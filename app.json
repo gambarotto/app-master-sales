@@ -1,0 +1,12 @@
+{
+  "name": "appsalles",
+  "displayName": "appsalles",
+  "expo": {
+    "name": "appsalles",
+    "slug": "appsalles",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
