@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">appsalles</string>
+    <string name="facebook_app_id">535929907582864</string>
+    <string name="facebook_client_token">8d07a282c02acb040a56078d1a5f0ff3</string>
 </resources>
