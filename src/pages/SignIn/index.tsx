@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { KeyboardAvoidingView, Text, TextInput, Platform } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Platform } from 'react-native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
 
@@ -9,7 +9,6 @@ import {
   ContainerLoginOrRegistry,
   ContainerLoginWithSocialMedia,
   ContainerLogo,
-  GoogleButton,
   Logo,
   TextCreateAccount,
   TextOr,
@@ -78,9 +77,6 @@ const SignIn: React.FC = () => {
 
         <ContainerLoginWithSocialMedia>
           <FacebookButton />
-          <GoogleButton>
-            <Text>G</Text>
-          </GoogleButton>
         </ContainerLoginWithSocialMedia>
       </Container>
     </KeyboardAvoidingView>

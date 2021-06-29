@@ -1,6 +1,9 @@
 import { RectButton } from 'react-native-gesture-handler';
 import { css } from 'styled-components';
 import styled from 'styled-components/native';
+import Constants from 'expo-constants';
+
+const { statusBarHeight } = Constants;
 
 export const Container = styled.ScrollView`
   flex: 1;
@@ -13,12 +16,12 @@ export const ContainerLogo = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin-top: 20%;
+  margin-top: ${`${statusBarHeight + 16}px`};
   /* margin-bottom: 36px; */
 `;
 export const Logo = styled.Image`
-  width: 200px;
-  height: 180px;
+  width: 190px;
+  height: 170px;
 `;
 export const ContainerLoginOrRegistry = styled.View`
   width: 100%;
@@ -27,7 +30,7 @@ export const ContainerLoginOrRegistry = styled.View`
   align-items: center;
   margin-top: 24px;
 `;
-export const ContainerCreateAccount = styled.TouchableOpacity`
+export const ContainerOr = styled.TouchableOpacity`
   flex: 1;
   align-items: center;
 `;

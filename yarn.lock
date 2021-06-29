@@ -4524,6 +4524,13 @@ expo-font@~9.1.0:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-google-sign-in@~9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/expo-google-sign-in/-/expo-google-sign-in-9.1.0.tgz#9d52c8eaf8ab78bd3c579dea5c730b33026b22f8"
+  integrity sha512-IxbTU3R6bfgiIhiFIP2n52iRNtv7IE22pZVQCVVo3xMTMj5kmafh25daPYOEqkBB3G2AQofY8hCxD4gCLW7GnQ==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-image-loader@~2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-2.1.1.tgz"

@@ -1,12 +1,20 @@
 {
-  "name": "appsalles",
-  "displayName": "appsalles",
-  "expo": {
     "name": "appsalles",
-    "slug": "appsalles",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  }
+    "displayName": "appsalles",
+    "expo": {
+        "name": "appsalles",
+        "slug": "appsalles",
+        "version": "1.0.0",
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "bundleIdentifier": "example.expo.googlesignin",
+            "config": {
+                "googleSignIn": {
+                    "reservedClientId": "com.googleusercontent.apps.197943329137-tgsqk98lactqhecpdvn9gfp0kuq2nefc"
+                }
+            }
+        }
+    }
 }
