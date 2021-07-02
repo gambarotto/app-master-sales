@@ -3,9 +3,9 @@ import * as Facebook from 'expo-facebook';
 import { Alert } from 'react-native';
 
 import { ButtonFacebookLogin, FacebookLogo } from './styles';
-import { facebookApi } from '../../../../services/facebookApi';
-import logo from '../../../../assets/facebook.png';
-import { config } from '../../../../config';
+import { facebookApi } from '../../services/facebookApi';
+import logo from '../../assets/facebook.png';
+import { config } from '../../config';
 // TODO refatorar
 const FacebookButton: React.FC = () => {
   const logIn = useCallback(async (): Promise<void> => {

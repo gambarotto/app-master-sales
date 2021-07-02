@@ -16,13 +16,30 @@ import {
 import logoImage from '../../assets/logo_catarina.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import FacebookButton from './components/FacebookButton';
+import FacebookButton from '../../components/FacebookButton';
+import { useAuth } from '../../contexts/auth';
+
+interface IFormData {
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const inputPasswordRef = useRef<TextInput>(null);
 
-  const handleSignIn = useCallback(() => {}, []);
+  const { signIn } = useAuth();
+
+  const handleSignIn = useCallback(
+    async ({ email, password }: IFormData) => {
+      try {
+        await signIn({ email, password });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+    [signIn],
+  );
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

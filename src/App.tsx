@@ -4,11 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'styled-components/native';
 import Routes from './routes';
 import themeGlobal from './styles/global';
+import { AuthProvider } from './contexts/auth';
 
 const App: React.FC = () => (
   <NavigationContainer>
     <ThemeProvider theme={themeGlobal}>
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   </NavigationContainer>
 );

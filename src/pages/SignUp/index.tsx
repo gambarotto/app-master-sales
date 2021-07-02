@@ -20,7 +20,7 @@ import {
 import logoImage from '../../assets/logo_catarina.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import FacebookButton from './components/FacebookButton';
+import FacebookButton from '../../components/FacebookButton';
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
