@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, TextInput, Platform } from 'react-native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
 
+import { useNavigation } from '@react-navigation/native';
 import {
   Container,
   ContainerCreateAccount,
@@ -27,6 +28,7 @@ interface IFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const inputPasswordRef = useRef<TextInput>(null);
+  const navigation = useNavigation();
 
   const { signIn } = useAuth();
 
@@ -84,7 +86,7 @@ const SignIn: React.FC = () => {
           >
             Login
           </Button>
-          <ContainerCreateAccount>
+          <ContainerCreateAccount onPress={() => navigation.navigate('SignUp')}>
             <TextCreateAccount>
               Ainda não tem uma conta? Crie uma aqui
             </TextCreateAccount>

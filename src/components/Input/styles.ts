@@ -26,12 +26,12 @@ export const Container = styled.View<ContainerProps>`
   ${(props) =>
     props.isFocus &&
     css`
-      border-bottom-color: ${props.theme.colors.primary};
+      border-bottom-color: ${props.theme.colors.secondary};
     `}
   ${(props) =>
     props.isFilled &&
     css`
-      border-bottom-color: ${props.theme.colors.primary};
+      border-bottom-color: ${props.theme.colors.secondary};
     `}
 `;
 export const Icon = styled(MaterialIcons)`

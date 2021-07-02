@@ -11,6 +11,7 @@ import { TextInputProps, TextInput } from 'react-native';
 import { useField } from '@unform/core';
 
 import { Container, Icon, styleTextInput } from './styles';
+import themeGlobal from '../../styles/global';
 
 interface InputValueReference {
   value: string;
@@ -70,7 +71,11 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
       <Icon
         name={icon}
         size={20}
-        color={isFilled || isFocus ? '#17164A' : '#37C7E3'}
+        color={
+          isFilled || isFocus
+            ? themeGlobal.colors.secondary
+            : themeGlobal.colors.tertiary
+        }
       />
       <TextInput
         ref={inputElementRef}
