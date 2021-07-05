@@ -11,6 +11,7 @@ const themeGlobal: DefaultTheme = {
     gray1: '#757575',
     gray2: '#828282',
     gray3: '#C9C9C9',
+    gray4: '#ececec',
     green: '#27ae60',
     red: '#E40B0B',
   },

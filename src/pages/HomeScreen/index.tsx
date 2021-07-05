@@ -1,18 +1,45 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '../../contexts/auth';
+import logoImage from '../../assets/logo_horizontal_catarina.png';
 
-// import { Container } from './styles';
+import {
+  Container,
+  ContainerCart,
+  ContainerHeader,
+  ContainerImageAndCart,
+  ContainerSearch,
+  IconCart,
+  IconSearch,
+  ImageLogo,
+  InputSearch,
+} from './styles';
+import themeGlobal from '../../styles/global';
 
 const HomeScreen: React.FC = () => {
   const { user, signOut } = useAuth();
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>{user.name}</Text>
-      <TouchableOpacity onPress={signOut}>
-        <Text>sair</Text>
-      </TouchableOpacity>
-    </View>
+    <Container>
+      <ContainerHeader>
+        <ContainerImageAndCart>
+          <ImageLogo source={logoImage} />
+          <ContainerCart>
+            <IconCart
+              name="shopping-cart"
+              size={24}
+              color={themeGlobal.colors.gray2}
+            />
+          </ContainerCart>
+        </ContainerImageAndCart>
+        <ContainerSearch>
+          <IconSearch
+            name="search"
+            size={24}
+            color={themeGlobal.colors.gray2}
+          />
+          <InputSearch placeholder="Pesquisar" />
+        </ContainerSearch>
+      </ContainerHeader>
+    </Container>
   );
 };
 
