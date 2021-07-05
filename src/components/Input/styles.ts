@@ -33,11 +33,23 @@ export const Container = styled.View<ContainerProps>`
     css`
       border-bottom-color: ${props.theme.colors.secondary};
     `}
+  ${(props) =>
+    props.isErrored &&
+    css`
+      border-bottom-color: ${props.theme.colors.red};
+    `}
 `;
 export const Icon = styled(MaterialIcons)`
   margin-right: 16px;
 `;
 
+export const TextError = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.secondary};
+  `}
+  font-size: 8px;
+  align-self: flex-end;
+`;
 export const styleTextInput = StyleSheet.create({
   textInput: {
     flex: 1,

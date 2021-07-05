@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import * as Facebook from 'expo-facebook';
 import { Alert } from 'react-native';
 
-import { ButtonFacebookLogin, FacebookLogo } from './styles';
+import { ButtonFacebookLogin, Icon, TextFacebookButton } from './styles';
 import { facebookApi } from '../../services/facebookApi';
-import logo from '../../assets/facebook.png';
 import { config } from '../../config';
+import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 // TODO refatorar
 const FacebookButton: React.FC = () => {
+  const { signIn } = useAuth();
   const logIn = useCallback(async (): Promise<void> => {
     try {
       const responseLogin = await Facebook.logInWithReadPermissionsAsync({
@@ -23,16 +25,22 @@ const FacebookButton: React.FC = () => {
           `/${userId}/picture?width=200&height=200&access_token=${responseLogin.token}`,
         );
 
-        console.log(responseAvatar.request.responseURL);
+        const responseApi = await api.post('users/fb', {
+          name: response.data.name,
+          email: response.data.email,
+          password: response.data.email,
+          avatar_social_media: responseAvatar.request.responseURL,
+        });
 
-        Alert.alert('Logged in!', `Hi ${(await response.data).name}!`);
-      } else {
-        // type === 'cancel'
+        await signIn({
+          email: responseApi.data.email,
+          password: responseApi.data.email,
+        });
       }
     } catch ({ message }) {
       Alert.alert(`Facebook Login Error: ${message}`);
     }
-  }, []);
+  }, [signIn]);
   const logOut = useCallback(async (): Promise<void> => {
     await Facebook.logOutAsync();
   }, []);
@@ -52,7 +60,8 @@ const FacebookButton: React.FC = () => {
 
   return (
     <ButtonFacebookLogin onPress={toggleAuthAsync}>
-      <FacebookLogo source={logo} />
+      <Icon name="facebook" size={24} color="#fff" />
+      <TextFacebookButton>Entrar com facebook</TextFacebookButton>
     </ButtonFacebookLogin>
   );
 };

@@ -10,7 +10,7 @@ import React, {
 import { TextInputProps, TextInput } from 'react-native';
 import { useField } from '@unform/core';
 
-import { Container, Icon, styleTextInput } from './styles';
+import { Container, Icon, styleTextInput, TextError } from './styles';
 import themeGlobal from '../../styles/global';
 
 interface InputValueReference {
@@ -67,29 +67,32 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   }, [fieldName, registerField]);
 
   return (
-    <Container isFocus={isFocus} isFilled={isFilled} isErrored={!!error}>
-      <Icon
-        name={icon}
-        size={20}
-        color={
-          isFilled || isFocus
-            ? themeGlobal.colors.secondary
-            : themeGlobal.colors.tertiary
-        }
-      />
-      <TextInput
-        ref={inputElementRef}
-        style={styleTextInput.textInput}
-        keyboardAppearance="dark"
-        placeholderTextColor="#666360"
-        onFocus={handleInputFocus}
-        onBlur={handleInputFilled}
-        onChangeText={(value) => {
-          inputValueRef.current.value = value;
-        }}
-        {...rest}
-      />
-    </Container>
+    <>
+      <Container isFocus={isFocus} isFilled={isFilled} isErrored={!!error}>
+        <Icon
+          name={icon}
+          size={20}
+          color={
+            isFilled || isFocus
+              ? themeGlobal.colors.tertiary
+              : themeGlobal.colors.primary
+          }
+        />
+        <TextInput
+          ref={inputElementRef}
+          style={styleTextInput.textInput}
+          keyboardAppearance="dark"
+          placeholderTextColor="#666360"
+          onFocus={handleInputFocus}
+          onBlur={handleInputFilled}
+          onChangeText={(value) => {
+            inputValueRef.current.value = value;
+          }}
+          {...rest}
+        />
+      </Container>
+      {!!error && <TextError>{error}</TextError>}
+    </>
   );
 };
 

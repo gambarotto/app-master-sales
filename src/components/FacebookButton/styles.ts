@@ -1,10 +1,13 @@
 import { RectButton } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { css } from 'styled-components';
 
 export const ButtonFacebookLogin = styled(RectButton)`
-  width: 60px;
-  height: 60px;
-  border-radius: 40px;
+  /* flex: 1;
+  height: 50px; */
+  padding: 10px;
+  border-radius: 8px;
   justify-content: center;
   align-items: center;
   background-color: #459ef8;
@@ -13,8 +16,13 @@ export const ButtonFacebookLogin = styled(RectButton)`
   justify-content: space-between;
   align-items: center;
 `;
-export const FacebookLogo = styled.Image`
-  width: 60px;
-  height: 60px;
-  border-radius: 40px;
+export const Icon = styled(MaterialIcons)`
+  margin-right: 8px;
+`;
+export const TextFacebookButton = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+  ${(props) => css`
+    color: ${props.theme.colors.white};
+  `}
 `;

@@ -11,6 +11,8 @@ const themeGlobal: DefaultTheme = {
     gray1: '#757575',
     gray2: '#828282',
     gray3: '#C9C9C9',
+    green: '#27ae60',
+    red: '#E40B0B',
   },
 };
 export default themeGlobal;

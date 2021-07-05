@@ -1,9 +1,10 @@
 import React, { useCallback, useRef } from 'react';
-import { KeyboardAvoidingView, TextInput, Platform } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Platform, Alert } from 'react-native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
 
 import { useNavigation } from '@react-navigation/native';
+import * as Yup from 'yup';
 import {
   Container,
   ContainerCreateAccount,
@@ -19,6 +20,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import FacebookButton from '../../components/FacebookButton';
 import { useAuth } from '../../contexts/auth';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 interface IFormData {
   email: string;
@@ -35,9 +37,26 @@ const SignIn: React.FC = () => {
   const handleSignIn = useCallback(
     async ({ email, password }: IFormData) => {
       try {
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .email('Informe um email válido')
+            .required('E-mail é obrigatório'),
+          password: Yup.string()
+            .required()
+            .min(6, 'A senha deve conter no mínimo 6 caractéres'),
+        });
+        await schema.validate({ email, password }, { abortEarly: false });
         await signIn({ email, password });
       } catch (error) {
-        console.log(error.message);
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+        Alert.alert(
+          'Erro no login',
+          'Ocorreu um erro ao efetuar o login, tente novamente.',
+        );
       }
     },
     [signIn],

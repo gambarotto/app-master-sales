@@ -1,33 +1,84 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   TextInput,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
 
+import { useNavigation } from '@react-navigation/native';
+import * as Yup from 'yup';
+import Modal from 'react-native-modal';
 import {
   Container,
   ContainerOr,
-  ContainerLoginOrRegistry,
   ContainerLoginWithSocialMedia,
   ContainerLogo,
   Logo,
   TextOr,
+  ContainerTextBack,
+  TextBack,
+  ContainerForm,
 } from './styles';
 import logoImage from '../../assets/logo_catarina.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import FacebookButton from '../../components/FacebookButton';
+import api from '../../services/api';
+import ModalCreateAccount from './ModalCreateAccount';
+import getValidationErrors from '../../utils/getValidationErrors';
+
+interface IFormData {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const inputEmailRef = useRef<TextInput>(null);
   const inputPasswordRef = useRef<TextInput>(null);
 
-  const handleSignUp = useCallback(() => {}, []);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const navigate = useNavigation();
+
+  const handleCloseModal = useCallback(() => {
+    setModalIsOpen(false);
+    navigate.goBack();
+  }, [navigate, setModalIsOpen]);
+
+  const handleSignUp = useCallback(async (data: IFormData) => {
+    try {
+      formRef.current?.setErrors({});
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome é obrigatório'),
+        email: Yup.string()
+          .required('E-mail é obrigatório')
+          .email('Informe um email válido'),
+        password: Yup.string().min(
+          6,
+          'A senha deve conter no minimo 6 caractéres',
+        ),
+      });
+      await schema.validate(data, { abortEarly: false });
+      await api.post('users', data);
+      setModalIsOpen(true);
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(error);
+        formRef.current?.setErrors(errors);
+        return;
+      }
+      Alert.alert(
+        'Erro no cadastro',
+        'Ocorreu um erro ao efetuar o cadastro, tente novamente.',
+      );
+    }
+  }, []);
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -39,7 +90,7 @@ const SignUp: React.FC = () => {
           <ContainerLogo>
             <Logo source={logoImage} />
           </ContainerLogo>
-          <ContainerLoginOrRegistry>
+          <ContainerForm>
             <Form ref={formRef} onSubmit={handleSignUp}>
               <Input
                 autoCapitalize="words"
@@ -89,11 +140,22 @@ const SignUp: React.FC = () => {
             <ContainerOr>
               <TextOr>Ou</TextOr>
             </ContainerOr>
-          </ContainerLoginOrRegistry>
+          </ContainerForm>
 
           <ContainerLoginWithSocialMedia>
             <FacebookButton />
           </ContainerLoginWithSocialMedia>
+          <ContainerTextBack onPress={() => navigate.goBack()}>
+            <TextBack>Já tem uma conta? clique aqui</TextBack>
+          </ContainerTextBack>
+          <Modal
+            isVisible={modalIsOpen}
+            onBackButtonPress={handleCloseModal}
+            onBackdropPress={handleCloseModal}
+            useNativeDriver
+          >
+            <ModalCreateAccount setModalIsOpen={setModalIsOpen} />
+          </Modal>
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -1,4 +1,3 @@
-import { RectButton } from 'react-native-gesture-handler';
 import { css } from 'styled-components';
 import styled from 'styled-components/native';
 import Constants from 'expo-constants';
@@ -23,17 +22,14 @@ export const Logo = styled.Image`
   width: 190px;
   height: 170px;
 `;
-export const ContainerLoginOrRegistry = styled.View`
+export const ContainerForm = styled.View`
   width: 100%;
   flex: 1;
   justify-content: center;
   align-items: center;
   margin-top: 24px;
 `;
-export const ContainerOr = styled.TouchableOpacity`
-  flex: 1;
-  align-items: center;
-`;
+
 export const TextCreateAccount = styled.Text`
   ${(props) =>
     css`
@@ -41,6 +37,11 @@ export const TextCreateAccount = styled.Text`
     `}
   font-size: 12px;
   margin-top: 12px;
+`;
+
+export const ContainerOr = styled.TouchableOpacity`
+  flex: 1;
+  align-items: center;
 `;
 export const TextOr = styled.Text`
   ${(props) =>
@@ -59,11 +60,17 @@ export const ContainerLoginWithSocialMedia = styled.View`
   margin-top: 12px;
 `;
 
-export const GoogleButton = styled(RectButton)`
-  width: 80px;
-  height: 80px;
-  border-radius: 40px;
-  background-color: red;
+export const ContainerTextBack = styled.TouchableOpacity`
+  flex: 1;
   justify-content: center;
   align-items: center;
+  margin-top: 8px;
+`;
+export const TextBack = styled.Text`
+  ${(props) =>
+    css`
+      color: ${props.theme.colors.primary};
+    `}
+  font-size: 12px;
+  margin-top: 12px;
 `;
