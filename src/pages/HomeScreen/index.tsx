@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/auth';
 
 // import { Container } from './styles';
 
-const Main: React.FC = () => {
+const HomeScreen: React.FC = () => {
   const { user, signOut } = useAuth();
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -16,4 +16,4 @@ const Main: React.FC = () => {
   );
 };
 
-export default Main;
+export default HomeScreen;
