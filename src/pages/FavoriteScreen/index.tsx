@@ -1,12 +1,14 @@
 import React from 'react';
-import { Text, View } from 'react-native';
 
-// import { Container } from './styles';
+import { Container, ContainerHeader } from './styles';
+import HeaderScreen from '../../components/HeaderScreen';
 
 const FavoriteScreen: React.FC = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Favorite</Text>
-  </View>
+  <Container>
+    <ContainerHeader>
+      <HeaderScreen />
+    </ContainerHeader>
+  </Container>
 );
 
 export default FavoriteScreen;
