@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProductItem } from '..';
+import { IProductItem } from '../../pages/HomeScreen';
 
 import {
   Container,

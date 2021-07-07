@@ -20,7 +20,7 @@ import {
   TitleProducts,
 } from './styles';
 import themeGlobal from '../../styles/global';
-import ProductItem from './ProductItem';
+import ProductItem from '../../components/ProductItem';
 import HeaderScreen from '../../components/HeaderScreen';
 
 export interface ICategoryItem {

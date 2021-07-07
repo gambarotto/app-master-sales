@@ -1,5 +1,7 @@
 import Constants from 'expo-constants';
-import styled from 'styled-components/native';
+import { FlatList } from 'react-native';
+import styled, { css } from 'styled-components/native';
+import { IProductItem } from '../HomeScreen';
 
 const { statusBarHeight } = Constants;
 
@@ -10,3 +12,19 @@ export const Container = styled.View`
 export const ContainerHeader = styled.View`
   padding: 16px;
 `;
+export const TitleFavorites = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.secondary};
+  `}
+  font-size:18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+export const ContainerFavoriteList = styled.View`
+  flex: 1;
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+export const FavoriteList = styled(
+  FlatList as new () => FlatList<IProductItem>,
+)``;
