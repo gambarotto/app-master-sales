@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from '../contexts/auth';
-import AppRoutes from './app.routes';
+import AppMain from './app.main.routes';
 import AuthRoutes from './auth.routes';
 
 const Routes: React.FC = () => {
@@ -13,7 +13,7 @@ const Routes: React.FC = () => {
       </View>
     );
   }
-  return user ? <AppRoutes /> : <AuthRoutes />;
+  return user ? <AppMain /> : <AuthRoutes />;
 };
 
 export default Routes;

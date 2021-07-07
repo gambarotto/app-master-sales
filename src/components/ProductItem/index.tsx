@@ -1,4 +1,5 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import { IProductItem } from '../../pages/HomeScreen';
 
 import {
@@ -14,17 +15,23 @@ import {
 interface IProductItemProps {
   product: IProductItem;
 }
-const ProductItem: React.FC<IProductItemProps> = ({ product }) => (
-  <Container>
-    <ContainerImage>
-      <ImageProduct source={{ uri: product.photo.photo_url }} />
-    </ContainerImage>
-    <ContainerInfo>
-      <TitleProduct>{product.name}</TitleProduct>
-      <DescriptionProduct>{product.description}</DescriptionProduct>
-      <PriceProduct>{product.sale_price}</PriceProduct>
-    </ContainerInfo>
-  </Container>
-);
+const ProductItem: React.FC<IProductItemProps> = ({ product }) => {
+  const navigation = useNavigation();
+  const handleGoToProductScreen = useCallback(() => {
+    navigation.navigate('Product', product);
+  }, [navigation, product]);
+  return (
+    <Container onPress={handleGoToProductScreen}>
+      <ContainerImage>
+        <ImageProduct source={{ uri: product.photo.photo_url }} />
+      </ContainerImage>
+      <ContainerInfo>
+        <TitleProduct>{product.name}</TitleProduct>
+        <DescriptionProduct>{product.description}</DescriptionProduct>
+        <PriceProduct>{product.sale_price}</PriceProduct>
+      </ContainerInfo>
+    </Container>
+  );
+};
 
 export default ProductItem;

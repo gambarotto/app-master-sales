@@ -9,7 +9,7 @@ import SettingsScreen from '../pages/SettingsScreen';
 
 const App = createBottomTabNavigator();
 
-const AppRoutes: React.FC = () => (
+const AppTabsRoutes: React.FC = () => (
   <App.Navigator
     initialRouteName="HomeScreen"
     tabBarOptions={{
@@ -59,4 +59,4 @@ const AppRoutes: React.FC = () => (
     />
   </App.Navigator>
 );
-export default AppRoutes;
+export default AppTabsRoutes;
