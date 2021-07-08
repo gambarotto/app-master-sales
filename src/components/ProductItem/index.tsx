@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { IProductItem } from '../../pages/HomeScreen';
+import Currency from '../Currency';
 
 import {
   Container,
@@ -28,7 +29,9 @@ const ProductItem: React.FC<IProductItemProps> = ({ product }) => {
       <ContainerInfo>
         <TitleProduct>{product.name}</TitleProduct>
         <DescriptionProduct>{product.description}</DescriptionProduct>
-        <PriceProduct>{product.sale_price}</PriceProduct>
+        <PriceProduct>
+          <Currency value={product.sale_price} />
+        </PriceProduct>
       </ContainerInfo>
     </Container>
   );

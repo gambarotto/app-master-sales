@@ -1,6 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
 import Button from '../../components/Button';
+import Currency from '../../components/Currency';
 import themeGlobal from '../../styles/global';
 import { IProductItem } from '../HomeScreen';
 
@@ -46,10 +47,10 @@ const ProductScreen: React.FC = () => {
     setQuantity((state) => state + 1);
   }, []);
 
-  const currentValue = useMemo(() => {
+  const currentValue = useMemo((): number => {
     setCurrentPrice(routeParams.sale_price * quantity);
     const value = quantity * routeParams.sale_price;
-    return `R$ ${value.toFixed(2)}`;
+    return value;
   }, [quantity, routeParams.sale_price]);
 
   return (
@@ -88,7 +89,9 @@ const ProductScreen: React.FC = () => {
           </ContainerQuantity>
           <ContainerTextPrice>
             <TextPrice>
-              {currentPrice ? currentValue : routeParams.sale_price}
+              <Currency
+                value={currentPrice ? currentValue : routeParams.sale_price}
+              />
             </TextPrice>
           </ContainerTextPrice>
         </ContainerQuantityAndPrice>
