@@ -1,20 +1,7 @@
 import 'styled-components/native';
+import themeGlobal from '../styles/global';
 
 declare module 'styled-components/native' {
-  export interface DefaultTheme {
-    colors: {
-      primary: string;
-      secondary: string;
-      tertiary: string;
-      white: string;
-      white2: string;
-      gray: string;
-      gray1: string;
-      gray2: string;
-      gray3: string;
-      gray4: string;
-      green: string;
-      red: string;
-    };
-  }
+  type ThemeType = typeof themeGlobal;
+  export interface DefaultTheme extends ThemeType {}
 }

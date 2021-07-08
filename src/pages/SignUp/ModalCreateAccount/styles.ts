@@ -21,6 +21,7 @@ export const Icon = styled(MaterialIcons)`
 `;
 export const TextDescription = styled.Text`
   font-size: 16px;
+  font-family: 'Roboto-Regular';
   ${(props) => css`
     color: ${props.theme.colors.gray1};
   `}

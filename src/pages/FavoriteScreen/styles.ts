@@ -17,7 +17,7 @@ export const TitleFavorites = styled.Text`
     color: ${props.theme.colors.secondary};
   `}
   font-size:18px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
 export const ContainerFavoriteList = styled.View`

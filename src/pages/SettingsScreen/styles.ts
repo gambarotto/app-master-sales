@@ -31,7 +31,7 @@ export const ContainerUserInfo = styled.View`
   padding-left: 8px;
 `;
 export const TextNameUser = styled.Text`
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
   font-size: 16px;
   color: #000;
 `;

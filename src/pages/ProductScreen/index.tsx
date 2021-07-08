@@ -1,5 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
+import Button from '../../components/Button';
 import themeGlobal from '../../styles/global';
 import { IProductItem } from '../HomeScreen';
 
@@ -19,6 +20,12 @@ import {
   ContainerTextPrice,
   TextPrice,
   IconQuantity,
+  ContainerDescription,
+  TitleDescription,
+  TextDescription,
+  ContainerActionButtons,
+  ButtonFavorite,
+  IconFavorite,
 } from './styles';
 
 const ProductScreen: React.FC = () => {
@@ -26,7 +33,6 @@ const ProductScreen: React.FC = () => {
   const routeParams = route.params as IProductItem;
   const navigation = useNavigation();
 
-  const [product, setProduct] = useState<IProductItem>(routeParams);
   const [quantity, setQuantity] = useState(1);
 
   const [currentPrice, setCurrentPrice] = useState(routeParams.sale_price);
@@ -49,7 +55,7 @@ const ProductScreen: React.FC = () => {
   return (
     <Container>
       <ContainerProductImage>
-        <ProductImage source={{ uri: product.photo.photo_url }} />
+        <ProductImage source={{ uri: routeParams.photo.photo_url }} />
         <ContainerIconBack onPress={() => navigation.goBack()}>
           <IconBack
             name="keyboard-arrow-left"
@@ -60,7 +66,7 @@ const ProductScreen: React.FC = () => {
       </ContainerProductImage>
       <ContainerInfo>
         <ContainerNameAndPackage>
-          <TextNameProduct>{product.name}</TextNameProduct>
+          <TextNameProduct>{routeParams.name}</TextNameProduct>
         </ContainerNameAndPackage>
         <ContainerQuantityAndPrice>
           <ContainerQuantity>
@@ -86,6 +92,22 @@ const ProductScreen: React.FC = () => {
             </TextPrice>
           </ContainerTextPrice>
         </ContainerQuantityAndPrice>
+        <ContainerDescription>
+          <TitleDescription>Descrição do Produto</TitleDescription>
+          <TextDescription>{routeParams.description}</TextDescription>
+        </ContainerDescription>
+        <ContainerActionButtons>
+          <ButtonFavorite>
+            <IconFavorite
+              name="favorite"
+              size={18}
+              color={themeGlobal.colors.red}
+            />
+          </ButtonFavorite>
+          <Button color="tertiary" textSize={16}>
+            Adicionar ao carrinho
+          </Button>
+        </ContainerActionButtons>
       </ContainerInfo>
     </Container>
   );

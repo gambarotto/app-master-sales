@@ -1,6 +1,8 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import { useAuth } from '../../contexts/auth';
 import themeGlobal from '../../styles/global';
+import FacebookFunctions from '../../utils/facebook';
 
 import {
   Container,
@@ -19,29 +21,46 @@ import {
 interface IMenu {
   name: string;
   icon: string;
+  goTo(): void;
 }
 
 const SettingsScreen: React.FC = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigation = useNavigation();
 
+  const signOutWithFacebook = useCallback(async () => {
+    await FacebookFunctions.initFacebook();
+    await FacebookFunctions.logOut();
+    signOut();
+  }, [signOut]);
   const menu: IMenu[] = [
     {
       name: 'Dados',
       icon: 'assignment-ind',
+      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
     },
     {
       name: 'Endereços',
       icon: 'place',
+      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
     },
     {
       name: 'Sobre a Leiteria',
       icon: 'store',
+      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
     },
     {
       name: 'Sobre o App',
       icon: 'contact-support',
+      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
+    },
+    {
+      name: 'Sair',
+      icon: 'logout',
+      goTo: signOutWithFacebook,
     },
   ];
+
   return (
     <Container>
       <ContainerUserData>
@@ -55,7 +74,7 @@ const SettingsScreen: React.FC = () => {
       </ContainerUserData>
       <ContainerMenu>
         {menu.map((item) => (
-          <ContainerItemMenu key={item.name}>
+          <ContainerItemMenu key={item.name} onPress={item.goTo}>
             <IconItemMenu
               name={item.icon}
               size={24}

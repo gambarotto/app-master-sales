@@ -37,6 +37,7 @@ export const TextCreateAccount = styled.Text`
       color: ${props.theme.colors.primary};
     `}
   font-size: 12px;
+  font-family: 'Roboto-Regular';
   margin-top: 12px;
 `;
 export const TextOr = styled.Text`
@@ -45,6 +46,7 @@ export const TextOr = styled.Text`
       color: ${props.theme.colors.primary};
     `}
   font-size: 16px;
+  font-family: 'Roboto-Regular';
   margin-top: 12px;
 `;
 export const ContainerLoginWithSocialMedia = styled.View`

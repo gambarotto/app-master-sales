@@ -28,7 +28,7 @@ export const TitleProduct = styled.Text`
     color: ${props.theme.colors.secondary};
   `}
   font-size:14px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
 `;
 
 export const DescriptionProduct = styled.Text`
@@ -36,10 +36,12 @@ export const DescriptionProduct = styled.Text`
     color: ${props.theme.colors.gray1};
   `}
   font-size:12px;
+  font-family: 'Roboto-Regular';
 `;
 export const PriceProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.tertiary};
   `}
   font-size:14px;
+  font-family: 'Roboto-Medium';
 `;

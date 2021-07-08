@@ -6,11 +6,17 @@ import { Container, TextButton } from './styles';
 interface ButtonProps extends RectButtonProperties {
   children: string;
   color?: 'primary' | 'secondary' | 'tertiary';
+  textSize?: number;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, color, ...rest }) => (
+const Button: React.FC<ButtonProps> = ({
+  children,
+  color,
+  textSize = 24,
+  ...rest
+}) => (
   <Container color={color} {...rest}>
-    <TextButton>{children}</TextButton>
+    <TextButton textSize={textSize}>{children}</TextButton>
   </Container>
 );
 

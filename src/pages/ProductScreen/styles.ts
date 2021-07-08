@@ -48,14 +48,14 @@ export const TextNameProduct = styled.Text`
     color: ${props.theme.colors.primary};
   `}
   font-size:24px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
 `;
 export const ContainerQuantityAndPrice = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 36px;
 `;
 export const ContainerQuantity = styled.View`
   height: 50px;
@@ -76,6 +76,7 @@ export const TextNumberQuantity = styled.Text`
     color: ${props.theme.colors.secondary};
   `}
   font-size:24px;
+  font-family: 'Roboto-Regular';
   margin-left: 8px;
   margin-right: 8px;
 `;
@@ -85,5 +86,43 @@ export const TextPrice = styled.Text`
     color: ${props.theme.colors.tertiary};
   `}
   font-size:24px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
 `;
+export const ContainerDescription = styled.View`
+  margin-top: 36px;
+`;
+export const TitleDescription = styled.Text`
+  font-family: 'Roboto-Bold';
+  font-size: 18px;
+  ${(props) => css`
+    color: ${props.theme.colors.primary};
+  `}
+`;
+export const TextDescription = styled.Text`
+  font-family: 'Roboto-Regular';
+  ${(props) => css`
+    color: ${props.theme.colors.gray};
+  `}
+`;
+export const ContainerActionButtons = styled.View`
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+export const ButtonFavorite = styled.TouchableOpacity`
+  height: 60px;
+  width: 60px;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  border-width: 1px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.red};
+  `}
+  margin-right:16px;
+`;
+export const IconFavorite = styled(MaterialIcons)``;

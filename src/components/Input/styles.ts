@@ -48,6 +48,7 @@ export const TextError = styled.Text`
     color: ${props.theme.colors.secondary};
   `}
   font-size: 8px;
+  font-family: 'Roboto-Regular';
   align-self: flex-end;
 `;
 export const styleTextInput = StyleSheet.create({

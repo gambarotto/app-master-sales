@@ -1,6 +1,4 @@
-import { DefaultTheme } from 'styled-components/native';
-
-const themeGlobal: DefaultTheme = {
+export default {
   colors: {
     primary: '#17164a',
     secondary: '#e94250',
@@ -16,4 +14,3 @@ const themeGlobal: DefaultTheme = {
     red: '#E40B0B',
   },
 };
-export default themeGlobal;

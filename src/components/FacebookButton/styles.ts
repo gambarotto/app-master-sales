@@ -21,6 +21,7 @@ export const Icon = styled(MaterialIcons)`
 `;
 export const TextFacebookButton = styled.Text`
   font-size: 16px;
+  font-family: 'Roboto-Regular';
   font-weight: bold;
   ${(props) => css`
     color: ${props.theme.colors.white};

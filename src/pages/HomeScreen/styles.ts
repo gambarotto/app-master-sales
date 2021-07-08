@@ -56,7 +56,7 @@ export const TitleCategories = styled.Text`
     color: ${props.theme.colors.secondary};
   `}
   font-size:18px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
 export const ContainerCategoryList = styled.View`
@@ -84,7 +84,7 @@ export const CategoryItemTitle = styled.Text`
     color: ${props.theme.colors.white};
   `}
   font-size:14px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
 `;
 export const ContainerProducts = styled.View`
   flex: 1;
@@ -96,7 +96,7 @@ export const TitleProducts = styled.Text`
     color: ${props.theme.colors.secondary};
   `}
   font-size:18px;
-  font-weight: bold;
+  font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
 export const ContainerProductList = styled.View`

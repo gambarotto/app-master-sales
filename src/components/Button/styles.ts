@@ -4,20 +4,25 @@ import styled, { css } from 'styled-components/native';
 interface ContainerProps {
   color?: 'primary' | 'secondary' | 'tertiary';
 }
+interface TextProps {
+  textSize: number;
+}
 export const Container = styled(RectButton)<ContainerProps>`
   width: 100%;
+  flex: 1;
   height: 60px;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  background-color: #e94250;
   ${(props) =>
     css`
       background-color: ${props.theme.colors[props.color || 'primary']};
     `}
-  margin-top: 16px;
 `;
-export const TextButton = styled.Text`
+export const TextButton = styled.Text<TextProps>`
   color: #fff;
-  font-size: 24px;
+  ${(props) => css`
+    font-size: ${`${props.textSize || 24}px`};
+  `}
+  font-family: 'Roboto-Regular';
 `;
