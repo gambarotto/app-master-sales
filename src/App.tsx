@@ -8,6 +8,8 @@ import { ActivityIndicator, View } from 'react-native';
 import Routes from './routes';
 import themeGlobal from './styles/global';
 import { AuthProvider } from './contexts/auth';
+import { ProductProvider } from './contexts/products';
+import { CartProvider } from './contexts/cart';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -27,7 +29,11 @@ const App: React.FC = () => {
     <NavigationContainer>
       <ThemeProvider theme={themeGlobal}>
         <AuthProvider>
-          <Routes />
+          <ProductProvider>
+            <CartProvider>
+              <Routes />
+            </CartProvider>
+          </ProductProvider>
         </AuthProvider>
       </ThemeProvider>
     </NavigationContainer>
