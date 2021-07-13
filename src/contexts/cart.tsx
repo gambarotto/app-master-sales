@@ -2,14 +2,17 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 
 interface ICartProduct {
-  id: string;
-  name: string;
-  description: string;
-  sale_price: number;
-  photo: {
+  product: {
     id: string;
-    photo_url: string;
+    name: string;
+    description: string;
+    sale_price: number;
+    photo: {
+      id: string;
+      photo_url: string;
+    };
   };
+  quantity: number;
 }
 interface ICartContext {
   cartProducts: ICartProduct[];
@@ -27,7 +30,7 @@ const CartProvider: React.FC = ({ children }) => {
   }, []);
   const removeProduct = useCallback((id: string) => {
     setCartProducts((state) => {
-      const products = state.filter((product) => product.id !== id);
+      const products = state.filter((item) => item.product.id !== id);
 
       return [...products];
     });
