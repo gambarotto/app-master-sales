@@ -17,22 +17,32 @@ interface ICartProduct {
 interface ICartContext {
   cartProducts: ICartProduct[];
   countCartProducts: number;
-  addProduct(product: ICartProduct): void;
-  removeProduct(id: string): void;
+  handleProduct(product: ICartProduct): void;
 }
 const CartContext = createContext<ICartContext>({} as ICartContext);
 
 const CartProvider: React.FC = ({ children }) => {
   const [cartProducts, setCartProducts] = useState<ICartProduct[]>([]);
 
-  const addProduct = useCallback((product: ICartProduct) => {
-    setCartProducts((state) => [...state, product]);
-  }, []);
-  const removeProduct = useCallback((id: string) => {
+  const handleProduct = useCallback((product: ICartProduct) => {
     setCartProducts((state) => {
-      const products = state.filter((item) => item.product.id !== id);
+      const itemIndex = state.findIndex(
+        (item) => item.product.id === product.product.id,
+      );
+      if (itemIndex < 0) {
+        return [...state, product];
+      }
 
-      return [...products];
+      const newState = [...state];
+
+      if (product.quantity === 0) {
+        newState.slice(itemIndex, 1);
+        return [...newState];
+      }
+
+      newState[itemIndex].quantity = product.quantity;
+
+      return newState;
     });
   }, []);
 
@@ -40,8 +50,7 @@ const CartProvider: React.FC = ({ children }) => {
     <CartContext.Provider
       value={{
         cartProducts,
-        addProduct,
-        removeProduct,
+        handleProduct,
         countCartProducts: cartProducts.length,
       }}
     >

@@ -2,6 +2,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
+import { useCart } from '../../contexts/cart';
 import themeGlobal from '../../styles/global';
 import { IProductItem } from '../HomeScreen';
 
@@ -33,7 +34,7 @@ const ProductScreen: React.FC = () => {
   const route = useRoute();
   const routeParams = route.params as IProductItem;
   const navigation = useNavigation();
-
+  const { handleProduct } = useCart();
   const [quantity, setQuantity] = useState(1);
 
   const [currentPrice, setCurrentPrice] = useState(routeParams.sale_price);
@@ -46,6 +47,11 @@ const ProductScreen: React.FC = () => {
   const handleAddQty = useCallback(() => {
     setQuantity((state) => state + 1);
   }, []);
+  const handleAddCartProduct = useCallback(() => {
+    const data = { product: { ...routeParams }, quantity: Number(quantity) };
+
+    handleProduct(data);
+  }, [handleProduct, quantity, routeParams]);
 
   const currentValue = useMemo((): number => {
     setCurrentPrice(routeParams.sale_price * quantity);
@@ -107,7 +113,7 @@ const ProductScreen: React.FC = () => {
               color={themeGlobal.colors.red}
             />
           </ButtonFavorite>
-          <Button color="tertiary" textSize={16}>
+          <Button color="tertiary" textSize={16} onPress={handleAddCartProduct}>
             Adicionar ao carrinho
           </Button>
         </ContainerActionButtons>

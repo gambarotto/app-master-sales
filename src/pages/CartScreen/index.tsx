@@ -1,9 +1,22 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
 import Modal from 'react-native-modal';
 import CartProductItem from '../../components/CartProductItem';
 import ModalCartProductQty from '../../components/ModalCartProductQty';
+import { useCart } from '../../contexts/cart';
 
-import { Container } from './styles';
+import {
+  ButtonAddMoreItems,
+  CartProductsList,
+  Container,
+  ContainerCartProductList,
+  ContainerDeliveryAddress,
+  ContainerWithOutItems,
+  TextAddMoreItems,
+  TextWithOutItems,
+  TitleDelivery,
+  TitlePage,
+} from './styles';
 
 export interface ICartProductItem {
   product: {
@@ -20,88 +33,14 @@ export interface ICartProductItem {
 }
 
 const CartScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const { cartProducts, countCartProducts } = useCart();
+  // const [products, setProducts] = useState<ICartProductItem[]>(cartProducts);
   const [showModal, setShowModal] = useState(false);
   const [currentItemModal, setCurrentItemModal] = useState<ICartProductItem>(
     {} as ICartProductItem,
   );
 
-  const products: ICartProductItem[] = [
-    {
-      product: {
-        id: '1',
-        name: 'Queijo 1',
-        description:
-          'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-        sale_price: 27.9,
-        photo: {
-          id: '1',
-          photo_url:
-            'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-        },
-      },
-      quantity: 1,
-    },
-    {
-      product: {
-        id: '2',
-        name: 'Queijo 2',
-        description:
-          'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-        sale_price: 27.9,
-        photo: {
-          id: '2',
-          photo_url:
-            'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-        },
-      },
-      quantity: 1,
-    },
-    {
-      product: {
-        id: '3',
-        name: 'Queijo 3',
-        description:
-          'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-        sale_price: 27.9,
-        photo: {
-          id: '3',
-          photo_url:
-            'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-        },
-      },
-      quantity: 1,
-    },
-    {
-      product: {
-        id: '4',
-        name: 'Queijo 4',
-        description:
-          'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-        sale_price: 27.9,
-        photo: {
-          id: '4',
-          photo_url:
-            'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-        },
-      },
-      quantity: 1,
-    },
-    {
-      product: {
-        id: '5',
-        name: 'Queijo 5',
-        description:
-          'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-        sale_price: 27.9,
-        photo: {
-          id: '5',
-          photo_url:
-            'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-        },
-      },
-      quantity: 1,
-    },
-  ];
   const handlePressCartProduct = useCallback((item) => {
     setCurrentItemModal(item);
     setShowModal((state) => !state);
@@ -110,17 +49,45 @@ const CartScreen: React.FC = () => {
     setShowModal((state) => !state);
   }, []);
 
+  if (countCartProducts <= 0) {
+    return (
+      <ContainerWithOutItems>
+        <TextWithOutItems>Oops...</TextWithOutItems>
+        <TextWithOutItems>
+          Você ainda não tem produtos no carrinho
+        </TextWithOutItems>
+        <ButtonAddMoreItems onPress={() => navigation.goBack()}>
+          <TextAddMoreItems>Adicionar Produtos</TextAddMoreItems>
+        </ButtonAddMoreItems>
+      </ContainerWithOutItems>
+    );
+  }
   return (
     <Container>
-      {products.map((item) => (
-        <CartProductItem
-          item={item}
-          handlePressCartProduct={handlePressCartProduct}
+      <TitlePage>Carrinho</TitlePage>
+      <ContainerCartProductList>
+        <CartProductsList
+          data={cartProducts}
+          keyExtractor={(product) => product.product.id}
+          renderItem={({ item }) => (
+            <CartProductItem
+              key={item.product.id}
+              item={item}
+              handlePressCartProduct={() => handlePressCartProduct(item)}
+            />
+          )}
         />
-      ))}
+        <ButtonAddMoreItems onPress={() => navigation.goBack()}>
+          <TextAddMoreItems>Adicionar mais itens</TextAddMoreItems>
+        </ButtonAddMoreItems>
+      </ContainerCartProductList>
+      <ContainerDeliveryAddress>
+        <TitleDelivery>Entrega</TitleDelivery>
+      </ContainerDeliveryAddress>
       <Modal
         style={{ flex: 1, justifyContent: 'flex-end', margin: 0 }}
         isVisible={showModal}
+        onBackButtonPress={handleModal}
       >
         <ModalCartProductQty
           handleModal={handleModal}

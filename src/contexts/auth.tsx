@@ -14,6 +14,30 @@ interface IUser {
   name: string;
   email: string;
   avatar_url: string;
+  adresses: IAddress[];
+  favorite_products: IFavoriteProduct[];
+}
+interface IAddress {
+  id: string;
+  street: string;
+  number: string;
+  district: string;
+  city: string;
+  zip_code: string;
+  complement: string;
+  reference_point: string;
+  alias: string;
+  created_at: Date;
+  updated_at: Date;
+}
+interface IFavoriteProduct {
+  id: string;
+  name: string;
+  description: string;
+  cost_price: number;
+  sale_price: number;
+  created_at: Date;
+  updated_at: Date;
 }
 interface IAuthData {
   user: IUser;
@@ -29,6 +53,7 @@ interface IAuthContextData {
   loading: boolean;
   signIn(credentials: ISignIn): Promise<void>;
   signOut(): Promise<void>;
+  updateUser(): Promise<void>;
 }
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
@@ -74,9 +99,19 @@ const AuthProvider: React.FC = ({ children }) => {
     await AsyncStorage.multiRemove(['AppSales:token', 'AppSales:user']);
     setData({} as IAuthData);
   }, []);
-
+  const updateUser = useCallback(async () => {
+    const response = await api.get('profiles/me');
+    if (response) {
+      setData((state) => {
+        Object.assign(state, { user: response.data });
+        return { ...state };
+      });
+    }
+  }, []);
   return (
-    <AuthContext.Provider value={{ user: data.user, loading, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user: data.user, loading, signIn, signOut, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { useCallback, useState } from 'react';
-import Modal from 'react-native-modal';
+import React, { useCallback, useMemo, useState } from 'react';
+
 import Currency from '../Currency';
-import ModalCartProductQty from '../ModalCartProductQty';
 
 import {
   Container,
@@ -34,25 +33,25 @@ interface Props {
 }
 
 const CartProductItem: React.FC<Props> = ({ item, handlePressCartProduct }) => {
-  const [qty, setQty] = useState(item.quantity);
+  const [value, setValue] = useState(item.quantity * item.product.sale_price);
 
-  const handleChangeValue = useCallback(() => {}, []);
+  const productValue = useMemo(
+    () => item.quantity * item.product.sale_price,
+    [item.product.sale_price, item.quantity],
+  );
 
   return (
-    <Container
-      key={item.product.id}
-      onPress={() => handlePressCartProduct(item)}
-    >
+    <Container onPress={() => handlePressCartProduct(item)}>
       <ContainerProductImage>
         <ProductImage source={{ uri: item.product.photo.photo_url }} />
       </ContainerProductImage>
       <ContainerProductData>
         <NameProduct>{item.product.name}</NameProduct>
         <ContainerQuantity>
-          <TextQuantity>{qty}</TextQuantity>
+          <TextQuantity>{item.quantity}</TextQuantity>
         </ContainerQuantity>
         <TotalProduct>
-          <Currency value={item.product.sale_price} />
+          <Currency value={productValue} />
         </TotalProduct>
       </ContainerProductData>
     </Container>
