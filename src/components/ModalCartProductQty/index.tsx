@@ -12,6 +12,7 @@ import {
   Quantity,
   ButtonConfirm,
   TextButtonConfirm,
+  ContainerTextQuantity,
 } from './styles';
 
 interface Props {
@@ -64,7 +65,9 @@ const ModalCartProductQty: React.FC<Props> = ({ handleModal, item }) => {
               color={themeGlobal.colors.secondary}
             />
           </ContainerAction>
-          <Quantity>{quantity}</Quantity>
+          <ContainerTextQuantity>
+            <Quantity>{quantity}</Quantity>
+          </ContainerTextQuantity>
           <ContainerAction onPress={handleAddQty}>
             <Icon name="add" size={24} color={themeGlobal.colors.secondary} />
           </ContainerAction>

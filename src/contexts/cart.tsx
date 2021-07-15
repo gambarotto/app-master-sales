@@ -18,6 +18,7 @@ interface ICartContext {
   cartProducts: ICartProduct[];
   countCartProducts: number;
   handleProduct(product: ICartProduct): void;
+  clearCart(): void;
 }
 const CartContext = createContext<ICartContext>({} as ICartContext);
 
@@ -46,11 +47,15 @@ const CartProvider: React.FC = ({ children }) => {
     });
   }, []);
 
+  const clearCart = useCallback(() => {
+    setCartProducts([] as ICartProduct[]);
+  }, []);
   return (
     <CartContext.Provider
       value={{
         cartProducts,
         handleProduct,
+        clearCart,
         countCartProducts: cartProducts.length,
       }}
     >

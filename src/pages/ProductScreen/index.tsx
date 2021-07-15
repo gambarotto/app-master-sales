@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
 import { useCart } from '../../contexts/cart';
@@ -34,11 +34,21 @@ const ProductScreen: React.FC = () => {
   const route = useRoute();
   const routeParams = route.params as IProductItem;
   const navigation = useNavigation();
-  const { handleProduct } = useCart();
+  const { handleProduct, cartProducts } = useCart();
   const [quantity, setQuantity] = useState(1);
 
   const [currentPrice, setCurrentPrice] = useState(routeParams.sale_price);
 
+  useEffect(() => {
+    const product = cartProducts.filter(
+      (item) => item.product.id === routeParams.id,
+    );
+    if (product.length > 0) {
+      setQuantity(product[0].quantity);
+    } else {
+      setQuantity(0);
+    }
+  }, [cartProducts, routeParams.id]);
   const handleRemoveQty = useCallback(() => {
     if (quantity > 1) {
       setQuantity((state) => state - 1);
@@ -51,7 +61,8 @@ const ProductScreen: React.FC = () => {
     const data = { product: { ...routeParams }, quantity: Number(quantity) };
 
     handleProduct(data);
-  }, [handleProduct, quantity, routeParams]);
+    navigation.navigate('Cart');
+  }, [handleProduct, navigation, quantity, routeParams]);
 
   const currentValue = useMemo((): number => {
     setCurrentPrice(routeParams.sale_price * quantity);

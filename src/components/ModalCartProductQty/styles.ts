@@ -20,7 +20,12 @@ export const ContainerQuantityAndButton = styled.View`
 `;
 export const ContainerQuantity = styled.View`
   flex-direction: row;
-  border-radius: 4px;
+  border-radius: 8px;
+  border-width: 0.5px;
+  ${(props) =>
+    css`
+      border-color: ${props.theme.colors.gray4};
+    `}
   justify-content: center;
   align-items: center;
   margin-right: 24px;
@@ -32,11 +37,21 @@ export const ContainerAction = styled.TouchableOpacity`
   align-items: center;
 `;
 export const Icon = styled(MaterialIcons)``;
+export const ContainerTextQuantity = styled.View`
+  height: 60px;
+  padding: 0px 16px;
+  border-left-width: 0.5px;
+  border-right-width: 0.5px;
+  ${(props) =>
+    css`
+      border-color: ${props.theme.colors.gray4};
+    `}
+  justify-content: center;
+  align-items: center;
+`;
 export const Quantity = styled.Text`
   font-family: 'Roboto-Bold';
   font-size: 14px;
-  margin-right: 12px;
-  margin-left: 12px;
 `;
 export const ButtonConfirm = styled.TouchableOpacity`
   width: 100%;
