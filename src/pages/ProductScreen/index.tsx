@@ -58,10 +58,12 @@ const ProductScreen: React.FC = () => {
     setQuantity((state) => state + 1);
   }, []);
   const handleAddCartProduct = useCallback(() => {
-    const data = { product: { ...routeParams }, quantity: Number(quantity) };
+    if (quantity > 0) {
+      const data = { product: { ...routeParams }, quantity: Number(quantity) };
 
-    handleProduct(data);
-    navigation.navigate('Cart');
+      handleProduct(data);
+      navigation.navigate('Cart');
+    }
   }, [handleProduct, navigation, quantity, routeParams]);
 
   const currentValue = useMemo((): number => {

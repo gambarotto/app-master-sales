@@ -25,6 +25,6 @@ export const InsideCircle = styled.View<IProps>`
     border-radius: ${`${props.size / 2}px`};
     background-color: ${props.isChecked
       ? props.theme.colors.secondary
-      : props.theme.colors.gray3};
+      : props.theme.colors.white2};
   `}
 `;

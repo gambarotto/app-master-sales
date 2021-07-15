@@ -26,9 +26,7 @@ export const ContainerProductData = styled.View`
 `;
 export const NameProduct = styled.Text`
   position: absolute;
-  top: 5px;
   left: 8px;
-  align-self: flex-start;
   font-family: 'Roboto-Regular';
   font-size: 12px;
   ${(props) => css`
@@ -54,9 +52,11 @@ export const TextQuantity = styled.Text`
   `}
 `;
 export const TotalProduct = styled.Text`
+  width: 70px;
   font-family: 'Roboto-Regular';
   font-size: 12px;
   ${(props) => css`
     color: ${props.theme.colors.red};
   `};
+  text-align: right;
 `;

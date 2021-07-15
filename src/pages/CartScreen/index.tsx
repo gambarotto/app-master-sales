@@ -7,10 +7,12 @@ import CheckCircle from '../../components/CheckCircle';
 import Currency from '../../components/Currency';
 import ModalCartProductQty from '../../components/ModalCartProductQty';
 import { useCart } from '../../contexts/cart';
+import logoImage from '../../assets/logo_horizontal_catarina.png';
 import themeGlobal from '../../styles/global';
 
 import {
   ButtonAddMoreItems,
+  ButtonBack,
   ButtonTrash,
   CartProductsList,
   Container,
@@ -21,6 +23,7 @@ import {
   ContainerCard,
   ContainerCartProductList,
   ContainerDeliveryAddress,
+  ContainerHeader,
   ContainerLabelAndPrice,
   ContainerTopCard,
   ContainerTotal,
@@ -28,6 +31,8 @@ import {
   DeliveryLabel,
   DeliveryPrice,
   Icon,
+  IconHeader,
+  ImageLogo,
   TextAddMoreItems,
   TextAddress,
   TextAliasAddress,
@@ -101,11 +106,22 @@ const CartScreen: React.FC = () => {
   }
   return (
     <Container>
+      <ContainerHeader>
+        <ButtonBack onPress={() => navigation.goBack()}>
+          <IconHeader
+            name="keyboard-arrow-left"
+            size={24}
+            color={themeGlobal.colors.secondary}
+          />
+        </ButtonBack>
+        <ImageLogo source={logoImage} />
+      </ContainerHeader>
       <TitlePage>Carrinho</TitlePage>
       <ContainerCartProductList>
         <CartProductsList
           data={cartProducts}
           keyExtractor={(product) => product.product.id}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <CartProductItem
               key={item.product.id}
@@ -127,18 +143,15 @@ const CartScreen: React.FC = () => {
           <ContainerTopCard>
             <CheckCircle isChecked={isCheckedDelivery} size={24} />
             <ContainerLabelAndPrice>
-              <DeliveryLabel isChecked={isCheckedDelivery}>
-                Delivery
-              </DeliveryLabel>
+              <TextAliasAddress isChecked={isCheckedDelivery}>
+                Casa
+              </TextAliasAddress>
               <DeliveryPrice isChecked={isCheckedDelivery}>
                 <Currency value={10} />
               </DeliveryPrice>
             </ContainerLabelAndPrice>
           </ContainerTopCard>
           <ContainerBottomCard>
-            <TextAliasAddress isChecked={isCheckedDelivery}>
-              Casa
-            </TextAliasAddress>
             <ContainerAddress>
               <TextAddress isChecked={isCheckedDelivery}>
                 Rua Ernesto Ribeiro, 683 - cep: 12.387-908

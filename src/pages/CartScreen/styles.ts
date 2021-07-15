@@ -34,6 +34,25 @@ export const Container = styled.View`
   margin-top: ${`${statusBarHeight + 8}px`};
   position: relative;
 `;
+export const ContainerHeader = styled.View`
+  position: relative;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+export const ButtonBack = styled.TouchableOpacity`
+  position: absolute;
+  left: 0px;
+`;
+export const IconHeader = styled(MaterialIcons)``;
+
+export const ImageLogo = styled.Image`
+  width: 170px;
+  height: 50px;
+  margin-bottom: 16px;
+  align-self: center;
+`;
 export const TitlePage = styled.Text`
   font-family: 'Roboto-Bold';
   font-size: 24px;
@@ -44,7 +63,7 @@ export const TitlePage = styled.Text`
   margin-bottom: 16px;
 `;
 export const ContainerCartProductList = styled.View`
-  max-height: 40%;
+  max-height: 30%;
 `;
 export const CartProductsList = styled(
   FlatList as new () => FlatList<ICartProductItem>,
@@ -52,6 +71,11 @@ export const CartProductsList = styled(
 export const ButtonAddMoreItems = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
+  border-top-width: 0.7px;
+  ${(props) =>
+    css`
+      border-top-color: ${props.theme.colors.gray3};
+    `};
 `;
 export const TextAddMoreItems = styled.Text`
   font-family: 'Roboto-Regular';
@@ -61,7 +85,7 @@ export const TextAddMoreItems = styled.Text`
       color: ${props.theme.colors.secondary};
     `};
   text-align: center;
-  margin-top: 16px;
+  margin-top: 8px;
 `;
 export const ContainerDeliveryAddress = styled.View`
   flex: 1;
