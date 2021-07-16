@@ -2,6 +2,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import styled, { css } from 'styled-components/native';
 
+interface IButtonFavorite {
+  isFavorite: boolean;
+}
+
 const { statusBarHeight } = Constants;
 
 export const Container = styled.View`
@@ -113,7 +117,7 @@ export const ContainerActionButtons = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
-export const ButtonFavorite = styled.TouchableOpacity`
+export const ButtonFavorite = styled.TouchableOpacity<IButtonFavorite>`
   height: 60px;
   width: 60px;
   border-radius: 8px;
@@ -122,6 +126,9 @@ export const ButtonFavorite = styled.TouchableOpacity`
   border-width: 1px;
   ${(props) => css`
     border-color: ${props.theme.colors.red};
+    background-color: ${props.isFavorite
+      ? props.theme.colors.red
+      : props.theme.colors.white2};
   `}
   margin-right:16px;
 `;

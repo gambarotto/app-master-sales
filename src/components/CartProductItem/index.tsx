@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useMemo, useState } from 'react';
+import { ICartProduct } from '../../contexts/cart';
 
 import Currency from '../Currency';
 
@@ -14,22 +15,9 @@ import {
   TotalProduct,
 } from './styles';
 
-interface Iitem {
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    sale_price: number;
-    photo: {
-      id: string;
-      photo_url: string;
-    };
-  };
-  quantity: number;
-}
 interface Props {
-  item: Iitem;
-  handlePressCartProduct(item: Iitem): void;
+  item: ICartProduct;
+  handlePressCartProduct(item: ICartProduct): void;
 }
 
 const CartProductItem: React.FC<Props> = ({ item, handlePressCartProduct }) => {
@@ -43,7 +31,7 @@ const CartProductItem: React.FC<Props> = ({ item, handlePressCartProduct }) => {
   return (
     <Container onPress={() => handlePressCartProduct(item)}>
       <ContainerProductImage>
-        <ProductImage source={{ uri: item.product.photo.photo_url }} />
+        <ProductImage source={{ uri: item.product.photos[0].photo_url }} />
       </ContainerProductImage>
       <ContainerProductData>
         <NameProduct>{item.product.name}</NameProduct>

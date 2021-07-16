@@ -1,17 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useCallback, useContext, useState } from 'react';
+import { IProduct } from './products';
 
-interface ICartProduct {
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    sale_price: number;
-    photo: {
-      id: string;
-      photo_url: string;
-    };
-  };
+export interface ICartProduct {
+  product: IProduct;
   quantity: number;
 }
 interface ICartContext {
@@ -37,7 +29,7 @@ const CartProvider: React.FC = ({ children }) => {
       const newState = [...state];
 
       if (product.quantity === 0) {
-        newState.slice(itemIndex, 1);
+        newState.splice(itemIndex, 1);
         return [...newState];
       }
 

@@ -6,7 +6,7 @@ import CartProductItem from '../../components/CartProductItem';
 import CheckCircle from '../../components/CheckCircle';
 import Currency from '../../components/Currency';
 import ModalCartProductQty from '../../components/ModalCartProductQty';
-import { useCart } from '../../contexts/cart';
+import { ICartProduct, useCart } from '../../contexts/cart';
 import logoImage from '../../assets/logo_horizontal_catarina.png';
 import themeGlobal from '../../styles/global';
 
@@ -24,6 +24,7 @@ import {
   ContainerCartProductList,
   ContainerDeliveryAddress,
   ContainerHeader,
+  ContainerHeaderWithoutItems,
   ContainerLabelAndPrice,
   ContainerTopCard,
   ContainerTotal,
@@ -44,16 +45,7 @@ import {
 } from './styles';
 
 export interface ICartProductItem {
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    sale_price: number;
-    photo: {
-      id: string;
-      photo_url: string;
-    };
-  };
+  product: ICartProduct;
   quantity: number;
 }
 
@@ -93,21 +85,33 @@ const CartScreen: React.FC = () => {
 
   if (countCartProducts <= 0) {
     return (
-      <ContainerWithOutItems>
-        <TextWithOutItems>Oops...</TextWithOutItems>
-        <TextWithOutItems>
-          Você ainda não tem produtos no carrinho
-        </TextWithOutItems>
-        <ButtonAddMoreItems onPress={() => navigation.goBack()}>
-          <TextAddMoreItems>Adicionar Produtos</TextAddMoreItems>
-        </ButtonAddMoreItems>
-      </ContainerWithOutItems>
+      <>
+        <ContainerHeaderWithoutItems>
+          <ButtonBack onPress={() => navigation.navigate('Tabs')}>
+            <IconHeader
+              name="keyboard-arrow-left"
+              size={24}
+              color={themeGlobal.colors.secondary}
+            />
+          </ButtonBack>
+          <ImageLogo source={logoImage} />
+        </ContainerHeaderWithoutItems>
+        <ContainerWithOutItems>
+          <TextWithOutItems>Oops...</TextWithOutItems>
+          <TextWithOutItems>
+            Você ainda não tem produtos no carrinho
+          </TextWithOutItems>
+          <ButtonAddMoreItems onPress={() => navigation.navigate('Tabs')}>
+            <TextAddMoreItems>Adicionar Produtos</TextAddMoreItems>
+          </ButtonAddMoreItems>
+        </ContainerWithOutItems>
+      </>
     );
   }
   return (
     <Container>
       <ContainerHeader>
-        <ButtonBack onPress={() => navigation.goBack()}>
+        <ButtonBack onPress={() => navigation.navigate('Tabs')}>
           <IconHeader
             name="keyboard-arrow-left"
             size={24}
@@ -130,7 +134,7 @@ const CartScreen: React.FC = () => {
             />
           )}
         />
-        <ButtonAddMoreItems onPress={() => navigation.goBack()}>
+        <ButtonAddMoreItems onPress={() => navigation.navigate('Tabs')}>
           <TextAddMoreItems>Adicionar mais itens</TextAddMoreItems>
         </ButtonAddMoreItems>
       </ContainerCartProductList>

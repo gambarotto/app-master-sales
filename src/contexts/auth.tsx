@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../services/api';
+import { IProductPhoto } from './products';
 
 interface IUser {
   id: string;
@@ -17,27 +18,23 @@ interface IUser {
   adresses: IAddress[];
   favorite_products: IFavoriteProduct[];
 }
-interface IAddress {
+export interface IAddress {
   id: string;
   street: string;
   number: string;
   district: string;
   city: string;
   zip_code: string;
-  complement: string;
-  reference_point: string;
+  complement?: string;
+  reference_point?: string;
   alias: string;
-  created_at: Date;
-  updated_at: Date;
 }
 interface IFavoriteProduct {
   id: string;
   name: string;
   description: string;
-  cost_price: number;
   sale_price: number;
-  created_at: Date;
-  updated_at: Date;
+  photos: IProductPhoto;
 }
 interface IAuthData {
   user: IUser;
@@ -54,6 +51,7 @@ interface IAuthContextData {
   signIn(credentials: ISignIn): Promise<void>;
   signOut(): Promise<void>;
   updateUser(): Promise<void>;
+  updateAdresses(adresses: IAddress[]): void;
 }
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
@@ -108,9 +106,22 @@ const AuthProvider: React.FC = ({ children }) => {
       });
     }
   }, []);
+  const updateAdresses = useCallback((adresses: IAddress[]) => {
+    setData((state) => {
+      Object.assign(state, { adresses });
+      return { ...state };
+    });
+  }, []);
   return (
     <AuthContext.Provider
-      value={{ user: data.user, loading, signIn, signOut, updateUser }}
+      value={{
+        user: data.user,
+        loading,
+        signIn,
+        signOut,
+        updateUser,
+        updateAdresses,
+      }}
     >
       {children}
     </AuthContext.Provider>

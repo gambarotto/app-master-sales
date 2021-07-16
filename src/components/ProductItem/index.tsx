@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
-import { IProductItem } from '../../pages/HomeScreen';
+import { IProduct } from '../../contexts/products';
 import Currency from '../Currency';
 
 import {
@@ -14,7 +14,7 @@ import {
 } from './styles';
 
 interface IProductItemProps {
-  product: IProductItem;
+  product: IProduct;
 }
 const ProductItem: React.FC<IProductItemProps> = ({ product }) => {
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ const ProductItem: React.FC<IProductItemProps> = ({ product }) => {
   return (
     <Container onPress={handleGoToProductScreen}>
       <ContainerImage>
-        <ImageProduct source={{ uri: product.photo.photo_url }} />
+        <ImageProduct source={{ uri: product.photos[0].photo_url }} />
       </ContainerImage>
       <ContainerInfo>
         <TitleProduct>{product.name}</TitleProduct>

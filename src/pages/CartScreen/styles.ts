@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/native';
 import Constants from 'expo-constants';
 import { FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ICartProductItem } from '.';
+import { ICartProduct } from '../../contexts/cart';
 
 interface PropsCard {
   isChecked: boolean;
@@ -10,11 +10,20 @@ interface PropsCard {
 
 const { statusBarHeight } = Constants;
 
+export const ContainerHeaderWithoutItems = styled.View`
+  position: relative;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: ${`${statusBarHeight + 8}px`};
+  margin-left: 8px;
+  margin-right: 8px;
+`;
 export const ContainerWithOutItems = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  margin-top: ${`${statusBarHeight + 8}px`};
 `;
 export const TextWithOutItems = styled.Text`
   font-family: 'Roboto-Regular';
@@ -66,7 +75,7 @@ export const ContainerCartProductList = styled.View`
   max-height: 30%;
 `;
 export const CartProductsList = styled(
-  FlatList as new () => FlatList<ICartProductItem>,
+  FlatList as new () => FlatList<ICartProduct>,
 )``;
 export const ButtonAddMoreItems = styled.TouchableOpacity`
   justify-content: center;

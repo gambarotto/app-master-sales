@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // import { useAuth } from '../../contexts/auth';
 
 import {
@@ -22,108 +22,69 @@ import {
 import themeGlobal from '../../styles/global';
 import ProductItem from '../../components/ProductItem';
 import HeaderScreen from '../../components/HeaderScreen';
+import { useFetch } from '../../hooks/useFetch';
+import { IProduct, useProduct } from '../../contexts/products';
 
 export interface ICategoryItem {
   id: string;
   name: string;
   image_url: string;
 }
-interface IPhotoProduct {
-  id: string;
-  photo_url: string;
-}
-export interface IProductItem {
-  id: string;
-  name: string;
-  description: string;
-  sale_price: number;
-  photo: IPhotoProduct;
-}
 
 const HomeScreen: React.FC = () => {
   const categories: ICategoryItem[] = [
     {
-      id: '1',
+      id: '757d8707-8372-4449-b937-ae39a2a063db',
       name: 'Queijos',
       image_url:
         'https://www.atabua.com.br/wp-content/uploads/2020/09/post_thumbnail-5e561078885c6abcd39df0847ffc94a4.jpeg',
     },
     {
-      id: '2',
+      id: 'dd5a54a5-6f37-4699-b393-3437bf9ffd89',
       name: 'Doces',
       image_url:
         'https://japrovei.com/wp-content/uploads/2019/12/melhor-marca-de-doce-de-leite.jpg',
     },
     {
-      id: '3',
+      id: '198d3291-7d0f-4f43-8045-1746bb745a78',
       name: 'Bifes de Linguiça',
       image_url:
         'https://topxfoods.com/wp-content/uploads/2020/10/bife-linguica-apimentado.jpg',
     },
-  ];
-  const products: IProductItem[] = [
     {
-      id: '1',
-      name: 'Queijo 1',
-      description:
-        'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-      sale_price: 27.9,
-      photo: {
-        id: '1',
-        photo_url:
-          'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-      },
-    },
-    {
-      id: '2',
-      name: 'Queijo 2',
-      description:
-        'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-      sale_price: 27.9,
-      photo: {
-        id: '2',
-        photo_url:
-          'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-      },
-    },
-    {
-      id: '3',
-      name: 'Queijo 3',
-      description:
-        'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-      sale_price: 27.9,
-      photo: {
-        id: '3',
-        photo_url:
-          'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-      },
-    },
-    {
-      id: '4',
-      name: 'Queijo 4',
-      description:
-        'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-      sale_price: 27.9,
-      photo: {
-        id: '4',
-        photo_url:
-          'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-      },
-    },
-    {
-      id: '5',
-      name: 'Queijo 5',
-      description:
-        'Sunt quis minim culpa voluptate elit sint sunt. Reprehenderit culpa aliquip consectetur amet ad Lorem do proident. Nisi voluptate',
-      sale_price: 27.9,
-      photo: {
-        id: '5',
-        photo_url:
-          'https://portaldoqueijo.com.br/site/wp-content/uploads/2019/03/Queijo-canastra.-Fonte-Armazem-S%C3%A3o-Roque-881x587-881x587.jpg',
-      },
+      id: 'f9c0aa26-3860-4509-a935-50bff89af6bf',
+      name: 'Artesanal',
+      image_url:
+        'https://i9menu.com.br/public/uploads/2019/01/culinaria-artesanal.jpg',
     },
   ];
-  // const { user, signOut } = useAuth();
+  const { updateProducts } = useProduct();
+  const { data: products } = useFetch<IProduct[]>('products');
+  const [productsFiltred, setProductsFiltered] = useState<IProduct[]>([]);
+
+  useEffect(() => {
+    updateProducts(products as IProduct[]);
+  }, [products, updateProducts]);
+
+  const handleSelectCategory = useCallback(
+    (category_id: string) => {
+      if (products) {
+        const prodsFiltred = products.filter((product) => {
+          const findIndex = product.categories.findIndex(
+            (category) => category.id === category_id,
+          );
+          return findIndex >= 0 && product;
+        });
+        setProductsFiltered(prodsFiltred);
+      }
+    },
+    [products],
+  );
+  const dataProducts = useMemo(
+    () => (productsFiltred.length > 0 ? productsFiltred : products),
+    [products, productsFiltred],
+  );
+
   return (
     <Container>
       <ContainerHeader>
@@ -146,7 +107,9 @@ const HomeScreen: React.FC = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item: category }) => (
-              <CategoryItemContainer>
+              <CategoryItemContainer
+                onPress={() => handleSelectCategory(category.id)}
+              >
                 <CategoryItemImage source={{ uri: category.image_url }}>
                   <CategoryItemTitle>{category.name}</CategoryItemTitle>
                 </CategoryItemImage>
@@ -159,7 +122,7 @@ const HomeScreen: React.FC = () => {
         <TitleProducts>Produtos</TitleProducts>
         <ContainerProductList>
           <ProductList
-            data={products}
+            data={dataProducts}
             keyExtractor={(product) => product.id}
             showsVerticalScrollIndicator={false}
             renderItem={({ item: product }) => (

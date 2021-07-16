@@ -3,8 +3,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
 import { useCart } from '../../contexts/cart';
+import { IProduct } from '../../contexts/products';
+import api from '../../services/api';
 import themeGlobal from '../../styles/global';
-import { IProductItem } from '../HomeScreen';
 
 import {
   Container,
@@ -32,10 +33,11 @@ import {
 
 const ProductScreen: React.FC = () => {
   const route = useRoute();
-  const routeParams = route.params as IProductItem;
+  const routeParams = route.params as IProduct;
   const navigation = useNavigation();
   const { handleProduct, cartProducts } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const [currentPrice, setCurrentPrice] = useState(routeParams.sale_price);
 
@@ -72,10 +74,17 @@ const ProductScreen: React.FC = () => {
     return value;
   }, [quantity, routeParams.sale_price]);
 
+  const handleFavorite = useCallback(async (product_id: string) => {
+    const response = await api.post('users/favorites', { product_id });
+    if (response.data) {
+      setIsFavorite((state) => !state);
+    }
+  }, []);
+
   return (
     <Container>
       <ContainerProductImage>
-        <ProductImage source={{ uri: routeParams.photo.photo_url }} />
+        <ProductImage source={{ uri: routeParams.photos[0].photo_url }} />
         <ContainerIconBack onPress={() => navigation.goBack()}>
           <IconBack
             name="keyboard-arrow-left"
@@ -119,11 +128,16 @@ const ProductScreen: React.FC = () => {
           <TextDescription>{routeParams.description}</TextDescription>
         </ContainerDescription>
         <ContainerActionButtons>
-          <ButtonFavorite>
+          <ButtonFavorite
+            isFavorite={isFavorite}
+            onPress={() => handleFavorite(routeParams.id)}
+          >
             <IconFavorite
               name="favorite"
               size={18}
-              color={themeGlobal.colors.red}
+              color={
+                isFavorite ? themeGlobal.colors.white : themeGlobal.colors.red
+              }
             />
           </ButtonFavorite>
           <Button color="tertiary" textSize={16} onPress={handleAddCartProduct}>

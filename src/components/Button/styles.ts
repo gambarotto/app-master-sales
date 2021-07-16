@@ -10,7 +10,7 @@ interface TextProps {
 export const Container = styled(RectButton)<ContainerProps>`
   width: 100%;
   flex: 1;
-  height: 60px;
+  max-height: 60px;
   justify-content: center;
   align-items: center;
   border-radius: 8px;

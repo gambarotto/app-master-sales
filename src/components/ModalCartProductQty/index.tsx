@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useCart } from '../../contexts/cart';
+import { ICartProduct, useCart } from '../../contexts/cart';
 import themeGlobal from '../../styles/global';
 
 import {
@@ -18,16 +18,7 @@ import {
 interface Props {
   handleModal(): void;
   item: {
-    product: {
-      id: string;
-      name: string;
-      description: string;
-      sale_price: number;
-      photo: {
-        id: string;
-        photo_url: string;
-      };
-    };
+    product: ICartProduct;
     quantity: number;
   };
 }

@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
+import Modal from 'react-native-modal';
 import { useAuth } from '../../contexts/auth';
 import themeGlobal from '../../styles/global';
 import FacebookFunctions from '../../utils/facebook';
+import ModalEditProfile from './ModalEditProfile';
 
 import {
   Container,
@@ -27,22 +29,26 @@ interface IMenu {
 const SettingsScreen: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigation = useNavigation();
+  const [modalProfile, setModalProfile] = useState(false);
 
   const signOutWithFacebook = useCallback(async () => {
     await FacebookFunctions.initFacebook();
     await FacebookFunctions.logOut();
     signOut();
   }, [signOut]);
+  const handleOpenModal = useCallback(() => {
+    setModalProfile((state) => !state);
+  }, []);
   const menu: IMenu[] = [
     {
       name: 'Dados',
       icon: 'assignment-ind',
-      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
+      goTo: handleOpenModal,
     },
     {
       name: 'Endereços',
       icon: 'place',
-      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
+      goTo: useCallback(() => navigation.navigate('Adresses'), [navigation]),
     },
     {
       name: 'Sobre a Leiteria',
@@ -84,6 +90,9 @@ const SettingsScreen: React.FC = () => {
           </ContainerItemMenu>
         ))}
       </ContainerMenu>
+      <Modal isVisible={modalProfile}>
+        <ModalEditProfile setModalIsOpen={handleOpenModal} />
+      </Modal>
     </Container>
   );
 };
