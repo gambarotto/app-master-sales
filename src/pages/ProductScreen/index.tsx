@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
 import { useCart } from '../../contexts/cart';
-import { IProduct } from '../../contexts/products';
+import { IProduct, useProduct } from '../../contexts/products';
 import api from '../../services/api';
 import themeGlobal from '../../styles/global';
 
@@ -36,8 +36,19 @@ const ProductScreen: React.FC = () => {
   const routeParams = route.params as IProduct;
   const navigation = useNavigation();
   const { handleProduct, cartProducts } = useCart();
+  const { favoriteProducts } = useProduct();
+
   const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(() => {
+    const isFav = favoriteProducts.findIndex(
+      (fav) => fav.id === routeParams.id,
+    );
+    console.log(favoriteProducts);
+
+    console.log(isFav);
+
+    return isFav >= 0;
+  });
 
   const [currentPrice, setCurrentPrice] = useState(routeParams.sale_price);
 

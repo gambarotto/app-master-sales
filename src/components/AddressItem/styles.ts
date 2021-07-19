@@ -1,3 +1,4 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import styled, { css } from 'styled-components/native';
 
 interface SelectedAddress {
@@ -5,7 +6,6 @@ interface SelectedAddress {
 }
 
 export const Container = styled.View<SelectedAddress>`
-  padding: 16px;
   flex-direction: row;
   border-width: 1px;
   border-radius: 4px;
@@ -18,6 +18,7 @@ export const Container = styled.View<SelectedAddress>`
 `;
 export const ContainerData = styled.TouchableOpacity`
   flex: 1;
+  padding: 16px;
 `;
 export const AliasAddress = styled.Text<SelectedAddress>`
   font-family: 'Roboto-Bold';
@@ -35,6 +36,22 @@ export const TextAddressDescription = styled.Text<SelectedAddress>`
   ${(props) => css`
     color: ${props.isSelected
       ? props.theme.colors.gray2
+      : props.theme.colors.gray3};
+  `}
+`;
+export const ContainerEdit = styled.TouchableOpacity`
+  width: 60px;
+  justify-content: center;
+  align-items: center;
+`;
+export const Icon = styled(MaterialIcons)``;
+
+export const TextEdit = styled.Text<SelectedAddress>`
+  font-family: 'Roboto-Regular';
+  font-size: 10px;
+  ${(props) => css`
+    color: ${props.isSelected
+      ? props.theme.colors.secondary
       : props.theme.colors.gray3};
   `}
 `;

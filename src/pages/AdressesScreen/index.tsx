@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useNavigation } from '@react-navigation/native';
 import {
   AdressesList,
+  ButtonAdd,
   ButtonBack,
   Container,
   ContainerAdressesList,
+  ContainerButton,
   ContainerHeader,
   Icon,
   TitleAdresses,
@@ -13,12 +16,14 @@ import themeGlobal from '../../styles/global';
 import { useFetch } from '../../hooks/useFetch';
 import { IAddress, useAuth } from '../../contexts/auth';
 import AddressItem from '../../components/AddressItem';
+import Button from '../../components/Button';
 
 interface IIsSelected {
   [key: string]: boolean;
 }
 
 const AdressesScreen: React.FC = () => {
+  const navigation = useNavigation();
   const { updateAdresses } = useAuth();
   const adressesCreate = useMemo(
     () => [
@@ -32,6 +37,7 @@ const AdressesScreen: React.FC = () => {
         complement: 'complemento 1',
         reference_point: 'referencia 1',
         alias: 'Trabalho',
+        default: true,
       },
       {
         id: '6f4a1e0b-f615-4b0c-9968-b2c9d4de215oCASA',
@@ -43,6 +49,7 @@ const AdressesScreen: React.FC = () => {
         complement: 'complemento 2',
         reference_point: 'referencia 2',
         alias: 'Casa',
+        default: false,
       },
       {
         id: '6f4a1e0b-f615-4b0c-9968-b2c9d4d8e215oPAIS',
@@ -54,30 +61,24 @@ const AdressesScreen: React.FC = () => {
         complement: 'complemento 3',
         reference_point: 'referencia 3',
         alias: 'Casa Pais',
+        default: false,
       },
     ],
     [],
   );
-  const createSelected = useMemo(() => {
-    const selectedObject: IIsSelected = {};
-    adressesCreate.forEach((address) => {
-      selectedObject[address.id] = false;
-    });
-    return selectedObject;
-  }, [adressesCreate]);
-  const [selected, setSelected] = useState<IIsSelected>(createSelected);
 
-  const handleSelected = useCallback((address_id: string) => {
-    setSelected((state) => {
-      const keys = Object.keys(state);
-      const newState = { ...state };
-      keys.forEach((key) => {
-        newState[key] = false;
+  const [selected, setSelected] = useState('id');
+  // const [selected, setSelected] = useState<IIsSelected>(createSelected);
+
+  const handleSelected = useCallback(
+    (address_id: string) => {
+      adressesCreate.forEach((address, index) => {
+        adressesCreate[index].default = address.id === address_id;
       });
-      Object.assign(newState, { [address_id]: true });
-      return newState;
-    });
-  }, []);
+      setSelected(address_id);
+    },
+    [adressesCreate],
+  );
   // const { data: adresses } = useFetch<IAddress[]>('users/adresses/me');
 
   // useEffect(() => {
@@ -86,7 +87,7 @@ const AdressesScreen: React.FC = () => {
   return (
     <Container>
       <ContainerHeader>
-        <ButtonBack>
+        <ButtonBack onPress={() => navigation.navigate('Tabs')}>
           <Icon
             name="keyboard-arrow-left"
             size={24}
@@ -94,6 +95,13 @@ const AdressesScreen: React.FC = () => {
           />
         </ButtonBack>
         <TitleAdresses>Endereços</TitleAdresses>
+        <ButtonAdd>
+          <Icon
+            name="add-circle"
+            size={24}
+            color={themeGlobal.colors.secondary}
+          />
+        </ButtonAdd>
       </ContainerHeader>
       <ContainerAdressesList>
         <AdressesList
@@ -102,13 +110,18 @@ const AdressesScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item: address }) => (
             <AddressItem
-              isSelected={selected[address.id]}
+              isSelected={address.default || address.id === selected}
               handleSelected={handleSelected}
               address={address}
             />
           )}
         />
       </ContainerAdressesList>
+      <ContainerButton>
+        <Button textSize={16} color="secondary">
+          Confirmar
+        </Button>
+      </ContainerButton>
     </Container>
   );
 };

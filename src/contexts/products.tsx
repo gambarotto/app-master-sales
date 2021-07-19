@@ -22,6 +22,7 @@ interface IProductContext {
   products: IProduct[];
   favoriteProducts: IProduct[];
   updateProducts(productsRequest: IProduct[]): void;
+  updateFavoriteProducts(productsRequest: IProduct[]): void;
 }
 
 const ProductContext = createContext<IProductContext>({} as IProductContext);
@@ -40,7 +41,12 @@ const ProductProvider: React.FC = ({ children }) => {
   }, []);
   return (
     <ProductContext.Provider
-      value={{ products, favoriteProducts, updateProducts }}
+      value={{
+        products,
+        favoriteProducts,
+        updateProducts,
+        updateFavoriteProducts,
+      }}
     >
       {children}
     </ProductContext.Provider>

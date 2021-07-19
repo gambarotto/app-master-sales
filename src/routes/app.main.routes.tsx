@@ -12,7 +12,7 @@ const AppMainRoutes = createStackNavigator();
 
 const AppMain: React.FC = () => (
   <AppMainRoutes.Navigator
-    initialRouteName="Adresses"
+    initialRouteName="Tabs"
     screenOptions={{
       headerShown: false,
       cardStyle: { backgroundColor: themeGlobal.colors.white },

@@ -30,9 +30,18 @@ export const TitleAdresses = styled.Text`
   font-size:18px;
   font-family: 'Roboto-Bold';
 `;
+export const ButtonAdd = styled.TouchableOpacity`
+  position: absolute;
+  right: 16px;
+`;
 export const ContainerAdressesList = styled.View`
   flex: 1;
   padding-left: 16px;
   padding-right: 16px;
 `;
 export const AdressesList = styled(FlatList as new () => FlatList<IAddress>)``;
+export const ContainerButton = styled.View`
+  height: 92px;
+  width: 100%;
+  padding: 16px;
+`;

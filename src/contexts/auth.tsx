@@ -28,6 +28,7 @@ export interface IAddress {
   complement?: string;
   reference_point?: string;
   alias: string;
+  default: boolean;
 }
 interface IFavoriteProduct {
   id: string;

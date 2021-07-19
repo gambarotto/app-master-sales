@@ -58,13 +58,15 @@ const HomeScreen: React.FC = () => {
         'https://i9menu.com.br/public/uploads/2019/01/culinaria-artesanal.jpg',
     },
   ];
-  const { updateProducts } = useProduct();
+  const { updateProducts, updateFavoriteProducts } = useProduct();
   const { data: products } = useFetch<IProduct[]>('products');
+  const { data: favorite_products } = useFetch<IProduct[]>('users/favorites');
   const [productsFiltred, setProductsFiltered] = useState<IProduct[]>([]);
 
   useEffect(() => {
     updateProducts(products as IProduct[]);
-  }, [products, updateProducts]);
+    updateFavoriteProducts(favorite_products as IProduct[]);
+  }, [favorite_products, products, updateFavoriteProducts, updateProducts]);
 
   const handleSelectCategory = useCallback(
     (category_id: string) => {

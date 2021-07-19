@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Modal from 'react-native-modal';
 import { useAuth } from '../../contexts/auth';
 import themeGlobal from '../../styles/global';
@@ -39,33 +39,36 @@ const SettingsScreen: React.FC = () => {
   const handleOpenModal = useCallback(() => {
     setModalProfile((state) => !state);
   }, []);
-  const menu: IMenu[] = [
-    {
-      name: 'Dados',
-      icon: 'assignment-ind',
-      goTo: handleOpenModal,
-    },
-    {
-      name: 'Endereços',
-      icon: 'place',
-      goTo: useCallback(() => navigation.navigate('Adresses'), [navigation]),
-    },
-    {
-      name: 'Sobre a Leiteria',
-      icon: 'store',
-      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
-    },
-    {
-      name: 'Sobre o App',
-      icon: 'contact-support',
-      goTo: useCallback(() => navigation.navigate('Product'), [navigation]),
-    },
-    {
-      name: 'Sair',
-      icon: 'logout',
-      goTo: signOutWithFacebook,
-    },
-  ];
+  const menu: IMenu[] = useMemo(
+    () => [
+      {
+        name: 'Dados',
+        icon: 'assignment-ind',
+        goTo: handleOpenModal,
+      },
+      {
+        name: 'Endereços',
+        icon: 'place',
+        goTo: () => navigation.navigate('Adresses'),
+      },
+      {
+        name: 'Sobre a Leiteria',
+        icon: 'store',
+        goTo: () => navigation.navigate('Product'),
+      },
+      {
+        name: 'Sobre o App',
+        icon: 'contact-support',
+        goTo: () => navigation.navigate('Product'),
+      },
+      {
+        name: 'Sair',
+        icon: 'logout',
+        goTo: signOutWithFacebook,
+      },
+    ],
+    [handleOpenModal, navigation, signOutWithFacebook],
+  );
 
   return (
     <Container>

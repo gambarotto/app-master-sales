@@ -128,7 +128,7 @@ export const ButtonFavorite = styled.TouchableOpacity<IButtonFavorite>`
     border-color: ${props.theme.colors.red};
     background-color: ${props.isFavorite
       ? props.theme.colors.red
-      : props.theme.colors.white2};
+      : props.theme.colors.white};
   `}
   margin-right:16px;
 `;
