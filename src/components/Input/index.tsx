@@ -10,7 +10,14 @@ import React, {
 import { TextInputProps, TextInput } from 'react-native';
 import { useField } from '@unform/core';
 
-import { Container, Icon, styleTextInput, TextError } from './styles';
+import {
+  Container,
+  ContainerInput,
+  Icon,
+  LabelInput,
+  styleTextInput,
+  Warning,
+} from './styles';
 import themeGlobal from '../../styles/global';
 
 interface InputValueReference {
@@ -22,15 +29,20 @@ interface InputRef {
 interface InputProps extends TextInputProps {
   name: string;
   icon?: string;
+  label?: string;
+  style?: object;
+  initialValue?: string;
 }
 
 const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
-  { name, icon, ...rest },
+  { name, icon, label = null, style = {}, initialValue = '', ...rest },
   ref,
 ) => {
   const { registerField, defaultValue = '', fieldName, error } = useField(name);
   const inputElementRef = useRef<any>(null);
-  const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
+  const inputValueRef = useRef<InputValueReference>({
+    value: initialValue || defaultValue,
+  });
 
   const [isFocus, setIsFocus] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -68,32 +80,42 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
 
   return (
     <>
-      <Container isFocus={isFocus} isFilled={isFilled} isErrored={!!error}>
-        {icon && (
-          <Icon
-            name={icon}
-            size={20}
-            color={
-              isFilled || isFocus
-                ? themeGlobal.colors.tertiary
-                : themeGlobal.colors.primary
-            }
+      <Container
+        style={style}
+        isFocus={isFocus}
+        isFilled={isFilled}
+        isErrored={!!error}
+      >
+        {label && <LabelInput>{label}</LabelInput>}
+        <ContainerInput>
+          {icon && (
+            <Icon
+              name={icon}
+              size={20}
+              color={
+                isFilled || isFocus
+                  ? themeGlobal.colors.tertiary
+                  : themeGlobal.colors.primary
+              }
+            />
+          )}
+          <TextInput
+            ref={inputElementRef}
+            style={styleTextInput.textInput}
+            keyboardAppearance="dark"
+            placeholderTextColor={themeGlobal.colors.gray3}
+            onFocus={handleInputFocus}
+            onBlur={handleInputFilled}
+            onChangeText={(value) => {
+              inputValueRef.current.value = value;
+            }}
+            {...rest}
           />
+        </ContainerInput>
+        {!!error && (
+          <Warning name="error" size={16} color={themeGlobal.colors.red} />
         )}
-        <TextInput
-          ref={inputElementRef}
-          style={styleTextInput.textInput}
-          keyboardAppearance="dark"
-          placeholderTextColor="#666360"
-          onFocus={handleInputFocus}
-          onBlur={handleInputFilled}
-          onChangeText={(value) => {
-            inputValueRef.current.value = value;
-          }}
-          {...rest}
-        />
       </Container>
-      {!!error && <TextError>{error}</TextError>}
     </>
   );
 };

@@ -43,10 +43,6 @@ const ProductScreen: React.FC = () => {
     const isFav = favoriteProducts.findIndex(
       (fav) => fav.id === routeParams.id,
     );
-    console.log(favoriteProducts);
-
-    console.log(isFav);
-
     return isFav >= 0;
   });
 

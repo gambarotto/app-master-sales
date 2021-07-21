@@ -9,11 +9,10 @@ interface ContainerProps {
 }
 
 export const Container = styled.View<ContainerProps>`
-  width: 100%;
+  flex: 1;
   height: 60px;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   padding: 0 16px;
   border-bottom-width: 1px;
   margin-bottom: 8px;
@@ -39,17 +38,27 @@ export const Container = styled.View<ContainerProps>`
       border-bottom-color: ${props.theme.colors.red};
     `}
 `;
-export const Icon = styled(MaterialIcons)`
-  margin-right: 16px;
-`;
-
-export const TextError = styled.Text`
+export const LabelInput = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
-  font-size: 8px;
-  font-family: 'Roboto-Regular';
-  align-self: flex-end;
+  font-size: 12px;
+  font-family: 'Roboto-Bold';
+  align-self: flex-start;
+  margin-bottom: 8px;
+`;
+export const ContainerInput = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+export const Icon = styled(MaterialIcons)`
+  margin-right: 16px;
+`;
+export const Warning = styled(MaterialIcons)`
+  position: absolute;
+  right: 4px;
+  top: 4px;
 `;
 export const styleTextInput = StyleSheet.create({
   textInput: {

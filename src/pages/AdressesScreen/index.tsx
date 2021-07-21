@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import {
@@ -17,73 +17,39 @@ import { useFetch } from '../../hooks/useFetch';
 import { IAddress, useAuth } from '../../contexts/auth';
 import AddressItem from '../../components/AddressItem';
 import Button from '../../components/Button';
-
-interface IIsSelected {
-  [key: string]: boolean;
-}
+import api from '../../services/api';
 
 const AdressesScreen: React.FC = () => {
   const navigation = useNavigation();
+  const { data: adresses } = useFetch<IAddress[]>('users/adresses/me');
+
   const { updateAdresses } = useAuth();
-  const adressesCreate = useMemo(
-    () => [
-      {
-        id: '6f4a1e0b-f615-4b0c-9968-b2c9d4de215dTRABALHO',
-        street: 'rua do trabalho',
-        number: '1',
-        district: 'bairro 1',
-        city: 'cidade 1',
-        zip_code: '13123123',
-        complement: 'complemento 1',
-        reference_point: 'referencia 1',
-        alias: 'Trabalho',
-        default: true,
-      },
-      {
-        id: '6f4a1e0b-f615-4b0c-9968-b2c9d4de215oCASA',
-        street: 'rua de casa',
-        number: '2',
-        district: 'bairro 2',
-        city: 'cidade 2',
-        zip_code: '13123123',
-        complement: 'complemento 2',
-        reference_point: 'referencia 2',
-        alias: 'Casa',
-        default: false,
-      },
-      {
-        id: '6f4a1e0b-f615-4b0c-9968-b2c9d4d8e215oPAIS',
-        street: 'rua de casa dos pais',
-        number: '3',
-        district: 'bairro 3',
-        city: 'cidade 3',
-        zip_code: '13133133',
-        complement: 'complemento 3',
-        reference_point: 'referencia 3',
-        alias: 'Casa Pais',
-        default: false,
-      },
-    ],
-    [],
-  );
+  useEffect(() => {
+    updateAdresses(adresses as IAddress[]);
+  }, [adresses, updateAdresses]);
 
   const [selected, setSelected] = useState('id');
-  // const [selected, setSelected] = useState<IIsSelected>(createSelected);
 
   const handleSelected = useCallback(
     (address_id: string) => {
-      adressesCreate.forEach((address, index) => {
-        adressesCreate[index].default = address.id === address_id;
-      });
+      if (adresses) {
+        adresses.forEach((address, index) => {
+          adresses[index].default = address.id === address_id;
+        });
+      }
       setSelected(address_id);
     },
-    [adressesCreate],
+    [adresses],
   );
-  // const { data: adresses } = useFetch<IAddress[]>('users/adresses/me');
+  const handleCreateAddress = useCallback(() => {
+    navigation.navigate('CreateEditAddress');
+  }, [navigation]);
 
-  // useEffect(() => {
-  //   updateAdresses(adresses as IAddress[]);
-  // }, [adresses, updateAdresses]);
+  const handleConfirmSelectedAddress = useCallback(async () => {
+    await api.patch(`/users/adresses/me/${selected}/default`);
+    navigation.goBack();
+  }, [navigation, selected]);
+
   return (
     <Container>
       <ContainerHeader>
@@ -95,7 +61,7 @@ const AdressesScreen: React.FC = () => {
           />
         </ButtonBack>
         <TitleAdresses>Endereços</TitleAdresses>
-        <ButtonAdd>
+        <ButtonAdd onPress={handleCreateAddress}>
           <Icon
             name="add-circle"
             size={24}
@@ -105,7 +71,7 @@ const AdressesScreen: React.FC = () => {
       </ContainerHeader>
       <ContainerAdressesList>
         <AdressesList
-          data={adressesCreate}
+          data={adresses}
           keyExtractor={(address) => address.id}
           showsVerticalScrollIndicator={false}
           renderItem={({ item: address }) => (
@@ -118,7 +84,11 @@ const AdressesScreen: React.FC = () => {
         />
       </ContainerAdressesList>
       <ContainerButton>
-        <Button textSize={16} color="secondary">
+        <Button
+          onPress={handleConfirmSelectedAddress}
+          textSize={16}
+          color="secondary"
+        >
           Confirmar
         </Button>
       </ContainerButton>

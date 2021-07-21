@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { IAddress } from '../../contexts/auth';
 import themeGlobal from '../../styles/global';
@@ -24,11 +25,19 @@ const AddressItem: React.FC<Props> = ({
   isSelected,
   handleSelected,
 }) => {
+  const navigation = useNavigation();
   const changeColor = useMemo(
     () =>
       isSelected ? themeGlobal.colors.secondary : themeGlobal.colors.gray3,
     [isSelected],
   );
+  const handleEditAddress = useCallback(
+    (addressData) => {
+      navigation.navigate('CreateEditAddress', addressData);
+    },
+    [navigation],
+  );
+
   return (
     <Container isSelected={isSelected}>
       <ContainerData onPress={() => handleSelected(address.id)}>
@@ -53,7 +62,7 @@ const AddressItem: React.FC<Props> = ({
           </TextAddressDescription>
         )}
       </ContainerData>
-      <ContainerEdit>
+      <ContainerEdit onPress={() => handleEditAddress(address)}>
         <Icon name="edit" size={16} color={changeColor} />
         <TextEdit isSelected={isSelected}>Editar</TextEdit>
       </ContainerEdit>
