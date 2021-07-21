@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { TextInput, Platform, Alert, Keyboard } from 'react-native';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
@@ -109,7 +115,10 @@ const CreateEditAddressScreen: React.FC = () => {
     },
     [routeAddress],
   );
-
+  const changeTitle = useMemo(
+    () => (routeAddress ? 'Editar Endereço' : 'Novo Endereço'),
+    [routeAddress],
+  );
   return (
     <KeyboardAvoiding
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -124,7 +133,7 @@ const CreateEditAddressScreen: React.FC = () => {
               color={themeGlobal.colors.secondary}
             />
           </ButtonBack>
-          <TitleAdresses>Endereços</TitleAdresses>
+          <TitleAdresses>{changeTitle}</TitleAdresses>
         </ContainerHeader>
         <ContainerForm>
           <Form ref={formRef} onSubmit={handleCreateAddress}>
@@ -269,7 +278,7 @@ const CreateEditAddressScreen: React.FC = () => {
             }}
             color="secondary"
           >
-            Cadastrar endereço
+            {routeAddress ? 'Atualizar' : 'Cadastrar'}
           </Button>
         </ContainerButtons>
       )}

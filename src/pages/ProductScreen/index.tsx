@@ -81,12 +81,17 @@ const ProductScreen: React.FC = () => {
     return value;
   }, [quantity, routeParams.sale_price]);
 
-  const handleFavorite = useCallback(async (product_id: string) => {
-    const response = await api.post('users/favorites', { product_id });
-    if (response.data) {
+  const handleFavorite = useCallback(
+    async (product_id: string) => {
+      if (isFavorite) {
+        await api.delete(`users/favorites/${routeParams.id}`);
+      } else {
+        await api.post('users/favorites', { product_id });
+      }
       setIsFavorite((state) => !state);
-    }
-  }, []);
+    },
+    [isFavorite, routeParams.id],
+  );
 
   return (
     <Container>
