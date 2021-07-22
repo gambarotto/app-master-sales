@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -5,6 +6,7 @@ import React, {
   useCallback,
   useState,
   useEffect,
+  Dispatch,
 } from 'react';
 
 import { TextInputProps, TextInput } from 'react-native';
@@ -19,6 +21,7 @@ import {
   Warning,
 } from './styles';
 import themeGlobal from '../../styles/global';
+import * as masks from '../../utils/masks';
 
 interface InputValueReference {
   value: string;
@@ -32,10 +35,23 @@ interface InputProps extends TextInputProps {
   label?: string;
   style?: object;
   initialValue?: string;
+  mask?: 'number' | 'cep' | 'phone';
+  rawText?: string;
+  onInitialData?: Dispatch<React.SetStateAction<string>>;
 }
 
 const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
-  { name, icon, label = null, style = {}, initialValue = '', ...rest },
+  {
+    name,
+    icon,
+    label = null,
+    style = {},
+    initialValue = '',
+    mask,
+    rawText,
+    onInitialData,
+    ...rest
+  },
   ref,
 ) => {
   const { registerField, defaultValue = '', fieldName, error } = useField(name);
@@ -46,6 +62,10 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
 
   const [isFocus, setIsFocus] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+
+  useEffect(() => {
+    if (onInitialData) onInitialData(initialValue || defaultValue);
+  }, [defaultValue, initialValue, onInitialData]);
 
   const handleInputFocus = useCallback(() => {
     setIsFocus(true);
@@ -66,17 +86,22 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     registerField<string>({
       name: fieldName,
       ref: inputValueRef.current,
-      path: 'value',
+      // path: 'value',
       setValue(_ref: any, value) {
         inputValueRef.current.value = value;
         inputElementRef.current.setNativeProps({ text: value });
+      },
+      getValue(_ref: any) {
+        if (rawText) return rawText;
+        if (inputValueRef.current) return inputValueRef.current.value;
+        return '';
       },
       clearValue() {
         inputValueRef.current.value = '';
         inputElementRef.current.clear();
       },
     });
-  }, [fieldName, registerField]);
+  }, [fieldName, mask, rawText, registerField]);
 
   return (
     <>

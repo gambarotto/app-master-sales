@@ -155,6 +155,7 @@ export const DeliveryPrice = styled.Text<PropsCard>`
   font-size: 14px;
 `;
 export const ContainerBottomCard = styled.View`
+  height: 40px;
   margin-top: 16px;
 `;
 export const TextAliasAddress = styled.Text<PropsCard>`

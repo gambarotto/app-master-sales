@@ -34,6 +34,15 @@ export const ButtonAdd = styled.TouchableOpacity`
   position: absolute;
   right: 16px;
 `;
+export const TextSelectAddress = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.primary};
+  `}
+  font-size:12px;
+  font-family: 'Roboto-Regular';
+  padding: 16px;
+  padding-top: 0;
+`;
 export const ContainerAdressesList = styled.View`
   flex: 1;
   padding-left: 16px;

@@ -43,6 +43,8 @@ import {
   TitleDelivery,
   TitlePage,
 } from './styles';
+import { useFetch } from '../../hooks/useFetch';
+import { IAddress } from '../../contexts/auth';
 
 export interface ICartProductItem {
   product: ICartProduct;
@@ -52,9 +54,12 @@ export interface ICartProductItem {
 const CartScreen: React.FC = () => {
   const navigation = useNavigation();
   const { cartProducts, countCartProducts, clearCart } = useCart();
+  const { data: defaultAddress } = useFetch<IAddress>(
+    '/users/adresses/me/default',
+  );
   const [isCheckedDelivery, setIsCheckedDelivery] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [deliveryFee, setDeliveryFee] = useState(10);
+  const [deliveryFee, setDeliveryFee] = useState(defaultAddress ? 10 : 0);
   const [currentItemModal, setCurrentItemModal] = useState<ICartProductItem>(
     {} as ICartProductItem,
   );
@@ -140,35 +145,54 @@ const CartScreen: React.FC = () => {
       </ContainerCartProductList>
       <ContainerDeliveryAddress>
         <TitleDelivery>Entrega</TitleDelivery>
-        <ContainerCard
-          isChecked={isCheckedDelivery}
-          onPress={() => handleDeliveryMethod(10)}
-        >
-          <ContainerTopCard>
-            <CheckCircle isChecked={isCheckedDelivery} size={24} />
-            <ContainerLabelAndPrice>
-              <TextAliasAddress isChecked={isCheckedDelivery}>
-                Casa
-              </TextAliasAddress>
-              <DeliveryPrice isChecked={isCheckedDelivery}>
-                <Currency value={10} />
-              </DeliveryPrice>
-            </ContainerLabelAndPrice>
-          </ContainerTopCard>
-          <ContainerBottomCard>
-            <ContainerAddress>
-              <TextAddress isChecked={isCheckedDelivery}>
-                Rua Ernesto Ribeiro, 683 - cep: 12.387-908
-              </TextAddress>
-            </ContainerAddress>
-          </ContainerBottomCard>
-        </ContainerCard>
+        {defaultAddress ? (
+          <ContainerCard
+            isChecked={isCheckedDelivery}
+            onPress={() => handleDeliveryMethod(10)}
+          >
+            <ContainerTopCard>
+              <CheckCircle isChecked={isCheckedDelivery} size={20} />
+              <ContainerLabelAndPrice>
+                <TextAliasAddress isChecked={isCheckedDelivery}>
+                  Casa
+                </TextAliasAddress>
+                <DeliveryPrice isChecked={isCheckedDelivery}>
+                  <Currency value={10} />
+                </DeliveryPrice>
+              </ContainerLabelAndPrice>
+            </ContainerTopCard>
+            <ContainerBottomCard>
+              <ContainerAddress>
+                <TextAddress isChecked={isCheckedDelivery}>
+                  {`${defaultAddress?.street}, ${defaultAddress?.number}`}
+                </TextAddress>
+                <TextAddress isChecked={isCheckedDelivery}>
+                  {`${defaultAddress?.city} - cep: ${defaultAddress?.zip_code}`}
+                </TextAddress>
+              </ContainerAddress>
+            </ContainerBottomCard>
+          </ContainerCard>
+        ) : (
+          <ContainerCard
+            isChecked={isCheckedDelivery}
+            onPress={() => navigation.navigate('Adresses')}
+          >
+            <ContainerTopCard>
+              <CheckCircle isChecked={isCheckedDelivery} size={20} />
+              <ContainerLabelAndPrice>
+                <TextAliasAddress isChecked={isCheckedDelivery}>
+                  Cadastrar endereço
+                </TextAliasAddress>
+              </ContainerLabelAndPrice>
+            </ContainerTopCard>
+          </ContainerCard>
+        )}
         <ContainerCard
           isChecked={!isCheckedDelivery}
           onPress={() => handleDeliveryMethod(0)}
         >
           <ContainerTopCard>
-            <CheckCircle isChecked={!isCheckedDelivery} size={24} />
+            <CheckCircle isChecked={!isCheckedDelivery} size={20} />
             <ContainerLabelAndPrice>
               <DeliveryLabel isChecked={!isCheckedDelivery}>
                 Retirar na loja

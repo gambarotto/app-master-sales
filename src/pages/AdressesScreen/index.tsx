@@ -10,6 +10,7 @@ import {
   ContainerButton,
   ContainerHeader,
   Icon,
+  TextSelectAddress,
   TitleAdresses,
 } from './styles';
 import themeGlobal from '../../styles/global';
@@ -24,11 +25,15 @@ const AdressesScreen: React.FC = () => {
   const { data: adresses } = useFetch<IAddress[]>('users/adresses/me');
 
   const { updateAdresses } = useAuth();
+  const [selected, setSelected] = useState('');
+
   useEffect(() => {
     updateAdresses(adresses as IAddress[]);
   }, [adresses, updateAdresses]);
-
-  const [selected, setSelected] = useState('id');
+  useEffect(() => {
+    const defaultAddress = adresses?.find((adrs) => adrs.default === true);
+    setSelected(defaultAddress?.id as string);
+  }, [adresses]);
 
   const handleSelected = useCallback(
     (address_id: string) => {
@@ -46,14 +51,19 @@ const AdressesScreen: React.FC = () => {
   }, [navigation]);
 
   const handleConfirmSelectedAddress = useCallback(async () => {
+    if (adresses && adresses.length === 0) {
+      navigation.navigate('CreateEditAddress');
+      return;
+    }
     await api.patch(`/users/adresses/me/${selected}/default`);
+
     navigation.goBack();
-  }, [navigation, selected]);
+  }, [adresses, navigation, selected]);
 
   return (
     <Container>
       <ContainerHeader>
-        <ButtonBack onPress={() => navigation.navigate('Tabs')}>
+        <ButtonBack onPress={() => navigation.goBack()}>
           <Icon
             name="keyboard-arrow-left"
             size={24}
@@ -69,27 +79,34 @@ const AdressesScreen: React.FC = () => {
           />
         </ButtonAdd>
       </ContainerHeader>
-      <ContainerAdressesList>
-        <AdressesList
-          data={adresses}
-          keyExtractor={(address) => address.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item: address }) => (
-            <AddressItem
-              isSelected={address.default || address.id === selected}
-              handleSelected={handleSelected}
-              address={address}
-            />
-          )}
-        />
-      </ContainerAdressesList>
+      <TextSelectAddress>
+        {adresses && adresses?.length > 0
+          ? 'Selecione o endereço que gostaria de receber as entregas'
+          : 'Você ainda não possui um endereço cadastrado'}
+      </TextSelectAddress>
+      {adresses && adresses.length > 0 && (
+        <ContainerAdressesList>
+          <AdressesList
+            data={adresses}
+            keyExtractor={(address) => address.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item: address }) => (
+              <AddressItem
+                isSelected={address.default || address.id === selected}
+                handleSelected={handleSelected}
+                address={address}
+              />
+            )}
+          />
+        </ContainerAdressesList>
+      )}
       <ContainerButton>
         <Button
           onPress={handleConfirmSelectedAddress}
           textSize={16}
           color="secondary"
         >
-          Confirmar
+          {adresses && adresses.length === 0 ? 'Criar endereço' : 'Confirmar'}
         </Button>
       </ContainerButton>
     </Container>

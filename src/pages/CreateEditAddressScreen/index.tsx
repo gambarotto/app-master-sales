@@ -32,6 +32,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import themeGlobal from '../../styles/global';
 import { IAddress } from '../../contexts/auth';
 import ModalDeleteteAddress from './ModalDeleteAddress';
+import InputMask from '../../components/InputMask';
 
 interface IFormData {
   name: string;
@@ -192,9 +193,10 @@ const CreateEditAddressScreen: React.FC = () => {
                   inputZipcodeRef.current?.focus();
                 }}
               />
-              <Input
+              <InputMask
                 ref={inputZipcodeRef}
-                style={{ maxWidth: '30%' }}
+                style={{ maxWidth: '40%' }}
+                type="zip-code"
                 name="zip_code"
                 label="CEP"
                 defaultValue={routeAddress ? routeAddress.zip_code : undefined}
