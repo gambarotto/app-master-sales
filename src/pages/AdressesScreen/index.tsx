@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   AdressesList,
   ButtonAdd,
@@ -27,6 +27,14 @@ const AdressesScreen: React.FC = () => {
   const { updateAdresses } = useAuth();
   const [selected, setSelected] = useState('');
 
+  useFocusEffect(
+    useCallback(
+      () => () => {
+        setSelected('');
+      },
+      [],
+    ),
+  );
   useEffect(() => {
     updateAdresses(adresses as IAddress[]);
   }, [adresses, updateAdresses]);

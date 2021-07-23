@@ -8,18 +8,20 @@ import ProductScreen from '../pages/ProductScreen';
 import AppTabsRoutes from './app.tabs.routes';
 import AdressesScreen from '../pages/AdressesScreen';
 import CreateEditAddressScreen from '../pages/CreateEditAddressScreen';
+import EditProfileScreen from '../pages/EditProfileScreen';
 
 const AppMainRoutes = createStackNavigator();
 
 const AppMain: React.FC = () => (
   <AppMainRoutes.Navigator
-    initialRouteName="Tabs"
+    initialRouteName="EditProfile"
     screenOptions={{
       headerShown: false,
       cardStyle: { backgroundColor: themeGlobal.colors.white },
     }}
   >
     <AppMainRoutes.Screen name="Tabs" component={AppTabsRoutes} />
+    <AppMainRoutes.Screen name="EditProfile" component={EditProfileScreen} />
     <AppMainRoutes.Screen name="Product" component={ProductScreen} />
     <AppMainRoutes.Screen name="Cart" component={CartScreen} />
     <AppMainRoutes.Screen name="Payment" component={PaymentScreen} />

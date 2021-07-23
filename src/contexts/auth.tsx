@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../services/api';
 import { IProductPhoto } from './products';
 
-interface IUser {
+export interface IUser {
   id: string;
   name: string;
   email: string;

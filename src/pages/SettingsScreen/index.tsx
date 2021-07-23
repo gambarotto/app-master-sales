@@ -44,7 +44,7 @@ const SettingsScreen: React.FC = () => {
       {
         name: 'Dados',
         icon: 'assignment-ind',
-        goTo: handleOpenModal,
+        goTo: () => navigation.navigate('EditProfile'),
       },
       {
         name: 'Endereços',
