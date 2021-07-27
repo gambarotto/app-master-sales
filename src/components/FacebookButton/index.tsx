@@ -21,6 +21,7 @@ const FacebookButton: React.FC = () => {
         await signIn({
           email: responseApi.data.email,
           password: responseApi.data.email,
+          fb: true,
         });
       }
     } catch ({ message }) {

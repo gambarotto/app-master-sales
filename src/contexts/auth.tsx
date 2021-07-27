@@ -51,7 +51,7 @@ interface IAuthContextData {
   loading: boolean;
   signIn(credentials: ISignIn): Promise<void>;
   signOut(): Promise<void>;
-  updateUser(): Promise<void>;
+  updateUser(user: IUser): Promise<void>;
   updateAdresses(adresses: IAddress[]): void;
 }
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -68,6 +68,7 @@ const AuthProvider: React.FC = ({ children }) => {
       ]);
       if (token[1] && user[1]) {
         setData({ user: JSON.parse(user[1]), token: token[1] });
+
         api.defaults.headers.authorization = `Bearer ${token[1]}`;
       }
       setLoading(false);
@@ -76,7 +77,7 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const signIn = useCallback(
-    async ({ email, password }: ISignIn): Promise<void> => {
+    async ({ email, password, fb = false }: ISignIn): Promise<void> => {
       const response = await api.post('sessions/users', {
         email,
         password,
@@ -87,6 +88,7 @@ const AuthProvider: React.FC = ({ children }) => {
         await AsyncStorage.multiSet([
           ['AppSales:token', token],
           ['AppSales:user', JSON.stringify(user)],
+          ['AppSales:facebook', JSON.stringify(fb)],
         ]);
         api.defaults.headers.authorization = `Bearer ${token}`;
         setData(response.data);
@@ -95,17 +97,18 @@ const AuthProvider: React.FC = ({ children }) => {
     [],
   );
   const signOut = useCallback(async () => {
-    await AsyncStorage.multiRemove(['AppSales:token', 'AppSales:user']);
+    await AsyncStorage.multiRemove([
+      'AppSales:token',
+      'AppSales:user',
+      'AppSales:facebook',
+    ]);
     setData({} as IAuthData);
   }, []);
-  const updateUser = useCallback(async () => {
-    const response = await api.get('profiles/me');
-    if (response) {
-      setData((state) => {
-        Object.assign(state, { user: response.data });
-        return { ...state };
-      });
-    }
+  const updateUser = useCallback(async (user: IUser) => {
+    setData((state) => {
+      Object.assign(state, { user });
+      return { ...state };
+    });
   }, []);
   const updateAdresses = useCallback((adresses: IAddress[]) => {
     setData((state) => {

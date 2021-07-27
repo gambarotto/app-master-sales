@@ -25,8 +25,6 @@ export const Logo = styled.Image`
 export const ContainerForm = styled.View`
   width: 100%;
   flex: 1;
-  justify-content: center;
-  align-items: center;
   margin-top: 24px;
 `;
 

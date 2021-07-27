@@ -21,7 +21,6 @@ import {
   Warning,
 } from './styles';
 import themeGlobal from '../../styles/global';
-import * as masks from '../../utils/masks';
 
 interface InputValueReference {
   value: string;
@@ -86,14 +85,15 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     registerField<string>({
       name: fieldName,
       ref: inputValueRef.current,
-      // path: 'value',
       setValue(_ref: any, value) {
         inputValueRef.current.value = value;
         inputElementRef.current.setNativeProps({ text: value });
       },
       getValue(_ref: any) {
         if (rawText) return rawText;
-        if (inputValueRef.current) return inputValueRef.current.value;
+        if (inputValueRef.current)
+          return inputValueRef.current.value || initialValue;
+
         return '';
       },
       clearValue() {
@@ -101,7 +101,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
         inputElementRef.current.clear();
       },
     });
-  }, [fieldName, mask, rawText, registerField]);
+  }, [fieldName, initialValue, mask, rawText, registerField]);
 
   return (
     <>

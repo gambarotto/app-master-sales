@@ -14,7 +14,7 @@ const AppMainRoutes = createStackNavigator();
 
 const AppMain: React.FC = () => (
   <AppMainRoutes.Navigator
-    initialRouteName="EditProfile"
+    initialRouteName="Tabs"
     screenOptions={{
       headerShown: false,
       cardStyle: { backgroundColor: themeGlobal.colors.white },

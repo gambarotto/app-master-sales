@@ -1,12 +1,22 @@
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Alert, Keyboard, Platform, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Keyboard, Platform, TextInput } from 'react-native';
+import Modal from 'react-native-modal';
 import Button from '../../components/Button';
 import IconBack from '../../components/IconBack';
 import Input from '../../components/Input';
-import { IUser } from '../../contexts/auth';
+import { IUser, useAuth } from '../../contexts/auth';
 import { useFetch } from '../../hooks/useFetch';
 import themeGlobal from '../../styles/global';
 
@@ -22,18 +32,46 @@ import {
   IconCamera,
   KeyboardAvoiding,
   TextChangePassword,
+  TextFbLoginEmail,
 } from './styles';
+import ModalProfileUpdate from './ModalProfileUpdate';
+import api from '../../services/api';
+import getValidationErrors from '../../utils/getValidationErrors';
+
+interface ImagePickerCrop {
+  uri: string;
+  width?: number;
+  height?: number;
+  type?: string | undefined;
+}
+interface UpdateProfile {
+  name: string;
+  email: string;
+}
 
 const EditProfileScreen: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const inputNameRef = useRef<TextInput>(null);
   const inputEmailRef = useRef<TextInput>(null);
-  const [keybordShow, setKeyboardShow] = useState(false);
 
-  const navigation = useNavigation();
+  const [keybordShow, setKeyboardShow] = useState(false);
+  const [avatarImage, setAvatarImage] = useState<ImagePickerCrop>();
+  const [fbLogin, setFbLogin] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalSuccess, setOpenModalSuccess] = useState(false);
   const { data: user } = useFetch<IUser>('users/profiles/me');
+  const navigation = useNavigation();
+  const { updateUser } = useAuth();
 
   useEffect(() => {
+    async function verifyIfLoginFb(): Promise<void> {
+      const isFbLogin = await AsyncStorage.getItem('AppSales:facebook');
+      if (isFbLogin) {
+        setFbLogin(JSON.parse(isFbLogin));
+      }
+    }
+    verifyIfLoginFb();
+
     Keyboard.addListener('keyboardDidShow', keyboardDidShow);
     Keyboard.addListener('keyboardDidHide', keyboardDidHide);
     return () => {
@@ -44,8 +82,65 @@ const EditProfileScreen: React.FC = () => {
   const keyboardDidShow = (): void => setKeyboardShow(true);
   const keyboardDidHide = (): void => setKeyboardShow(false);
 
-  // TODO Antes de alterar email, verificar login com facebook
-  const handleEditProfile = useCallback(() => {}, []);
+  const handleEditProfile = useCallback(
+    async (data: UpdateProfile) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          name: Yup.string().required('O nome é obrigatório'),
+          email: Yup.string()
+            .email('Email inválido')
+            .required('OEmail é obrigatório'),
+        });
+        await schema.validate(data, { abortEarly: false });
+        if (avatarImage) {
+          const formData = new FormData();
+          formData.append('avatar', avatarImage.uri);
+          await api.patch('users/avatar', formData);
+        }
+        const response = await api.put('users/profiles/me', data);
+        await updateUser(response.data);
+
+        setOpenModalSuccess(true);
+        setOpenModal(true);
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+        setOpenModalSuccess(false);
+        setOpenModal(true);
+      }
+    },
+    [avatarImage, updateUser],
+  );
+  const handleCamera = useCallback(async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      Alert.alert('Permission to access camera roll is required!');
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    setAvatarImage({
+      uri: pickerResult.uri,
+      width: pickerResult.width,
+      height: pickerResult.height,
+      type: pickerResult.type,
+    });
+  }, []);
+  const changeAvatar = useMemo(
+    () => avatarImage?.uri || user?.avatar_url,
+    [avatarImage, user?.avatar_url],
+  );
   return (
     <KeyboardAvoiding
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -55,9 +150,9 @@ const EditProfileScreen: React.FC = () => {
         <IconBack onPress={() => navigation.goBack()} />
         <ContainerAvatar>
           <ContainerAvatarImage>
-            {user?.avatar_url && <Avatar source={{ uri: user?.avatar_url }} />}
+            <Avatar source={{ uri: changeAvatar }} />
           </ContainerAvatarImage>
-          <ButtonCamera>
+          <ButtonCamera onPress={handleCamera}>
             <IconCamera
               name="photo-camera"
               size={28}
@@ -83,6 +178,7 @@ const EditProfileScreen: React.FC = () => {
             />
             <Input
               ref={inputEmailRef}
+              editable={!fbLogin}
               autoCapitalize="words"
               autoCorrect={false}
               keyboardType="default"
@@ -96,6 +192,11 @@ const EditProfileScreen: React.FC = () => {
               }}
             />
           </Form>
+          {fbLogin && (
+            <TextFbLoginEmail>
+              Não é possível alterar o email se você fez login pelo facebook
+            </TextFbLoginEmail>
+          )}
         </ContainerForm>
       </Container>
       {!keybordShow && (
@@ -105,11 +206,21 @@ const EditProfileScreen: React.FC = () => {
               Gostaria de trocar sua senha? clique aqui
             </TextChangePassword>
           </ContainerChangePassword>
-          <Button textSize={16} color="secondary">
+          <Button
+            textSize={16}
+            color="secondary"
+            onPress={() => formRef.current?.submitForm()}
+          >
             Atualizar
           </Button>
         </ContainerActionsButtons>
       )}
+      <Modal isVisible={openModal}>
+        <ModalProfileUpdate
+          setModalIsOpen={setOpenModal}
+          success={openModalSuccess}
+        />
+      </Modal>
     </KeyboardAvoiding>
   );
 };

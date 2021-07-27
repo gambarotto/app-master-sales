@@ -23,8 +23,6 @@ export const Logo = styled.Image`
 export const ContainerLoginOrRegistry = styled.View`
   width: 100%;
   flex: 1;
-  justify-content: center;
-  align-items: center;
   margin-top: 24px;
 `;
 export const ContainerCreateAccount = styled.TouchableOpacity`

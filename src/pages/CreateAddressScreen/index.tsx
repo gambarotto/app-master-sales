@@ -50,7 +50,7 @@ const CreateAddressScreen: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const navigation = useNavigation();
-  const { updateUser } = useAuth();
+  const { updateAdresses } = useAuth();
 
   const handleCloseModal = useCallback(() => {
     setModalIsOpen(false);
@@ -72,8 +72,8 @@ const CreateAddressScreen: React.FC = () => {
           alias: Yup.string().required('O apelido é obrigatório'),
         });
         await schema.validate(data, { abortEarly: false });
-        await api.post('users/adresses/me', data);
-        await updateUser();
+        const response = await api.post('users/adresses/me', data);
+        updateAdresses(response.data);
         setModalIsOpen(true);
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -87,7 +87,7 @@ const CreateAddressScreen: React.FC = () => {
         );
       }
     },
-    [updateUser],
+    [updateAdresses],
   );
   return (
     <KeyboardAvoidingView

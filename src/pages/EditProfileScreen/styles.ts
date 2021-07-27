@@ -22,7 +22,7 @@ export const ContainerAvatarImage = styled.View`
   height: 150px;
   width: 150px;
   border-radius: 75px;
-  border-width: 1px;
+  border-width: 2px;
 `;
 export const Avatar = styled.Image`
   height: 100%;
@@ -47,7 +47,14 @@ export const IconCamera = styled(MaterialIcons)``;
 export const ContainerForm = styled.View`
   flex: 1;
   margin-top: 24px;
-  /* background-color: red; */
+`;
+export const TextFbLoginEmail = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.gray3};
+  `}
+  font-size:12px;
+  font-family: 'Roboto-Regular';
+  text-align: center;
 `;
 export const ContainerActionsButtons = styled.View`
   flex: 1;
