@@ -59,7 +59,7 @@ const SettingsScreen: React.FC = () => {
       {
         name: 'Sobre o App',
         icon: 'contact-support',
-        goTo: () => navigation.navigate('Product'),
+        goTo: () => navigation.navigate('AboutApp'),
       },
       {
         name: 'Sair',

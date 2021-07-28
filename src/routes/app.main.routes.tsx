@@ -10,6 +10,7 @@ import AdressesScreen from '../pages/AdressesScreen';
 import CreateEditAddressScreen from '../pages/CreateEditAddressScreen';
 import EditProfileScreen from '../pages/EditProfileScreen';
 import AboutStoreScreen from '../pages/AboutStoreScreen';
+import AboutAppScreen from '../pages/AboutAppScreen';
 
 const AppMainRoutes = createStackNavigator();
 
@@ -28,6 +29,7 @@ const AppMain: React.FC = () => (
     <AppMainRoutes.Screen name="Payment" component={PaymentScreen} />
     <AppMainRoutes.Screen name="Adresses" component={AdressesScreen} />
     <AppMainRoutes.Screen name="AboutStore" component={AboutStoreScreen} />
+    <AppMainRoutes.Screen name="AboutApp" component={AboutAppScreen} />
     <AppMainRoutes.Screen
       name="CreateEditAddress"
       component={CreateEditAddressScreen}
