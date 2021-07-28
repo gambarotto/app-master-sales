@@ -8,6 +8,7 @@ import React, {
 import { Alert, Keyboard, Platform, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Yup from 'yup';
+import mime from 'mime';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { FormHandles } from '@unform/core';
@@ -42,7 +43,8 @@ interface ImagePickerCrop {
   uri: string;
   width?: number;
   height?: number;
-  type?: string | undefined;
+  type?: string | null;
+  name: string | undefined;
 }
 interface UpdateProfile {
   name: string;
@@ -95,8 +97,13 @@ const EditProfileScreen: React.FC = () => {
         await schema.validate(data, { abortEarly: false });
         if (avatarImage) {
           const formData = new FormData();
-          formData.append('avatar', avatarImage.uri);
-          await api.patch('users/avatar', formData);
+          formData.append('avatar', avatarImage);
+
+          await api.patch('users/avatar', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
         }
         const response = await api.put('users/profiles/me', data);
         await updateUser(response.data);
@@ -130,11 +137,14 @@ const EditProfileScreen: React.FC = () => {
       return;
     }
 
+    const nameImage = pickerResult.uri.split('/').pop();
+
     setAvatarImage({
       uri: pickerResult.uri,
+      name: nameImage,
       width: pickerResult.width,
       height: pickerResult.height,
-      type: pickerResult.type,
+      type: mime.getType(pickerResult.uri),
     });
   }, []);
   const changeAvatar = useMemo(
