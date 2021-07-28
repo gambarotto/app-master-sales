@@ -7,5 +7,6 @@ export function useFetch<Data = any, Error = any>(url: string) {
     const response = await api.get(url);
     return response.data;
   });
+
   return { data, error };
 }

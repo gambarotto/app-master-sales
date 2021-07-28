@@ -54,7 +54,7 @@ const SettingsScreen: React.FC = () => {
       {
         name: 'Sobre a Leiteria',
         icon: 'store',
-        goTo: () => navigation.navigate('Product'),
+        goTo: () => navigation.navigate('AboutStore'),
       },
       {
         name: 'Sobre o App',
@@ -67,7 +67,7 @@ const SettingsScreen: React.FC = () => {
         goTo: signOutWithFacebook,
       },
     ],
-    [handleOpenModal, navigation, signOutWithFacebook],
+    [navigation, signOutWithFacebook],
   );
 
   return (
