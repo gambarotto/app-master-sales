@@ -51,13 +51,13 @@ const AboutStoreScreen: React.FC = () => {
     {} as IPhotoStore,
   );
   const navigation = useNavigation();
-  const { data } = useFetch('stores');
-  const store: IStore = data[0];
+  const { data: stores } = useFetch<IStore[]>('stores');
 
   const handlePhoto = useCallback((item: IPhotoStore) => {
     setPhotoSelected(item);
     setOpenModal(true);
   }, []);
+  if (!stores) return null;
   return (
     <Container>
       <ContainerHeader>
@@ -68,12 +68,12 @@ const AboutStoreScreen: React.FC = () => {
       </ContainerHeader>
       <ContainerDescription>
         <Title>Sobre a Leiteria</Title>
-        <Description>{store.description}</Description>
+        <Description>{stores[0].description}</Description>
       </ContainerDescription>
       <ContainerGallery>
         <Title style={{ alignSelf: 'flex-start' }}>Galeria de Imagens</Title>
         <PhotosList
-          data={store.photos}
+          data={stores[0].photos}
           keyExtractor={(photo) => photo.id}
           numColumns={3}
           renderItem={({ item }) => (

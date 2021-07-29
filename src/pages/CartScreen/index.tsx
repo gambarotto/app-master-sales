@@ -50,6 +50,12 @@ export interface ICartProductItem {
   product: ICartProduct;
   quantity: number;
 }
+export interface IOrder {
+  products: ICartProduct[];
+  deliveryFee: number;
+  delivery_address: IAddress | null | undefined;
+  subTotal: number;
+}
 
 const CartScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -87,7 +93,15 @@ const CartScreen: React.FC = () => {
     clearCart();
     navigation.navigate('Tabs');
   }, [clearCart, navigation]);
-
+  const handleGoToPayment = useCallback(() => {
+    const order: IOrder = {
+      products: cartProducts,
+      deliveryFee,
+      delivery_address: deliveryFee === 0 ? null : defaultAddress,
+      subTotal: calcTotal - deliveryFee,
+    };
+    navigation.navigate('Payment', order);
+  }, [calcTotal, cartProducts, defaultAddress, deliveryFee, navigation]);
   if (countCartProducts <= 0) {
     return (
       <>
@@ -215,8 +229,8 @@ const CartScreen: React.FC = () => {
           <ButtonTrash onPress={handleClearCart}>
             <Icon name="delete" size={26} color={themeGlobal.colors.white} />
           </ButtonTrash>
-          <Button color="tertiary" textSize={16}>
-            Ir para pagamento
+          <Button onPress={handleGoToPayment} color="tertiary" textSize={16}>
+            Finalizar pedido
           </Button>
         </ContainerButtons>
       </ContainerBottom>

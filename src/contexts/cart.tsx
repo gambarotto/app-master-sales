@@ -17,6 +17,7 @@ const CartContext = createContext<ICartContext>({} as ICartContext);
 const CartProvider: React.FC = ({ children }) => {
   const [cartProducts, setCartProducts] = useState<ICartProduct[]>([]);
   const [isDelivery, setIsDelivery] = useState(true);
+
   const handleProduct = useCallback((product: ICartProduct) => {
     setCartProducts((state) => {
       const itemIndex = state.findIndex(
@@ -38,11 +39,9 @@ const CartProvider: React.FC = ({ children }) => {
       return newState;
     });
   }, []);
-
   const clearCart = useCallback(() => {
     setCartProducts([] as ICartProduct[]);
   }, []);
-
   return (
     <CartContext.Provider
       value={{
