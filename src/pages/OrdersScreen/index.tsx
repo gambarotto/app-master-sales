@@ -13,6 +13,7 @@ import OrderItem from '../../components/OrderItem';
 
 export interface IOrders {
   id: string;
+  order_number: number;
   amount: number;
   delivery: boolean;
   delivery_fee: number;

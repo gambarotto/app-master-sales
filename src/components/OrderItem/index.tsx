@@ -13,6 +13,7 @@ import {
   TextTotal,
   TextTotalCurrency,
   TitleDate,
+  TextOrderNumber,
   LineText,
   ContainerTitle,
   SubTitleDate,
@@ -26,7 +27,7 @@ interface ResponseOrderDate {
   dateFormat: string;
 }
 const OrderItem: React.FC<IProps> = ({
-  order: { id, amount, delivery_fee, created_at },
+  order: { id, order_number, amount, delivery_fee, created_at },
 }) => {
   const navigation = useNavigation();
 
@@ -48,6 +49,7 @@ const OrderItem: React.FC<IProps> = ({
         <TitleDate>{orderDate().dateFormat}</TitleDate>
         <SubTitleDate>{orderDate().dateDistance}</SubTitleDate>
       </ContainerTitle>
+      <TextOrderNumber>{`#${order_number}`}</TextOrderNumber>
       <LineText>
         <TextDescription>Produtos</TextDescription>
         <TextCurrency>

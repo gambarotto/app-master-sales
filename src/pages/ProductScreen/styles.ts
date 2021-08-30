@@ -51,15 +51,22 @@ export const TextNameProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
-  font-size:24px;
+  font-size:20px;
   font-family: 'Roboto-Bold';
+`;
+export const TextPackage = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.gray3};
+  `}
+  font-size:16px;
+  font-family: 'Roboto-Regular';
 `;
 export const ContainerQuantityAndPrice = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 36px;
+  margin-top: 24px;
 `;
 export const ContainerQuantity = styled.View`
   height: 50px;

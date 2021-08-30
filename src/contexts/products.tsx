@@ -12,6 +12,7 @@ export interface IProductPhoto {
 export interface IProduct {
   id: string;
   name: string;
+  package: string;
   description: string;
   sale_price: number;
   categories: IProductCategory[];

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/native';
 
 export const Container = styled.TouchableOpacity`
   flex: 1;
-  max-height: 110px;
+  max-height: 125px;
   padding: 8px;
   border-radius: 8px;
   border-width: 0.5px;
@@ -31,6 +31,14 @@ export const SubTitleDate = styled.Text`
   font-size:10px;
   font-family: 'Roboto-Regular';
   margin-left: 8px;
+`;
+export const TextOrderNumber = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.gray1};
+  `}
+  font-size:10px;
+  font-family: 'Roboto-Bold';
+  margin-bottom: 4px;
 `;
 export const LineText = styled.View`
   flex-direction: row;

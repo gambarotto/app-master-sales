@@ -16,6 +16,7 @@ import {
   ProductImage,
   ContainerNameAndPackage,
   TextNameProduct,
+  TextPackage,
   ContainerQuantityAndPrice,
   ContainerQuantity,
   ContainerIconQuantity,
@@ -108,6 +109,7 @@ const ProductScreen: React.FC = () => {
       <ContainerInfo>
         <ContainerNameAndPackage>
           <TextNameProduct>{routeParams.name}</TextNameProduct>
+          <TextPackage>{routeParams.package}</TextPackage>
         </ContainerNameAndPackage>
         <ContainerQuantityAndPrice>
           <ContainerQuantity>
