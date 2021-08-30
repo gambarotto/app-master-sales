@@ -5,10 +5,14 @@ export const Container = styled.TouchableOpacity`
   border-radius: 8px;
   flex-direction: row;
   margin-bottom: 2px;
+  border-width: 1px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.gray4};
+  `}
 `;
 export const ContainerImage = styled.View`
   width: 120px;
-  height: 90px;
+  height: 88px;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 `;
@@ -19,7 +23,7 @@ export const ImageProduct = styled.Image`
   border-bottom-left-radius: 8px;
 `;
 export const ContainerInfo = styled.View`
-  width: 100%;
+  flex: 1;
   padding-left: 8px;
   padding-right: 8px;
 `;
@@ -35,7 +39,7 @@ export const DescriptionProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.gray1};
   `}
-  font-size:12px;
+  font-size:10px;
   font-family: 'Roboto-Regular';
 `;
 export const PriceProduct = styled.Text`

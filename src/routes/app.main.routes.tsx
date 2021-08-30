@@ -12,6 +12,7 @@ import EditProfileScreen from '../pages/EditProfileScreen';
 import AboutStoreScreen from '../pages/AboutStoreScreen';
 import AboutAppScreen from '../pages/AboutAppScreen';
 import CardPaymentScreen from '../pages/CardPaymentScreen';
+import OrderScreen from '../pages/OrderScreen';
 
 const AppMainRoutes = createStackNavigator();
 
@@ -26,6 +27,7 @@ const AppMain: React.FC = () => (
     <AppMainRoutes.Screen name="Tabs" component={AppTabsRoutes} />
     <AppMainRoutes.Screen name="EditProfile" component={EditProfileScreen} />
     <AppMainRoutes.Screen name="Product" component={ProductScreen} />
+    <AppMainRoutes.Screen name="Order" component={OrderScreen} />
     <AppMainRoutes.Screen name="Cart" component={CartScreen} />
     <AppMainRoutes.Screen name="Payment" component={PaymentScreen} />
     <AppMainRoutes.Screen name="CardPayment" component={CardPaymentScreen} />
