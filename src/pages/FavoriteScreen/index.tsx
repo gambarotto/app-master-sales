@@ -14,7 +14,7 @@ import { useProduct } from '../../contexts/products';
 
 const FavoriteScreen: React.FC = () => {
   const { updateProducts } = useProduct();
-  const { data: favorite_products } = useFetch('users/favorites');
+  const { data: favorite_products } = useFetch('favorites', 'users/favorites');
 
   useEffect(() => {
     updateProducts(favorite_products);

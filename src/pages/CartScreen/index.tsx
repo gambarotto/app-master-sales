@@ -61,6 +61,7 @@ const CartScreen: React.FC = () => {
   const navigation = useNavigation();
   const { cartProducts, countCartProducts, clearCart } = useCart();
   const { data: defaultAddress } = useFetch<IAddress>(
+    'address_default',
     '/users/adresses/me/default',
   );
   const [isCheckedDelivery, setIsCheckedDelivery] = useState(true);

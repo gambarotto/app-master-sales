@@ -51,7 +51,7 @@ const AboutStoreScreen: React.FC = () => {
     {} as IPhotoStore,
   );
   const navigation = useNavigation();
-  const { data: stores } = useFetch<IStore[]>('stores');
+  const { data: stores } = useFetch<IStore[]>('stores', 'stores');
 
   const handlePhoto = useCallback((item: IPhotoStore) => {
     setPhotoSelected(item);

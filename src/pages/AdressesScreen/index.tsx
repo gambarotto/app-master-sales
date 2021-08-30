@@ -22,7 +22,10 @@ import api from '../../services/api';
 
 const AdressesScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { data: adresses } = useFetch<IAddress[]>('users/adresses/me');
+  const { data: adresses } = useFetch<IAddress[]>(
+    'adresses',
+    'users/adresses/me',
+  );
 
   const { updateAdresses } = useAuth();
   const [selected, setSelected] = useState('');

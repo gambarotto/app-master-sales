@@ -59,8 +59,11 @@ const HomeScreen: React.FC = () => {
     },
   ];
   const { updateProducts, updateFavoriteProducts } = useProduct();
-  const { data: products } = useFetch<IProduct[]>('products');
-  const { data: favorite_products } = useFetch<IProduct[]>('users/favorites');
+  const { data: products } = useFetch<IProduct[]>('products', 'products');
+  const { data: favorite_products } = useFetch<IProduct[]>(
+    'favorites',
+    'users/favorites',
+  );
   const [productsFiltred, setProductsFiltered] = useState<IProduct[]>([]);
 
   useEffect(() => {

@@ -61,7 +61,7 @@ const EditProfileScreen: React.FC = () => {
   const [fbLogin, setFbLogin] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
   const [openModalSuccess, setOpenModalSuccess] = useState(false);
-  const { data: user } = useFetch<IUser>('users/profiles/me');
+  const { data: user } = useFetch<IUser>('profile', 'users/profiles/me');
   const navigation = useNavigation();
   const { updateUser } = useAuth();
 

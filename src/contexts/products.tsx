@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useCallback, useContext, useState } from 'react';
-import { useFetch } from '../hooks/useFetch';
 
 interface IProductCategory {
   id: string;
