@@ -229,18 +229,3 @@ export const ButtonTrash = styled.TouchableOpacity`
     `};
 `;
 export const Icon = styled(MaterialIcons)``;
-export const ContainerModal = styled.View`
-  flex: 1;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: flex-end;
-`;
-export const ContainerModalContent = styled.View`
-  height: 50%;
-  width: 100%;
-  background-color: white;
-`;
-export const TextModal = styled.Text``;
-export const ButtonConfirm = styled.TouchableOpacity`
-  flex: 1;
-  background-color: red;
-`;

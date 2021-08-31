@@ -1,4 +1,5 @@
 /* eslint-disable global-require */
+import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';

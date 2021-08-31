@@ -1,5 +1,8 @@
 import Constants from 'expo-constants';
+import { MotiView } from 'moti';
+import { FlatList } from 'react-native';
 import styled, { css } from 'styled-components/native';
+import { ICreditCard } from '.';
 
 interface PaymentMethod {
   selected: boolean;
@@ -120,6 +123,33 @@ export const TextCardPayment = styled.Text<PaymentMethod>`
   font-family: 'Roboto-Regular';
   padding: 12px;
 `;
+export const CardList = styled(FlatList as new () => FlatList<ICreditCard>)``;
 export const ContainerButton = styled.View`
   height: 60px;
+`;
+export const ContainerModal = styled(MotiView)`
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: flex-end;
+`;
+export const ContainerModalContent = styled(MotiView)`
+  height: 50%;
+  width: 100%;
+  background-color: white;
+`;
+export const TextModal = styled.Text`
+  ${(props) =>
+    css`
+      color: ${props.theme.colors.secondary};
+    `};
+  font-family: 'Roboto-Bold';
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+`;
+export const ButtonConfirm = styled.TouchableOpacity`
+  flex: 1;
+  ${(props) => css`
+    background-color: ${props.theme.colors.white};
+  `}
 `;
