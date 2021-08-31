@@ -1,10 +1,17 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
+import { Modal } from 'react-native';
 import logoImage from '../../assets/logo_horizontal_catarina.png';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
 import IconBack from '../../components/IconBack';
 import { IOrder } from '../CartScreen';
+import {
+  ButtonConfirm,
+  ContainerModal,
+  ContainerModalContent,
+  TextModal,
+} from '../CartScreen/styles';
 
 import {
   Container,
@@ -31,12 +38,16 @@ import {
 
 const PaymentScreen: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('pix');
+  const [modalCard, setModalCard] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
   const order = route.params as IOrder;
 
   const handlePaymentMethod = useCallback((payment: string) => {
     setPaymentMethod(payment);
+    if (payment === 'credit-card') {
+      setModalCard(true);
+    }
   }, []);
   const textAddressFormat = useMemo((): string | undefined => {
     if (order.delivery_address) {
@@ -118,6 +129,20 @@ const PaymentScreen: React.FC = () => {
           </Button>
         </ContainerButton>
       </ContainerPayment>
+      <Modal
+        style={{ height: '100%', backgroundColor: 'rgba(0,0,0,0.5)' }}
+        visible={modalCard}
+        transparent
+        animationType="slide"
+      >
+        <ContainerModal>
+          <ContainerModalContent>
+            <ButtonConfirm onPress={() => setModalCard(false)}>
+              <TextModal>oooooooiiiiii</TextModal>
+            </ButtonConfirm>
+          </ContainerModalContent>
+        </ContainerModal>
+      </Modal>
     </Container>
   );
 };

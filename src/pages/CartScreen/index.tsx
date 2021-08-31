@@ -239,6 +239,7 @@ const CartScreen: React.FC = () => {
         style={{ flex: 1, justifyContent: 'flex-end', margin: 0 }}
         isVisible={showModal}
         onBackButtonPress={handleModal}
+        coverScreen
       >
         <ModalCartProductQty
           handleModal={handleModal}
