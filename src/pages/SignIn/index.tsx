@@ -37,6 +37,7 @@ const SignIn: React.FC = () => {
   const handleSignIn = useCallback(
     async ({ email, password }: IFormData) => {
       try {
+        formRef.current?.setErrors({});
         const schema = Yup.object().shape({
           email: Yup.string()
             .email('Informe um email válido')

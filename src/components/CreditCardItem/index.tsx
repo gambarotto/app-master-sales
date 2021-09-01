@@ -8,7 +8,7 @@ import { Brand, Container, LastNumbersCard } from './styles';
 
 interface Props {
   card: ICreditCard;
-  selected: boolean;
+  selected: ICreditCard;
   setCreditCardData(card: ICreditCard): void;
 }
 const CreditCardItem: React.FC<Props> = ({
@@ -18,11 +18,15 @@ const CreditCardItem: React.FC<Props> = ({
 }) => {
   const selectBrand = useMemo(() => brands[card.brand], [card.brand]);
   const handleSelectedCard = useCallback(() => {
+    if (selected.id === card.id) {
+      setCreditCardData({} as ICreditCard);
+      return;
+    }
     setCreditCardData(card);
-  }, [card, setCreditCardData]);
+  }, [card, selected.id, setCreditCardData]);
   return (
     <Container onPress={handleSelectedCard}>
-      <CheckCircle isChecked={selected} size={20} />
+      <CheckCircle isChecked={selected.id === card.id} size={20} />
       <Brand source={selectBrand} />
       <LastNumbersCard>{`**** ${card.last_digits}`}</LastNumbersCard>
     </Container>

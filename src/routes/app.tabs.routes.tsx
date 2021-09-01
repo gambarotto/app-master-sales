@@ -11,7 +11,7 @@ const App = createBottomTabNavigator();
 
 const AppTabsRoutes: React.FC = () => (
   <App.Navigator
-    initialRouteName="OrdersScreen"
+    initialRouteName="HomeScreen"
     tabBarOptions={{
       activeTintColor: themeGlobal.colors.secondary,
       inactiveTintColor: themeGlobal.colors.gray,

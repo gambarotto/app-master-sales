@@ -2,10 +2,9 @@ import styled, { css } from 'styled-components/native';
 
 export const Container = styled.TouchableOpacity`
   flex: 1;
-  height: 40px;
+  max-height: 40px;
   flex-direction: row;
   align-items: center;
-  margin: 0 16px;
   border-bottom-width: 0.5px;
 
   ${(props) => css`

@@ -33,6 +33,7 @@ interface InputProps extends TextInputProps {
   icon?: string;
   label?: string;
   style?: object;
+  flex?: 'true' | 'false';
   initialValue?: string;
   mask?: 'number' | 'cep' | 'phone';
   rawText?: string;
@@ -103,6 +104,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     });
   }, [fieldName, initialValue, mask, rawText, registerField]);
 
+  // const isFlex = flex === 'true';
   return (
     <>
       <Container
