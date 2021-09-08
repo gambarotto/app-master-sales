@@ -3,6 +3,9 @@ import { FlatList } from 'react-native';
 import styled, { css } from 'styled-components/native';
 import { ICreditCard } from '..';
 
+export const ContainerModal = styled.View`
+  flex: 1;
+`;
 export const Container = styled(MotiView)`
   flex: 1;
   background-color: rgba(0, 0, 0, 0.5);

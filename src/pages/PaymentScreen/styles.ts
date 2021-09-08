@@ -1,9 +1,6 @@
 import Constants from 'expo-constants';
 import styled, { css } from 'styled-components/native';
 
-interface PaymentMethod {
-  selected: boolean;
-}
 const { statusBarHeight } = Constants;
 
 export const Container = styled.View`
@@ -25,14 +22,19 @@ export const ImageLogo = styled.Image`
   margin-bottom: 16px;
   align-self: center;
 `;
-export const ContainerOrderDetails = styled.View``;
+export const ContainerOrderDetails = styled.View`
+  border-bottom-width: 0.5px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.gray3};
+  `}
+`;
 export const Title = styled.Text`
+  font-size: 16px;
+  font-family: 'Roboto-Bold';
+  margin-bottom: 24px;
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
-  font-size:18px;
-  font-family: 'Roboto-Bold';
-  margin-bottom: 24px;
 `;
 export const ContainerDescriptionOrderCosts = styled.View`
   flex-direction: row;
@@ -51,7 +53,7 @@ export const TextTotalOrder = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
-  font-size:16px;
+  font-size:14px;
   font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
@@ -61,7 +63,7 @@ export const SubTitle = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
-  font-size:16px;
+  font-size:14px;
   font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
@@ -70,14 +72,18 @@ export const ContainerAddress = styled.View`
   justify-content: space-between;
   align-items: center;
   margin-top: 16px;
+  border-bottom-width: 0.5px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.gray3};
+  `}
 `;
 export const ContainerAddressData = styled.View``;
 export const TitleAliasAddress = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
-  font-size:16px;
-  font-family: 'Roboto-Bold';
+  font-size:14px;
+  font-family: 'Roboto-Regular';
   margin-bottom: 8px;
 `;
 export const TextAddress = styled.Text`
@@ -98,28 +104,51 @@ export const ContainerPaymentsMethods = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
-export const ContainerCardPayment = styled.TouchableOpacity<PaymentMethod>`
+export const ContainerCardPayment = styled.TouchableOpacity`
   flex: 1;
   flex-direction: row;
   align-items: center;
-  border-radius: 8px;
-  border-width: 0.8px;
-  ${(props) => css`
-    border-color: ${props.selected
-      ? props.theme.colors.secondary
-      : props.theme.colors.gray3};
-  `}
 `;
-export const TextCardPayment = styled.Text<PaymentMethod>`
+export const TextCardPayment = styled.Text`
   ${(props) => css`
-    color: ${props.selected
-      ? props.theme.colors.secondary
-      : props.theme.colors.gray3};
+    color: ${props.theme.colors.gray1};
   `}
-  font-size:14px;
+  font-size: 14px;
   font-family: 'Roboto-Regular';
-  padding: 12px;
+  margin-top: 8px;
 `;
 export const ContainerButton = styled.View`
   height: 60px;
+`;
+export const ContainerSelectedCard = styled.View`
+  flex-direction: row;
+  align-items: center;
+  height: 40px;
+  margin-top: 16px;
+  border-top-width: 0.5px;
+  border-bottom-width: 0.5px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.gray3};
+  `}
+`;
+export const BrandCreditCard = styled.Image`
+  height: 20px;
+  width: 35px;
+  margin-left: 8px;
+`;
+export const NumberCard = styled.Text`
+  font-family: 'Roboto-Bold';
+  font-size: 12px;
+  ${(props) => css`
+    color: ${props.theme.colors.primary};
+  `}
+  margin-left:8px;
+`;
+export const HolderName = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: 12px;
+  ${(props) => css`
+    color: ${props.theme.colors.primary};
+  `}
+  margin-left:8px;
 `;

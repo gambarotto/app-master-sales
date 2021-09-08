@@ -2,7 +2,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal, BackHandler } from 'react-native';
-import { AnimatePresence, MotiView } from 'moti';
+import { MotiView } from 'moti';
 import logoImage from '../../assets/logo_horizontal_catarina.png';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
@@ -10,6 +10,7 @@ import IconBack from '../../components/IconBack';
 import { IOrder } from '../CartScreen';
 
 import {
+  BrandCreditCard,
   Container,
   ContainerAddress,
   ContainerAddressData,
@@ -20,9 +21,12 @@ import {
   ContainerOrderDetails,
   ContainerPayment,
   ContainerPaymentsMethods,
+  ContainerSelectedCard,
   ContainerSubTitle,
   ContainerTitleAndPaymentsMethods,
+  HolderName,
   ImageLogo,
+  NumberCard,
   SubTitle,
   TextAddress,
   TextCardPayment,
@@ -32,6 +36,7 @@ import {
   TitleAliasAddress,
 } from './styles';
 import PaymentModal from './PaymentModal';
+import { brands } from '../../utils/brands';
 
 export interface ICreditCard {
   id: string;
@@ -49,7 +54,6 @@ export interface INewCard {
 }
 
 const PaymentScreen: React.FC = () => {
-  const [paymentMethod, setPaymentMethod] = useState('pix');
   const [modalCard, setModalCard] = useState(false);
   const [newCreditCard, setNewCreditCard] = useState({} as INewCard);
   const [creditCardPayment, setCreditCardPayment] = useState({} as ICreditCard);
@@ -70,12 +74,11 @@ const PaymentScreen: React.FC = () => {
       );
     };
   }, [handleHardwareBackPress]);
-  const handlePaymentMethod = useCallback((payment: string) => {
-    setPaymentMethod(payment);
-    if (payment === 'credit-card') {
-      setModalCard(true);
-    }
+
+  const handlePaymentMethod = useCallback(() => {
+    setModalCard(true);
   }, []);
+
   const textAddressFormat = useMemo((): string | undefined => {
     if (order.delivery_address) {
       const { street, number, district } = order.delivery_address;
@@ -84,6 +87,58 @@ const PaymentScreen: React.FC = () => {
     }
     return undefined;
   }, [order.delivery_address]);
+
+  const verifyIfHaveCreditCardSelected = useMemo(
+    () => !!(creditCardPayment.id || newCreditCard.card_number),
+    [creditCardPayment.id, newCreditCard.card_number],
+  );
+  const showCreditCardSelected = useMemo(() => {
+    const selectBrand = brands[creditCardPayment.brand];
+
+    return {
+      id: creditCardPayment.id || '',
+      last_digits: creditCardPayment.last_digits || newCreditCard.card_number,
+      holder_name:
+        creditCardPayment.holder_name || newCreditCard.card_holder_name,
+      brand: selectBrand,
+    };
+  }, [
+    creditCardPayment.brand,
+    creditCardPayment.holder_name,
+    creditCardPayment.id,
+    creditCardPayment.last_digits,
+    newCreditCard.card_holder_name,
+    newCreditCard.card_number,
+  ]);
+
+  const handleConfirm = useCallback(() => {
+    const items = order.products.map((product) => ({
+      product: {
+        id: product.product.id,
+        name: product.product.name,
+        description: product.product.description,
+        sale_price: product.product.sale_price,
+      },
+      quantity: product.quantity,
+    }));
+    const data = {
+      amount: order.subTotal,
+      card_id: creditCardPayment.id || '',
+      card: newCreditCard.card_number ? { ...newCreditCard } : {},
+      delivery_fee: order.deliveryFee,
+      delivery: order.deliveryFee > 0,
+      billing_address_id: order.delivery_address?.id,
+      shipping_address_id: order.delivery_address?.id,
+      items,
+    };
+  }, [
+    creditCardPayment.id,
+    newCreditCard,
+    order.deliveryFee,
+    order.delivery_address?.id,
+    order.products,
+    order.subTotal,
+  ]);
 
   return (
     <Container>
@@ -124,48 +179,46 @@ const PaymentScreen: React.FC = () => {
             <Currency value={order.subTotal + order.deliveryFee} />
           </TextTotalOrder>
         </ContainerDescriptionOrderCosts>
-        <ContainerSubTitle>
-          <SubTitle>Entrega</SubTitle>
-        </ContainerSubTitle>
-        <ContainerAddress>
-          <ContainerAddressData>
-            <TitleAliasAddress>
-              {order.delivery_address?.alias || 'Retirar na Loja'}
-            </TitleAliasAddress>
-            {order.delivery_address && (
-              <TextAddress>{textAddressFormat}</TextAddress>
-            )}
-          </ContainerAddressData>
-        </ContainerAddress>
       </ContainerOrderDetails>
+
+      <ContainerSubTitle>
+        <SubTitle>Entrega</SubTitle>
+      </ContainerSubTitle>
+      <ContainerAddress>
+        <ContainerAddressData>
+          <TitleAliasAddress>
+            {order.delivery_address?.alias || 'Retirar na Loja'}
+          </TitleAliasAddress>
+          {order.delivery_address && (
+            <TextAddress>{textAddressFormat}</TextAddress>
+          )}
+        </ContainerAddressData>
+      </ContainerAddress>
       <ContainerPayment>
         <ContainerTitleAndPaymentsMethods>
           <ContainerSubTitle>
             <SubTitle>Pagamento</SubTitle>
           </ContainerSubTitle>
           <ContainerPaymentsMethods>
-            <ContainerCardPayment
-              onPress={() => handlePaymentMethod('pix')}
-              selected={paymentMethod === 'pix'}
-            >
-              <TextCardPayment selected={paymentMethod === 'pix'}>
-                Pix
-              </TextCardPayment>
-            </ContainerCardPayment>
-            <ContainerCardPayment
-              style={{ marginLeft: 16 }}
-              onPress={() => handlePaymentMethod('credit-card')}
-              selected={paymentMethod === 'credit-card'}
-            >
-              <TextCardPayment selected={paymentMethod === 'credit-card'}>
-                Cartão de Crédito
+            <ContainerCardPayment onPress={handlePaymentMethod}>
+              <TextCardPayment>
+                {verifyIfHaveCreditCardSelected
+                  ? 'Trocar cartão'
+                  : 'Selecione o cartão de crédito'}
               </TextCardPayment>
             </ContainerCardPayment>
           </ContainerPaymentsMethods>
+          {verifyIfHaveCreditCardSelected && (
+            <ContainerSelectedCard>
+              <BrandCreditCard source={showCreditCardSelected.brand} />
+              <NumberCard>{`**** ${showCreditCardSelected.last_digits}`}</NumberCard>
+              <HolderName>{showCreditCardSelected.holder_name}</HolderName>
+            </ContainerSelectedCard>
+          )}
         </ContainerTitleAndPaymentsMethods>
         <ContainerButton>
-          <Button color="secondary" textSize={16}>
-            Ir para pagamento
+          <Button color="secondary" textSize={16} onPress={handleConfirm}>
+            Finalizar
           </Button>
         </ContainerButton>
       </ContainerPayment>
@@ -175,13 +228,11 @@ const PaymentScreen: React.FC = () => {
         transparent
         statusBarTranslucent
       >
-        <AnimatePresence>
-          <PaymentModal
-            setIsVisible={setModalCard}
-            setCreditCardPayment={setCreditCardPayment}
-            setNewCreditCard={setNewCreditCard}
-          />
-        </AnimatePresence>
+        <PaymentModal
+          setIsVisible={setModalCard}
+          setCreditCardPayment={setCreditCardPayment}
+          setNewCreditCard={setNewCreditCard}
+        />
       </Modal>
     </Container>
   );

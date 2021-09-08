@@ -1,6 +1,12 @@
-import { AnimatePresence } from 'moti';
-import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { useWindowDimensions } from 'react-native';
+import { AnimatePresence, useAnimationState } from 'moti';
 import { ICreditCard, INewCard } from '..';
 import AddNewCreditCard from '../../../components/AddNewCreditCard';
 import CheckCircle from '../../../components/CheckCircle';
@@ -10,6 +16,7 @@ import {
   ButtonConfirm,
   Container,
   ContainerAddCreditCard,
+  ContainerModal,
   ContainerModalContent,
   ContainerNewCard,
   KeybordAvoiding,
@@ -20,7 +27,6 @@ import {
 } from './styles';
 
 interface Props {
-  // isVisible: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
   setNewCreditCard: Dispatch<SetStateAction<INewCard>>;
   setCreditCardPayment: Dispatch<SetStateAction<ICreditCard>>;
@@ -35,6 +41,37 @@ const PaymentModal: React.FC<Props> = ({
   const [addNewCard, setAddNewCard] = useState(false);
   const [newCard, setNewCard] = useState<INewCard>({} as INewCard);
   const [creditCard, setCreditCard] = useState<ICreditCard>({} as ICreditCard);
+  const animationModal = useAnimationState({
+    from: {
+      translateY: heightDevice,
+    },
+    to: {
+      translateY: 0,
+      height: heightDevice / 2,
+    },
+    open: {
+      translateY: 0,
+    },
+    close: {
+      translateY: heightDevice,
+    },
+    extendHeight: {
+      height: heightDevice,
+    },
+  });
+  const animationBackgroundModal = useAnimationState({
+    from: {
+      opacity: 0,
+    },
+    to: { opacity: 1 },
+    open: {
+      opacity: 0,
+    },
+    close: {
+      opacity: 0,
+    },
+  });
+
   const cards: ICreditCard[] = [
     {
       id: 'yujo',
@@ -53,87 +90,109 @@ const PaymentModal: React.FC<Props> = ({
       expiration_date: '1023',
     },
   ];
-  const addNewCardData = useCallback((card: INewCard) => {
-    setAddNewCard(false);
-    setNewCard(card);
-  }, []);
+  const addNewCardData = useCallback(
+    (card: INewCard) => {
+      animationModal.transitionTo('to');
+      setAddNewCard(false);
+      setNewCard(card);
+    },
+    [animationModal],
+  );
 
   const handleChooseNewCard = useCallback(() => {
-    if (newCard.card_number) {
-      setNewCard({} as INewCard);
-    }
     setCreditCard({} as ICreditCard);
+  }, []);
+
+  const handleAddNewCard = useCallback(() => {
+    animationModal.transitionTo('extendHeight');
+    setAddNewCard(true);
+  }, [animationModal]);
+
+  const formatCardNumber = useMemo(() => {
+    if (newCard.card_number) {
+      return newCard.card_number.replace(/[0-9]/g, '*');
+    }
+    return '';
   }, [newCard.card_number]);
+
   const handleConfirm = useCallback(() => {
     if (newCard.card_number && !creditCard.id) {
       setNewCreditCard(newCard);
     } else if (creditCard.id) {
       setCreditCardPayment(creditCard);
     }
-    setIsVisible(false);
+    animationBackgroundModal.transitionTo('close');
+    animationModal.transitionTo('close');
+
+    if (animationModal.current === 'close') {
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 1000);
+    }
   }, [
+    animationBackgroundModal,
+    animationModal,
     creditCard,
     newCard,
     setCreditCardPayment,
     setIsVisible,
     setNewCreditCard,
   ]);
+
   return (
-    <AnimatePresence>
-      <Container
-        from={{ opacity: 0, backgroundColor: '#000' }}
-        animate={{ opacity: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-        exit={{ opacity: 0 }}
-        exitTransition={{ type: 'timing', duration: 500 }}
-        transition={{ type: 'timing', duration: 350 }}
-      >
-        <ContainerModalContent
-          from={{ translateY: heightDevice }}
-          animate={{
-            translateY: 0,
-            height: addNewCard ? heightDevice : heightDevice / 2,
-          }}
-          exit={{
-            translateY: -heightDevice,
-          }}
-          transition={{ type: 'timing', duration: 350 }}
+    <ContainerModal>
+      <AnimatePresence>
+        <Container
+          state={animationBackgroundModal}
+          transition={{ type: 'timing', duration: 500 }}
+          exitTransition={{ type: 'timing', duration: 500 }}
         >
-          <KeybordAvoiding>
-            <TextModal>Cartão de Crédito</TextModal>
-            {cards.map((card) => (
-              <CreditCardItem
-                key={card.id}
-                card={card}
-                setCreditCardData={setCreditCard}
-                selected={creditCard}
-              />
-            ))}
-            <ContainerAddCreditCard
-              onPress={() => setAddNewCard(true)}
-              disabled={addNewCard}
-            >
-              <TextAddNewCreditCard>
-                Adicionar um novo cartão
-              </TextAddNewCreditCard>
-            </ContainerAddCreditCard>
-            {addNewCard && <AddNewCreditCard addNewCardData={addNewCardData} />}
-            {!addNewCard && newCard.card_holder_name && (
-              <ContainerNewCard onPress={handleChooseNewCard}>
-                <CheckCircle
-                  isChecked={!!(!creditCard.id && newCard.card_number)}
+          <ContainerModalContent
+            state={animationModal}
+            transition={{ type: 'timing', duration: 500 }}
+            exitTransition={{ type: 'timing', duration: 500 }}
+          >
+            <KeybordAvoiding>
+              <TextModal>Cartão de Crédito</TextModal>
+              {cards.map((card) => (
+                <CreditCardItem
+                  key={card.id}
+                  card={card}
+                  setCreditCardData={setCreditCard}
+                  selected={creditCard}
                 />
-                <NewCardNumber>{newCard.card_number}</NewCardNumber>
-              </ContainerNewCard>
-            )}
-          </KeybordAvoiding>
-          <ButtonConfirm onPress={handleConfirm}>
-            <TextButton>
-              {!creditCard.id && !newCard.card_number ? 'Votar' : 'Confirmar'}
-            </TextButton>
-          </ButtonConfirm>
-        </ContainerModalContent>
-      </Container>
-    </AnimatePresence>
+              ))}
+              <ContainerAddCreditCard
+                onPress={handleAddNewCard}
+                disabled={addNewCard}
+              >
+                <TextAddNewCreditCard>
+                  Adicionar um novo cartão
+                </TextAddNewCreditCard>
+              </ContainerAddCreditCard>
+              {addNewCard && (
+                <AddNewCreditCard addNewCardData={addNewCardData} />
+              )}
+              {!addNewCard && newCard.card_holder_name && (
+                <ContainerNewCard onPress={handleChooseNewCard}>
+                  <CheckCircle
+                    isChecked={!!(!creditCard.id && newCard.card_number)}
+                  />
+                  <NewCardNumber>{formatCardNumber}</NewCardNumber>
+                </ContainerNewCard>
+              )}
+            </KeybordAvoiding>
+            <ButtonConfirm onPress={handleConfirm}>
+              <TextButton>
+                {!creditCard.id && !newCard.card_number
+                  ? 'Voltar'
+                  : 'Confirmar'}
+              </TextButton>
+            </ButtonConfirm>
+          </ContainerModalContent>
+        </Container>
+      </AnimatePresence>
+    </ContainerModal>
   );
 };
 
