@@ -27,12 +27,14 @@ import {
 } from './styles';
 
 interface Props {
+  cards: ICreditCard[] | undefined;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
   setNewCreditCard: Dispatch<SetStateAction<INewCard>>;
   setCreditCardPayment: Dispatch<SetStateAction<ICreditCard>>;
 }
 
 const PaymentModal: React.FC<Props> = ({
+  cards,
   setIsVisible,
   setNewCreditCard,
   setCreditCardPayment,
@@ -41,6 +43,7 @@ const PaymentModal: React.FC<Props> = ({
   const [addNewCard, setAddNewCard] = useState(false);
   const [newCard, setNewCard] = useState<INewCard>({} as INewCard);
   const [creditCard, setCreditCard] = useState<ICreditCard>({} as ICreditCard);
+
   const animationModal = useAnimationState({
     from: {
       translateY: heightDevice,
@@ -72,24 +75,6 @@ const PaymentModal: React.FC<Props> = ({
     },
   });
 
-  const cards: ICreditCard[] = [
-    {
-      id: 'yujo',
-      brand: 'visa',
-      holder_name: 'Diego Gambarotto',
-      first_digits: '444222',
-      last_digits: '5555',
-      expiration_date: '1122',
-    },
-    {
-      id: 'yujoujg',
-      brand: 'master',
-      holder_name: 'Diego Carvalho',
-      first_digits: '777333',
-      last_digits: '1234',
-      expiration_date: '1023',
-    },
-  ];
   const addNewCardData = useCallback(
     (card: INewCard) => {
       animationModal.transitionTo('to');
@@ -154,14 +139,16 @@ const PaymentModal: React.FC<Props> = ({
           >
             <KeybordAvoiding>
               <TextModal>Cartão de Crédito</TextModal>
-              {cards.map((card) => (
-                <CreditCardItem
-                  key={card.id}
-                  card={card}
-                  setCreditCardData={setCreditCard}
-                  selected={creditCard}
-                />
-              ))}
+              {cards &&
+                cards?.length > 0 &&
+                cards.map((card) => (
+                  <CreditCardItem
+                    key={card.id}
+                    card={card}
+                    setCreditCardData={setCreditCard}
+                    selected={creditCard}
+                  />
+                ))}
               <ContainerAddCreditCard
                 onPress={handleAddNewCard}
                 disabled={addNewCard}

@@ -55,3 +55,5 @@ web-build/
 
 # CONFIGS
 src/config
+
+.env

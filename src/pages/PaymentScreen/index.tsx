@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-syntax */
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -37,6 +39,10 @@ import {
 } from './styles';
 import PaymentModal from './PaymentModal';
 import { brands } from '../../utils/brands';
+import { createCardHash } from '../../utils/cardHashGenerator';
+import api from '../../services/api';
+import { handleAxiosErrors } from '../../utils/getAxiosError';
+import { useFetch } from '../../hooks/useFetch';
 
 export interface ICreditCard {
   id: string;
@@ -60,6 +66,11 @@ const PaymentScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const order = route.params as IOrder;
+
+  const { data: cards } = useFetch<ICreditCard[]>(
+    'payment-cards',
+    'payment-cards',
+  );
 
   const handleHardwareBackPress = useCallback(() => {
     setModalCard(false);
@@ -111,28 +122,49 @@ const PaymentScreen: React.FC = () => {
     newCreditCard.card_number,
   ]);
 
-  const handleConfirm = useCallback(() => {
-    const items = order.products.map((product) => ({
-      product: {
-        id: product.product.id,
-        name: product.product.name,
-        description: product.product.description,
-        sale_price: product.product.sale_price,
-      },
-      quantity: product.quantity,
-    }));
-    const data = {
-      amount: order.subTotal,
-      card_id: creditCardPayment.id || '',
-      card: newCreditCard.card_number ? { ...newCreditCard } : {},
-      delivery_fee: order.deliveryFee,
-      delivery: order.deliveryFee > 0,
-      billing_address_id: order.delivery_address?.id,
-      shipping_address_id: order.delivery_address?.id,
-      items,
-    };
+  const handleConfirm = useCallback(async () => {
+    try {
+      const fakeCard = {
+        card_number: '4111111111111111',
+        card_cvv: '754',
+        card_expiration_date: '1122',
+        card_holder_name: 'Morpheus Fishburne',
+      };
+      let card_hash = '';
+      if (!creditCardPayment.id) {
+        card_hash = await createCardHash(fakeCard);
+      }
+
+      const items = order.products.map((product) => ({
+        product: {
+          id: product.product.id,
+          name: product.product.name,
+          description: product.product.description,
+          sale_price: product.product.sale_price,
+        },
+        quantity: product.quantity,
+      }));
+
+      const data = {
+        amount: order.subTotal || 0,
+        card_hash,
+        card_id: creditCardPayment.id || '',
+        card: newCreditCard.card_number && { ...newCreditCard },
+        delivery_fee: order.deliveryFee,
+        delivery: order.deliveryFee > 0,
+        billing_address_id: order.delivery_address?.id || '',
+        shipping_address_id: order.delivery_address?.id || '',
+        items,
+      };
+
+      const orderData = await api.post('orders', data);
+      navigation.navigate('ConfirmedOrder', orderData.data);
+    } catch (error) {
+      console.log(handleAxiosErrors(error));
+    }
   }, [
     creditCardPayment.id,
+    navigation,
     newCreditCard,
     order.deliveryFee,
     order.delivery_address?.id,
@@ -229,6 +261,7 @@ const PaymentScreen: React.FC = () => {
         statusBarTranslucent
       >
         <PaymentModal
+          cards={cards}
           setIsVisible={setModalCard}
           setCreditCardPayment={setCreditCardPayment}
           setNewCreditCard={setNewCreditCard}
