@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components/native';
 
 export const Container = styled.TouchableOpacity`
-  height: 90px;
+  height: 80px;
   border-radius: 8px;
   flex-direction: row;
   margin-bottom: 2px;
@@ -12,7 +12,6 @@ export const Container = styled.TouchableOpacity`
 `;
 export const ContainerImage = styled.View`
   width: 120px;
-  height: 88px;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
 `;
@@ -24,6 +23,7 @@ export const ImageProduct = styled.Image`
 `;
 export const ContainerInfo = styled.View`
   flex: 1;
+  padding-top: 8px;
   padding-left: 8px;
   padding-right: 8px;
 `;
@@ -31,7 +31,7 @@ export const TitleProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
-  font-size:14px;
+  font-size:12px;
   font-family: 'Roboto-Bold';
 `;
 
@@ -46,6 +46,6 @@ export const PriceProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.tertiary};
   `}
-  font-size:14px;
+  font-size:12px;
   font-family: 'Roboto-Medium';
 `;

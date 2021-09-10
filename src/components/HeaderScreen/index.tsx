@@ -5,12 +5,16 @@ import logoImage from '../../assets/logo_horizontal_catarina.png';
 import CartButton from '../CartButton';
 import { useCart } from '../../contexts/cart';
 
-const HeaderScreen: React.FC = () => {
+interface Props {
+  cartButton?: boolean;
+}
+
+const HeaderScreen: React.FC<Props> = ({ cartButton = true }) => {
   const { countCartProducts } = useCart();
   return (
     <Container>
       <ImageLogo source={logoImage} />
-      <CartButton qtyCartProducts={countCartProducts} />
+      {cartButton && <CartButton qtyCartProducts={countCartProducts} />}
     </Container>
   );
 };

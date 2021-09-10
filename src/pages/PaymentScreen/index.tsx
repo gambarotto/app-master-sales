@@ -43,6 +43,7 @@ import { createCardHash } from '../../utils/cardHashGenerator';
 import api from '../../services/api';
 import { handleAxiosErrors } from '../../utils/getAxiosError';
 import { useFetch } from '../../hooks/useFetch';
+import { useCart } from '../../contexts/cart';
 
 export interface ICreditCard {
   id: string;
@@ -60,6 +61,7 @@ export interface INewCard {
 }
 
 const PaymentScreen: React.FC = () => {
+  const { clearCart } = useCart();
   const [modalCard, setModalCard] = useState(false);
   const [newCreditCard, setNewCreditCard] = useState({} as INewCard);
   const [creditCardPayment, setCreditCardPayment] = useState({} as ICreditCard);
@@ -124,15 +126,9 @@ const PaymentScreen: React.FC = () => {
 
   const handleConfirm = useCallback(async () => {
     try {
-      const fakeCard = {
-        card_number: '4111111111111111',
-        card_cvv: '754',
-        card_expiration_date: '1122',
-        card_holder_name: 'Morpheus Fishburne',
-      };
       let card_hash = '';
       if (!creditCardPayment.id) {
-        card_hash = await createCardHash(fakeCard);
+        card_hash = await createCardHash(newCreditCard);
       }
 
       const items = order.products.map((product) => ({
@@ -149,7 +145,6 @@ const PaymentScreen: React.FC = () => {
         amount: order.subTotal || 0,
         card_hash,
         card_id: creditCardPayment.id || '',
-        card: newCreditCard.card_number && { ...newCreditCard },
         delivery_fee: order.deliveryFee,
         delivery: order.deliveryFee > 0,
         billing_address_id: order.delivery_address?.id || '',
@@ -158,11 +153,13 @@ const PaymentScreen: React.FC = () => {
       };
 
       const orderData = await api.post('orders', data);
+      clearCart();
       navigation.navigate('ConfirmedOrder', orderData.data);
     } catch (error) {
       console.log(handleAxiosErrors(error));
     }
   }, [
+    clearCart,
     creditCardPayment.id,
     navigation,
     newCreditCard,
