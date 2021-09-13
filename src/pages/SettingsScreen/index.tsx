@@ -18,6 +18,7 @@ import {
   ContainerItemMenu,
   IconItemMenu,
   TextItemMenu,
+  ContainerAnimatedItemMenu,
 } from './styles';
 
 interface IMenu {
@@ -83,14 +84,21 @@ const SettingsScreen: React.FC = () => {
       </ContainerUserData>
       <ContainerMenu>
         {menu.map((item) => (
-          <ContainerItemMenu key={item.name} onPress={item.goTo}>
-            <IconItemMenu
-              name={item.icon}
-              size={24}
-              color={themeGlobal.colors.gray1}
-            />
-            <TextItemMenu>{item.name}</TextItemMenu>
-          </ContainerItemMenu>
+          <ContainerAnimatedItemMenu
+            key={item.name}
+            from={{ translateX: -70, opacity: 0 }}
+            animate={{ translateX: 0, opacity: 1 }}
+            transition={{ type: 'timing', duration: 500 }}
+          >
+            <ContainerItemMenu onPress={item.goTo}>
+              <IconItemMenu
+                name={item.icon}
+                size={24}
+                color={themeGlobal.colors.gray1}
+              />
+              <TextItemMenu>{item.name}</TextItemMenu>
+            </ContainerItemMenu>
+          </ContainerAnimatedItemMenu>
         ))}
       </ContainerMenu>
       <Modal isVisible={modalProfile}>

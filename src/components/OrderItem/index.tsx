@@ -17,10 +17,12 @@ import {
   LineText,
   ContainerTitle,
   SubTitleDate,
+  ContainerAnimated,
 } from './styles';
 
 interface IProps {
   order: IOrders;
+  index: number;
 }
 interface ResponseOrderDate {
   dateDistance: string;
@@ -28,6 +30,7 @@ interface ResponseOrderDate {
 }
 const OrderItem: React.FC<IProps> = ({
   order: { id, order_number, amount, delivery_fee, created_at },
+  index,
 }) => {
   const navigation = useNavigation();
 
@@ -44,31 +47,37 @@ const OrderItem: React.FC<IProps> = ({
   };
 
   return (
-    <Container onPress={() => navigation.navigate('Order', { id })}>
-      <ContainerTitle>
-        <TitleDate>{orderDate().dateFormat}</TitleDate>
-        <SubTitleDate>{orderDate().dateDistance}</SubTitleDate>
-      </ContainerTitle>
-      <TextOrderNumber>{`#${order_number}`}</TextOrderNumber>
-      <LineText>
-        <TextDescription>Produtos</TextDescription>
-        <TextCurrency>
-          <Currency value={amount} />
-        </TextCurrency>
-      </LineText>
-      <LineText>
-        <TextDescription>Taxa de entrega</TextDescription>
-        <TextCurrency>
-          <Currency value={delivery_fee} />
-        </TextCurrency>
-      </LineText>
-      <LineText style={{ marginTop: 8 }}>
-        <TextTotal>Total</TextTotal>
-        <TextTotalCurrency>
-          <Currency value={amount + delivery_fee} />
-        </TextTotalCurrency>
-      </LineText>
-    </Container>
+    <ContainerAnimated
+      from={{ translateX: -70, opacity: 0 }}
+      animate={{ translateX: 0, opacity: 1 }}
+      transition={{ type: 'timing', duration: 300 + index * 100 }}
+    >
+      <Container onPress={() => navigation.navigate('Order', { id })}>
+        <ContainerTitle>
+          <TitleDate>{orderDate().dateFormat}</TitleDate>
+          <SubTitleDate>{orderDate().dateDistance}</SubTitleDate>
+        </ContainerTitle>
+        <TextOrderNumber>{`#${order_number}`}</TextOrderNumber>
+        <LineText>
+          <TextDescription>Produtos</TextDescription>
+          <TextCurrency>
+            <Currency value={amount} />
+          </TextCurrency>
+        </LineText>
+        <LineText>
+          <TextDescription>Taxa de entrega</TextDescription>
+          <TextCurrency>
+            <Currency value={delivery_fee} />
+          </TextCurrency>
+        </LineText>
+        <LineText style={{ marginTop: 8 }}>
+          <TextTotal>Total</TextTotal>
+          <TextTotalCurrency>
+            <Currency value={amount + delivery_fee} />
+          </TextTotalCurrency>
+        </LineText>
+      </Container>
+    </ContainerAnimated>
   );
 };
 

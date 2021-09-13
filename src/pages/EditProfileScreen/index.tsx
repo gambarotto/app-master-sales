@@ -26,6 +26,7 @@ import {
   ButtonCamera,
   Container,
   ContainerActionsButtons,
+  ContainerAnimatedChangePassword,
   ContainerAvatar,
   ContainerAvatarImage,
   ContainerChangePassword,
@@ -158,7 +159,11 @@ const EditProfileScreen: React.FC = () => {
     >
       <Container>
         <IconBack onPress={() => navigation.goBack()} />
-        <ContainerAvatar>
+        <ContainerAvatar
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ type: 'timing', duration: 500 }}
+        >
           <ContainerAvatarImage>
             <Avatar source={{ uri: changeAvatar }} />
           </ContainerAvatarImage>
@@ -170,7 +175,11 @@ const EditProfileScreen: React.FC = () => {
             />
           </ButtonCamera>
         </ContainerAvatar>
-        <ContainerForm>
+        <ContainerForm
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ type: 'timing', duration: 500 }}
+        >
           <Form ref={formRef} onSubmit={handleEditProfile}>
             <Input
               ref={inputNameRef}
@@ -211,11 +220,17 @@ const EditProfileScreen: React.FC = () => {
       </Container>
       {!keybordShow && (
         <ContainerActionsButtons>
-          <ContainerChangePassword>
-            <TextChangePassword>
-              Gostaria de trocar sua senha? clique aqui
-            </TextChangePassword>
-          </ContainerChangePassword>
+          <ContainerAnimatedChangePassword
+            from={{ translateX: -70, opacity: 0 }}
+            animate={{ translateX: 0, opacity: 1 }}
+            transition={{ type: 'timing', duration: 500 }}
+          >
+            <ContainerChangePassword>
+              <TextChangePassword>
+                Gostaria de trocar sua senha? clique aqui
+              </TextChangePassword>
+            </ContainerChangePassword>
+          </ContainerAnimatedChangePassword>
           <Button
             textSize={16}
             color="secondary"

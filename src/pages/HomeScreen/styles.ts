@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { FlatList } from 'react-native';
+import { MotiText, MotiView } from 'moti';
 import { ICategoryItem } from '.';
 
 const { statusBarHeight } = Constants;
@@ -28,30 +29,12 @@ export const ContainerCart = styled.TouchableOpacity``;
 export const IconCart = styled(MaterialIcons)`
   margin-left: 8px;
 `;
-export const ContainerSearch = styled.View`
-  flex-direction: row;
-  ${(props) => css`
-    background-color: ${props.theme.colors.gray4};
-  `}
-  height:50px;
-  border-radius: 25px;
-  margin-top: 16px;
-  align-items: center;
-  padding-left: 8px;
-  padding-right: 8px;
-`;
-export const IconSearch = styled(MaterialIcons)`
-  margin-right: 8px;
-`;
-export const InputSearch = styled.TextInput`
-  flex: 1;
-`;
 export const ContainerCategories = styled.View`
   width: 100%;
   padding-left: 16px;
   justify-content: space-between;
 `;
-export const TitleCategories = styled.Text`
+export const TitleCategories = styled(MotiText)`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
@@ -65,6 +48,7 @@ export const ContainerCategoryList = styled.View`
 export const CategoriesList = styled(
   FlatList as new () => FlatList<ICategoryItem>,
 )``;
+export const ContainerAnimatedItemCategory = styled(MotiView)``;
 export const CategoryItemContainer = styled.TouchableOpacity`
   width: 120px;
   height: 60px;

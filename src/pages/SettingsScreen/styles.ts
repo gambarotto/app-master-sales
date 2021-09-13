@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { MotiView } from 'moti';
 import styled, { css } from 'styled-components/native';
 
 const { statusBarHeight } = Constants;
@@ -44,6 +45,7 @@ export const ContainerMenu = styled.View`
   flex: 1;
   margin-top: 30px;
 `;
+export const ContainerAnimatedItemMenu = styled(MotiView)``;
 export const ContainerItemMenu = styled.TouchableOpacity`
   flex-direction: row;
   height: 52px;

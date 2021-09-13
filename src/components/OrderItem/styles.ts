@@ -1,5 +1,7 @@
+import { MotiView } from 'moti';
 import styled, { css } from 'styled-components/native';
 
+export const ContainerAnimated = styled(MotiView)``;
 export const Container = styled.TouchableOpacity`
   flex: 1;
   max-height: 125px;

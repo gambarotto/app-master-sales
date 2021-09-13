@@ -10,6 +10,7 @@ import {
   TitleOrders,
 } from './styles';
 import OrderItem from '../../components/OrderItem';
+import LoadingContent from '../../components/LoadingContent';
 
 export interface IOrders {
   id: string;
@@ -23,6 +24,9 @@ export interface IOrders {
 const OrdersScreen: React.FC = () => {
   const { data: orders } = useFetch<IOrders[]>('orders', 'orders');
 
+  if (orders?.length === undefined) {
+    return <LoadingContent textLoading="Carregando..." />;
+  }
   return (
     <Container>
       <ContainerHeader>
@@ -33,7 +37,9 @@ const OrdersScreen: React.FC = () => {
         <OrderList
           data={orders}
           keyExtractor={(order) => order.id}
-          renderItem={({ item }) => <OrderItem order={item} />}
+          renderItem={({ item, index }) => (
+            <OrderItem order={item} index={index} />
+          )}
         />
       </ContainerOrders>
     </Container>

@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { MotiView } from 'moti';
 import styled, { css } from 'styled-components/native';
 
 const { statusBarHeight } = Constants;
@@ -14,7 +15,7 @@ export const Container = styled.ScrollView`
   padding-left: 16px;
   padding-right: 16px;
 `;
-export const ContainerAvatar = styled.View`
+export const ContainerAvatar = styled(MotiView)`
   justify-content: center;
   align-items: center;
 `;
@@ -44,7 +45,7 @@ export const ButtonCamera = styled.TouchableOpacity`
   margin-left: 100px;
 `;
 export const IconCamera = styled(MaterialIcons)``;
-export const ContainerForm = styled.View`
+export const ContainerForm = styled(MotiView)`
   flex: 1;
   margin-top: 24px;
 `;
@@ -63,6 +64,7 @@ export const ContainerActionsButtons = styled.View`
   left: 16px;
   right: 16px;
 `;
+export const ContainerAnimatedChangePassword = styled(MotiView)``;
 export const ContainerChangePassword = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
