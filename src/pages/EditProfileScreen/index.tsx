@@ -160,8 +160,8 @@ const EditProfileScreen: React.FC = () => {
       <Container>
         <IconBack onPress={() => navigation.goBack()} />
         <ContainerAvatar
-          from={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          from={{ translateY: -30, opacity: 0 }}
+          animate={{ translateY: 0, opacity: 1 }}
           transition={{ type: 'timing', duration: 500 }}
         >
           <ContainerAvatarImage>
@@ -178,7 +178,7 @@ const EditProfileScreen: React.FC = () => {
         <ContainerForm
           from={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ type: 'timing', duration: 500 }}
+          transition={{ type: 'timing', duration: 800 }}
         >
           <Form ref={formRef} onSubmit={handleEditProfile}>
             <Input

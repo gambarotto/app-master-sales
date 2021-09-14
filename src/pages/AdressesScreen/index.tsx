@@ -19,6 +19,7 @@ import { IAddress, useAuth } from '../../contexts/auth';
 import AddressItem from '../../components/AddressItem';
 import Button from '../../components/Button';
 import api from '../../services/api';
+import LoadingContent from '../../components/LoadingContent';
 
 const AdressesScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -71,9 +72,16 @@ const AdressesScreen: React.FC = () => {
     navigation.goBack();
   }, [adresses, navigation, selected]);
 
+  if (adresses === undefined) {
+    <LoadingContent />;
+  }
   return (
     <Container>
-      <ContainerHeader>
+      <ContainerHeader
+        from={{ translateY: -30, opacity: 0 }}
+        animate={{ translateY: 0, opacity: 1 }}
+        transition={{ type: 'timing', duration: 350 }}
+      >
         <ButtonBack onPress={() => navigation.goBack()}>
           <Icon
             name="keyboard-arrow-left"
@@ -90,7 +98,11 @@ const AdressesScreen: React.FC = () => {
           />
         </ButtonAdd>
       </ContainerHeader>
-      <TextSelectAddress>
+      <TextSelectAddress
+        from={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ type: 'timing', duration: 500 }}
+      >
         {adresses && adresses?.length > 0
           ? 'Selecione o endereço que gostaria de receber as entregas'
           : 'Você ainda não possui um endereço cadastrado'}
@@ -101,10 +113,11 @@ const AdressesScreen: React.FC = () => {
             data={adresses}
             keyExtractor={(address) => address.id}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item: address }) => (
+            renderItem={({ item: address, index }) => (
               <AddressItem
                 isSelected={address.default || address.id === selected}
                 handleSelected={handleSelected}
+                index={index}
                 address={address}
               />
             )}

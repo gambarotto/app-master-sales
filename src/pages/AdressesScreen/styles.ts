@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { MotiText, MotiView } from 'moti';
 import { FlatList } from 'react-native';
 import styled, { css } from 'styled-components/native';
 import { IAddress } from '../../contexts/auth';
@@ -10,7 +11,7 @@ export const Container = styled.View`
   flex: 1;
   margin-top: ${`${statusBarHeight + 8}px`};
 `;
-export const ContainerHeader = styled.View`
+export const ContainerHeader = styled(MotiView)`
   padding: 16px;
   flex-direction: row;
   justify-content: center;
@@ -34,7 +35,7 @@ export const ButtonAdd = styled.TouchableOpacity`
   position: absolute;
   right: 16px;
 `;
-export const TextSelectAddress = styled.Text`
+export const TextSelectAddress = styled(MotiText)`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}

@@ -83,12 +83,12 @@ const SettingsScreen: React.FC = () => {
         </ContainerUserInfo>
       </ContainerUserData>
       <ContainerMenu>
-        {menu.map((item) => (
+        {menu.map((item, index) => (
           <ContainerAnimatedItemMenu
             key={item.name}
             from={{ translateX: -70, opacity: 0 }}
             animate={{ translateX: 0, opacity: 1 }}
-            transition={{ type: 'timing', duration: 500 }}
+            transition={{ type: 'timing', duration: 300 + index * 100 }}
           >
             <ContainerItemMenu onPress={item.goTo}>
               <IconItemMenu

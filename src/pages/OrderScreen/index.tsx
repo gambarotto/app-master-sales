@@ -27,6 +27,7 @@ import { IAddress } from '../../contexts/auth';
 import { IProduct } from '../../contexts/products';
 import Currency from '../../components/Currency';
 import themeGlobal from '../../styles/global';
+import LoadingContent from '../../components/LoadingContent';
 
 interface ResponseOrderDate {
   dateDistance: string;
@@ -91,9 +92,16 @@ const OrderScreen: React.FC = () => {
       </Container>
     );
   }
+  if (!order) {
+    return <LoadingContent textLoading="Carregando pedido..." />;
+  }
   return (
     <Container>
-      <ContainerHeader>
+      <ContainerHeader
+        from={{ translateY: -70, opacity: 0 }}
+        animate={{ translateY: 0, opacity: 1 }}
+        transition={{ type: 'timing', duration: 450 }}
+      >
         <IconBack
           styleElement={{ left: 16 }}
           onPress={() => navigation.goBack()}
@@ -102,8 +110,18 @@ const OrderScreen: React.FC = () => {
         <ImageLogo source={logoImage} />
       </ContainerHeader>
       <ContainerInfo>
-        <TextOrder>{`Pedido #${order?.order_number}`}</TextOrder>
-        <TextOrderDate>{orderDate()?.dateFormat}</TextOrderDate>
+        <TextOrder
+          from={{ translateX: -70, opacity: 0 }}
+          animate={{ translateX: 0, opacity: 1 }}
+          transition={{ type: 'timing', duration: 350 }}
+        >{`Pedido #${order?.order_number}`}</TextOrder>
+        <TextOrderDate
+          from={{ translateX: -70, opacity: 0 }}
+          animate={{ translateX: 0, opacity: 1 }}
+          transition={{ type: 'timing', duration: 450 }}
+        >
+          {orderDate()?.dateFormat}
+        </TextOrderDate>
         <OrderProductList
           data={order?.products}
           keyExtractor={(item) => item.product.id}
@@ -116,13 +134,21 @@ const OrderScreen: React.FC = () => {
             </ContainerItemOrderProduct>
           )}
         />
-        <LineText>
+        <LineText
+          from={{ translateY: 30, opacity: 0 }}
+          animate={{ translateY: 0, opacity: 1 }}
+          transition={{ type: 'timing', duration: 350 }}
+        >
           <TextTotal>Taxa de entrega</TextTotal>
           <TextTotalCurrency>
             <Currency value={order.delivery_fee} />
           </TextTotalCurrency>
         </LineText>
-        <LineText>
+        <LineText
+          from={{ translateY: 30, opacity: 0 }}
+          animate={{ translateY: 0, opacity: 1 }}
+          transition={{ type: 'timing', duration: 450 }}
+        >
           <TextTotal>Total</TextTotal>
           <TextTotalCurrency>
             <Currency value={order.amount} />

@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import { MotiText, MotiView } from 'moti';
 import { FlatList } from 'react-native';
 import styled, { css } from 'styled-components/native';
 import { IProductOrder } from '.';
@@ -8,7 +9,7 @@ const { statusBarHeight } = Constants;
 export const Container = styled.View`
   flex: 1;
 `;
-export const ContainerHeader = styled.View`
+export const ContainerHeader = styled(MotiView)`
   padding-top: ${`${statusBarHeight}px`};
   ${(props) => css`
     background-color: ${props.theme.colors.secondary};
@@ -35,7 +36,7 @@ export const ContainerInfo = styled.View`
   `}
   padding:20px;
 `;
-export const TextOrder = styled.Text`
+export const TextOrder = styled(MotiText)`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
@@ -43,7 +44,7 @@ export const TextOrder = styled.Text`
   font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
-export const TextOrderDate = styled.Text`
+export const TextOrderDate = styled(MotiText)`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
@@ -76,7 +77,7 @@ export const ItemPriceProduct = styled.Text`
   font-size:13px;
   font-family: 'Roboto-Regular';
 `;
-export const LineText = styled.View`
+export const LineText = styled(MotiView)`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 13px;

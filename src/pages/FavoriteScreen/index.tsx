@@ -30,7 +30,9 @@ const FavoriteScreen: React.FC = () => {
           data={favorite_products}
           keyExtractor={(product) => product.id}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item: product }) => <ProductItem product={product} />}
+          renderItem={({ item: product, index }) => (
+            <ProductItem product={product} index={index} />
+          )}
         />
       </ContainerFavoriteList>
     </Container>

@@ -34,13 +34,42 @@ export const ContainerCategories = styled.View`
   padding-left: 16px;
   justify-content: space-between;
 `;
+export const ContainerTitleAndClearCategories = styled(MotiView)`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+`;
 export const TitleCategories = styled(MotiText)`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
   font-size:18px;
   font-family: 'Roboto-Bold';
-  margin-bottom: 8px;
+`;
+export const ContainerAnimateIconClear = styled(MotiView)`
+  opacity: 1;
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  justify-content: center;
+
+  overflow: hidden;
+`;
+export const ContainerIconClear = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+export const Icon = styled(MaterialIcons)`
+  margin-right: 8px;
+`;
+export const TextIcon = styled(MotiText)`
+  ${(props) => css`
+    color: ${props.theme.colors.gray1};
+  `}
+  font-size:10px;
+  font-family: 'Roboto-Regular';
 `;
 export const ContainerCategoryList = styled.View`
   margin-bottom: 8px;
@@ -75,7 +104,7 @@ export const ContainerProducts = styled.View`
   padding-left: 16px;
   padding-right: 16px;
 `;
-export const TitleProducts = styled.Text`
+export const TitleProducts = styled(MotiText)`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}

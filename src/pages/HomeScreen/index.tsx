@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // import { useAuth } from '../../contexts/auth';
 
+import { useAnimationState } from 'moti';
 import {
   CategoriesList,
   CategoryItemContainer,
@@ -8,17 +9,23 @@ import {
   CategoryItemTitle,
   Container,
   ContainerAnimatedItemCategory,
+  ContainerAnimateIconClear,
   ContainerCategories,
   ContainerCategoryList,
   ContainerHeader,
+  ContainerIconClear,
   ContainerProductList,
   ContainerProducts,
+  ContainerTitleAndClearCategories,
+  Icon,
   ProductList,
+  TextIcon,
   TitleCategories,
   TitleProducts,
 } from './styles';
 import ProductItem from '../../components/ProductItem';
 import HeaderScreen from '../../components/HeaderScreen';
+import themeGlobal from '../../styles/global';
 import { useFetch } from '../../hooks/useFetch';
 import { IProduct, useProduct } from '../../contexts/products';
 import LoadingContent from '../../components/LoadingContent';
@@ -47,6 +54,16 @@ const HomeScreen: React.FC = () => {
     updateFavoriteProducts(favorite_products as IProduct[]);
   }, [favorite_products, products, updateFavoriteProducts, updateProducts]);
 
+  const animationClearCategories = useAnimationState({
+    extend: {
+      width: 100,
+      opacity: 1,
+    },
+    close: {
+      width: 0,
+      opacity: 0,
+    },
+  });
   const handleSelectCategory = useCallback(
     (category_id: string) => {
       if (products) {
@@ -56,11 +73,16 @@ const HomeScreen: React.FC = () => {
           );
           return findIndex >= 0 && product;
         });
+        animationClearCategories.transitionTo('extend');
         setProductsFiltered(prodsFiltred);
       }
     },
-    [products],
+    [animationClearCategories, products],
   );
+  const handleClearCategories = useCallback(() => {
+    animationClearCategories.transitionTo('close');
+    setProductsFiltered(products as IProduct[]);
+  }, [animationClearCategories, products]);
   const dataProducts = useMemo(
     () => (productsFiltred.length > 0 ? productsFiltred : products),
     [products, productsFiltred],
@@ -75,13 +97,25 @@ const HomeScreen: React.FC = () => {
         <HeaderScreen />
       </ContainerHeader>
       <ContainerCategories>
-        <TitleCategories
-          from={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ type: 'timing', duration: 500 }}
-        >
-          Categorias
-        </TitleCategories>
+        <ContainerTitleAndClearCategories>
+          <TitleCategories
+            from={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ type: 'timing', duration: 500 }}
+          >
+            Categorias
+          </TitleCategories>
+          <ContainerAnimateIconClear state={animationClearCategories}>
+            <ContainerIconClear onPress={handleClearCategories}>
+              <Icon
+                name="clear-all"
+                size={20}
+                color={themeGlobal.colors.gray1}
+              />
+              <TextIcon>Limpar filtro</TextIcon>
+            </ContainerIconClear>
+          </ContainerAnimateIconClear>
+        </ContainerTitleAndClearCategories>
         <ContainerCategoryList>
           <CategoriesList
             data={categories}
@@ -107,7 +141,13 @@ const HomeScreen: React.FC = () => {
         </ContainerCategoryList>
       </ContainerCategories>
       <ContainerProducts>
-        <TitleProducts>Produtos</TitleProducts>
+        <TitleProducts
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ type: 'timing', duration: 600 }}
+        >
+          Produtos
+        </TitleProducts>
         <ContainerProductList>
           <ProductList
             data={dataProducts}

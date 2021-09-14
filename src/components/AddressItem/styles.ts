@@ -1,11 +1,12 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import { MotiView } from 'moti';
 import styled, { css } from 'styled-components/native';
 
 interface SelectedAddress {
   isSelected?: boolean;
 }
 
-export const Container = styled.View<SelectedAddress>`
+export const Container = styled(MotiView)<SelectedAddress>`
   flex-direction: row;
   border-width: 1px;
   border-radius: 4px;
