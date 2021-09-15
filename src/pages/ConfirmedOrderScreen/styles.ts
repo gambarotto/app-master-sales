@@ -28,6 +28,13 @@ export const ContainerBody = styled.View`
   flex: 1;
   margin-top: ${`${PADDING + 8}px`};
 `;
+export const ContainerConfirmOrder = styled.View`
+  border-bottom-width: 0.5px;
+  padding-bottom: ${`${PADDING - 8}px`};
+  ${(props) => css`
+    border-bottom-color: ${props.theme.colors.gray3};
+  `}
+`;
 export const TextConfirmedOrder = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
@@ -37,17 +44,45 @@ export const TextConfirmedOrder = styled.Text`
 `;
 export const TextExplainOrder = styled.Text`
   ${(props) => css`
-    color: ${props.theme.colors.primary};
+    color: ${props.theme.colors.gray1};
   `}
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Roboto-Regular';
   margin-top: ${`${PADDING}px`};
+`;
+export const ContainerShippingAddress = styled.View`
+  margin-top: ${`${PADDING - 8}px`};
+`;
+export const TitleAddress = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.secondary};
+  `}
+  font-size: 12px;
+  font-family: 'Roboto-Bold';
+  margin-top: ${`${PADDING - 8}px`};
+`;
+export const TextAddressAlias = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.primary};
+  `}
+  font-size: 12px;
+  font-family: 'Roboto-Bold';
+  margin-top: ${`${PADDING}px`};
+  margin-bottom: ${`${PADDING - 8}px`};
+`;
+export const TextAddressLine = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.gray1};
+  `}
+  font-size: 12px;
+  font-family: 'Roboto-Regular';
+  margin-top: ${`${PADDING - 8}px`};
 `;
 export const LineWithTwoText = styled.View`
   flex-direction: row;
   height: 40px;
   align-items: center;
-  margin-top: ${`${PADDING + 8}px`};
+  /* margin-top: ${`${PADDING}px`}; */
   border-bottom-width: 0.5px;
   ${(props) => css`
     border-bottom-color: ${props.theme.colors.gray3};
@@ -57,15 +92,16 @@ export const TextOrderDeliveryDate = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
-  font-size: 14px;
-  font-family: 'Roboto-Bold';
+  font-size: 12px;
+  font-family: 'Roboto-Regular';
 `;
 export const TextOrderDate = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
-  font-size: 14px;
-  font-family: 'Roboto-Regular';
+  font-size: 12px;
+  font-family: 'Roboto-Bold';
+  margin-left: 8px;
 `;
 export const ContainerOrderDetails = styled.View`
   margin-top: ${`${PADDING}px`};
@@ -75,9 +111,9 @@ export const ContainerOrderDetails = styled.View`
   `}
 `;
 export const Title = styled.Text`
-  font-size: 14px;
-  font-family: 'Roboto-Regular';
-  margin-bottom: 24px;
+  font-size: 12px;
+  font-family: 'Roboto-Bold';
+  margin-bottom: ${`${PADDING}px`};
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
@@ -100,14 +136,14 @@ export const ItemNameProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.tertiary};
   `}
-  font-size:14px;
+  font-size:12px;
   font-family: 'Roboto-Regular';
 `;
 export const ItemPriceProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.tertiary};
   `}
-  font-size:14px;
+  font-size:12px;
   font-family: 'Roboto-Regular';
 `;
 export const ContainerDescriptionOrderCosts = styled.View`
@@ -119,7 +155,7 @@ export const TextDescriptionItemOrder = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.gray3};
   `}
-  font-size:14px;
+  font-size:12px;
   font-family: 'Roboto-Regular';
   margin-bottom: 8px;
 `;
@@ -127,7 +163,7 @@ export const TextTotalOrder = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.secondary};
   `}
-  font-size:14px;
+  font-size:12px;
   font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;

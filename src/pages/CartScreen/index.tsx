@@ -17,6 +17,7 @@ import {
   CartProductsList,
   Container,
   ContainerAddress,
+  ContainerAnimateCard,
   ContainerBottom,
   ContainerBottomCard,
   ContainerButtons,
@@ -98,11 +99,24 @@ const CartScreen: React.FC = () => {
     const order: IOrder = {
       products: cartProducts,
       deliveryFee,
-      delivery_address: deliveryFee === 0 ? null : defaultAddress,
+      delivery_address: isCheckedDelivery ? defaultAddress : null,
       subTotal: calcTotal - deliveryFee,
     };
     navigation.navigate('Payment', order);
-  }, [calcTotal, cartProducts, defaultAddress, deliveryFee, navigation]);
+  }, [
+    calcTotal,
+    cartProducts,
+    defaultAddress,
+    deliveryFee,
+    isCheckedDelivery,
+    navigation,
+  ]);
+
+  const footerComponent = (): JSX.Element => (
+    <ButtonAddMoreItems onPress={() => navigation.navigate('Tabs')}>
+      <TextAddMoreItems>Adicionar mais itens</TextAddMoreItems>
+    </ButtonAddMoreItems>
+  );
   if (countCartProducts <= 0) {
     return (
       <>
@@ -114,7 +128,11 @@ const CartScreen: React.FC = () => {
               color={themeGlobal.colors.secondary}
             />
           </ButtonBack>
-          <ImageLogo source={logoImage} />
+          <ImageLogo
+            from={{ translateX: -30, opacity: 0 }}
+            animate={{ translateX: 0, opacity: 1 }}
+            source={logoImage}
+          />
         </ContainerHeaderWithoutItems>
         <ContainerWithOutItems>
           <TextWithOutItems>Oops...</TextWithOutItems>
@@ -138,7 +156,11 @@ const CartScreen: React.FC = () => {
             color={themeGlobal.colors.secondary}
           />
         </ButtonBack>
-        <ImageLogo source={logoImage} />
+        <ImageLogo
+          from={{ translateX: -30, opacity: 0 }}
+          animate={{ translateX: 0, opacity: 1 }}
+          source={logoImage}
+        />
       </ContainerHeader>
       <TitlePage>Carrinho</TitlePage>
       <ContainerCartProductList>
@@ -153,40 +175,48 @@ const CartScreen: React.FC = () => {
               handlePressCartProduct={() => handlePressCartProduct(item)}
             />
           )}
+          ListFooterComponent={footerComponent}
         />
-        <ButtonAddMoreItems onPress={() => navigation.navigate('Tabs')}>
-          <TextAddMoreItems>Adicionar mais itens</TextAddMoreItems>
-        </ButtonAddMoreItems>
       </ContainerCartProductList>
       <ContainerDeliveryAddress>
         <TitleDelivery>Entrega</TitleDelivery>
         {defaultAddress ? (
-          <ContainerCard
-            isChecked={isCheckedDelivery}
-            onPress={() => handleDeliveryMethod(10)}
+          <ContainerAnimateCard
+            from={{ translateY: 30, opacity: 0 }}
+            animate={{
+              translateY: 0,
+              opacity: 1,
+              scale: isCheckedDelivery ? [0.98, 1] : 1,
+            }}
+            transition={{ type: 'timing', duration: 150 }}
           >
-            <ContainerTopCard>
-              <CheckCircle isChecked={isCheckedDelivery} size={20} />
-              <ContainerLabelAndPrice>
-                <TextAliasAddress isChecked={isCheckedDelivery}>
-                  Casa
-                </TextAliasAddress>
-                <DeliveryPrice isChecked={isCheckedDelivery}>
-                  <Currency value={10} />
-                </DeliveryPrice>
-              </ContainerLabelAndPrice>
-            </ContainerTopCard>
-            <ContainerBottomCard>
-              <ContainerAddress>
-                <TextAddress isChecked={isCheckedDelivery}>
-                  {`${defaultAddress?.street}, ${defaultAddress?.number}`}
-                </TextAddress>
-                <TextAddress isChecked={isCheckedDelivery}>
-                  {`${defaultAddress?.city} - cep: ${defaultAddress?.zip_code}`}
-                </TextAddress>
-              </ContainerAddress>
-            </ContainerBottomCard>
-          </ContainerCard>
+            <ContainerCard
+              isChecked={isCheckedDelivery}
+              onPress={() => handleDeliveryMethod(10)}
+            >
+              <ContainerTopCard>
+                <CheckCircle isChecked={isCheckedDelivery} size={20} />
+                <ContainerLabelAndPrice>
+                  <TextAliasAddress isChecked={isCheckedDelivery}>
+                    Casa
+                  </TextAliasAddress>
+                  <DeliveryPrice isChecked={isCheckedDelivery}>
+                    <Currency value={10} />
+                  </DeliveryPrice>
+                </ContainerLabelAndPrice>
+              </ContainerTopCard>
+              <ContainerBottomCard>
+                <ContainerAddress>
+                  <TextAddress isChecked={isCheckedDelivery}>
+                    {`${defaultAddress?.street}, ${defaultAddress?.number}`}
+                  </TextAddress>
+                  <TextAddress isChecked={isCheckedDelivery}>
+                    {`${defaultAddress?.city} - cep: ${defaultAddress?.zip_code}`}
+                  </TextAddress>
+                </ContainerAddress>
+              </ContainerBottomCard>
+            </ContainerCard>
+          </ContainerAnimateCard>
         ) : (
           <ContainerCard
             isChecked={isCheckedDelivery}
@@ -202,22 +232,32 @@ const CartScreen: React.FC = () => {
             </ContainerTopCard>
           </ContainerCard>
         )}
-        <ContainerCard
-          isChecked={!isCheckedDelivery}
-          onPress={() => handleDeliveryMethod(0)}
+        <ContainerAnimateCard
+          from={{ translateY: 30, opacity: 0 }}
+          animate={{
+            translateY: 0,
+            opacity: 1,
+            scale: !isCheckedDelivery ? [0.98, 1] : 1,
+          }}
+          transition={{ type: 'timing', duration: 150 }}
         >
-          <ContainerTopCard>
-            <CheckCircle isChecked={!isCheckedDelivery} size={20} />
-            <ContainerLabelAndPrice>
-              <DeliveryLabel isChecked={!isCheckedDelivery}>
-                Retirar na loja
-              </DeliveryLabel>
-              <DeliveryPrice isChecked={!isCheckedDelivery}>
-                <Currency value={0} />
-              </DeliveryPrice>
-            </ContainerLabelAndPrice>
-          </ContainerTopCard>
-        </ContainerCard>
+          <ContainerCard
+            isChecked={!isCheckedDelivery}
+            onPress={() => handleDeliveryMethod(0)}
+          >
+            <ContainerTopCard>
+              <CheckCircle isChecked={!isCheckedDelivery} size={20} />
+              <ContainerLabelAndPrice>
+                <DeliveryLabel isChecked={!isCheckedDelivery}>
+                  Retirar na loja
+                </DeliveryLabel>
+                <DeliveryPrice isChecked={!isCheckedDelivery}>
+                  <Currency value={0} />
+                </DeliveryPrice>
+              </ContainerLabelAndPrice>
+            </ContainerTopCard>
+          </ContainerCard>
+        </ContainerAnimateCard>
       </ContainerDeliveryAddress>
       <ContainerBottom>
         <ContainerTotal>

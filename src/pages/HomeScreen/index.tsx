@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // import { useAuth } from '../../contexts/auth';
 
-import { useAnimationState } from 'moti';
+import { AnimatePresence, useAnimationState } from 'moti';
 import {
   CategoriesList,
   CategoryItemContainer,
@@ -38,6 +38,7 @@ export interface ICategoryItem {
 
 const HomeScreen: React.FC = () => {
   const { updateProducts, updateFavoriteProducts } = useProduct();
+  const [selectedCategory, setSelectedCategory] = useState<ICategoryItem>();
   const { data: products } = useFetch<IProduct[]>('products', 'products');
   const { data: categories } = useFetch<ICategoryItem[]>(
     'categories',
@@ -64,25 +65,38 @@ const HomeScreen: React.FC = () => {
       opacity: 0,
     },
   });
+  const animationTextClearCategories = useAnimationState({
+    extend: {
+      opacity: 1,
+    },
+    close: {
+      opacity: 0,
+    },
+  });
   const handleSelectCategory = useCallback(
-    (category_id: string) => {
+    (choosedCategory: ICategoryItem) => {
       if (products) {
         const prodsFiltred = products.filter((product) => {
           const findIndex = product.categories.findIndex(
-            (category) => category.id === category_id,
+            (category) => category.id === choosedCategory.id,
           );
           return findIndex >= 0 && product;
         });
         animationClearCategories.transitionTo('extend');
+        animationTextClearCategories.transitionTo('extend');
         setProductsFiltered(prodsFiltred);
+        setSelectedCategory(choosedCategory);
       }
     },
-    [animationClearCategories, products],
+    [animationClearCategories, animationTextClearCategories, products],
   );
   const handleClearCategories = useCallback(() => {
     animationClearCategories.transitionTo('close');
+    animationTextClearCategories.transitionTo('close');
+
     setProductsFiltered(products as IProduct[]);
-  }, [animationClearCategories, products]);
+    setSelectedCategory({} as ICategoryItem);
+  }, [animationClearCategories, animationTextClearCategories, products]);
   const dataProducts = useMemo(
     () => (productsFiltred.length > 0 ? productsFiltred : products),
     [products, productsFiltred],
@@ -112,7 +126,14 @@ const HomeScreen: React.FC = () => {
                 size={20}
                 color={themeGlobal.colors.gray1}
               />
-              <TextIcon>Limpar filtro</TextIcon>
+              {selectedCategory && (
+                <TextIcon
+                  state={animationTextClearCategories}
+                  transition={{ type: 'timing', duration: 700 }}
+                >
+                  Limpar filtro
+                </TextIcon>
+              )}
             </ContainerIconClear>
           </ContainerAnimateIconClear>
         </ContainerTitleAndClearCategories>
@@ -123,19 +144,35 @@ const HomeScreen: React.FC = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item: category, index }) => (
-              <ContainerAnimatedItemCategory
-                from={{ translateY: -30, opacity: 0 }}
-                animate={{ translateY: 0, opacity: 1 }}
-                transition={{ type: 'timing', duration: 500 + index * 100 }}
-              >
-                <CategoryItemContainer
-                  onPress={() => handleSelectCategory(category.id)}
+              <AnimatePresence>
+                <ContainerAnimatedItemCategory
+                  from={{ translateY: -30, opacity: 0 }}
+                  animate={{
+                    translateY: 0,
+                    opacity: 1,
+                    borderWidth: selectedCategory?.id === category.id ? 2 : 0,
+                  }}
+                  transition={{
+                    type: 'timing',
+                    duration: 500 + index * 100,
+                    borderWidth: {
+                      type: 'timing',
+                      duration: 200,
+                    },
+                  }}
+                  exit={{
+                    borderWidth: 0,
+                  }}
                 >
-                  <CategoryItemImage source={{ uri: category.image_url }}>
-                    <CategoryItemTitle>{category.name}</CategoryItemTitle>
-                  </CategoryItemImage>
-                </CategoryItemContainer>
-              </ContainerAnimatedItemCategory>
+                  <CategoryItemContainer
+                    onPress={() => handleSelectCategory(category)}
+                  >
+                    <CategoryItemImage source={{ uri: category.image_url }}>
+                      <CategoryItemTitle>{category.name}</CategoryItemTitle>
+                    </CategoryItemImage>
+                  </CategoryItemContainer>
+                </ContainerAnimatedItemCategory>
+              </AnimatePresence>
             )}
           />
         </ContainerCategoryList>

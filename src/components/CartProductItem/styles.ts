@@ -26,6 +26,7 @@ export const ContainerProductData = styled.View`
 `;
 export const NameProduct = styled.Text`
   position: absolute;
+  width: 65%;
   left: 8px;
   font-family: 'Roboto-Regular';
   font-size: 12px;

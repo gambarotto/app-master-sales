@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components/native';
 import Constants from 'expo-constants';
 import { FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { MotiImage, MotiView } from 'moti';
 import { ICartProduct } from '../../contexts/cart';
 
 interface PropsCard {
@@ -56,7 +57,7 @@ export const ButtonBack = styled.TouchableOpacity`
 `;
 export const IconHeader = styled(MaterialIcons)``;
 
-export const ImageLogo = styled.Image`
+export const ImageLogo = styled(MotiImage)`
   width: 170px;
   height: 50px;
   margin-bottom: 16px;
@@ -64,7 +65,7 @@ export const ImageLogo = styled.Image`
 `;
 export const TitlePage = styled.Text`
   font-family: 'Roboto-Bold';
-  font-size: 24px;
+  font-size: 16px;
   ${(props) =>
     css`
       color: ${props.theme.colors.primary};
@@ -85,6 +86,7 @@ export const ButtonAddMoreItems = styled.TouchableOpacity`
     css`
       border-top-color: ${props.theme.colors.gray3};
     `};
+  margin-top: 8px;
 `;
 export const TextAddMoreItems = styled.Text`
   font-family: 'Roboto-Regular';
@@ -101,7 +103,7 @@ export const ContainerDeliveryAddress = styled.View`
 `;
 export const TitleDelivery = styled.Text`
   font-family: 'Roboto-Bold';
-  font-size: 16px;
+  font-size: 14px;
   ${(props) =>
     css`
       color: ${props.theme.colors.primary};
@@ -109,6 +111,7 @@ export const TitleDelivery = styled.Text`
   margin-top: 16px;
   margin-bottom: 8px;
 `;
+export const ContainerAnimateCard = styled(MotiView)``;
 export const ContainerCard = styled.TouchableOpacity<PropsCard>`
   width: 100%;
   border-width: 1px;

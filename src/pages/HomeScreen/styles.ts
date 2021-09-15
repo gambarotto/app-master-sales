@@ -48,7 +48,7 @@ export const TitleCategories = styled(MotiText)`
   font-family: 'Roboto-Bold';
 `;
 export const ContainerAnimateIconClear = styled(MotiView)`
-  opacity: 1;
+  opacity: 0;
   width: 30px;
   height: 30px;
   border-radius: 20px;
@@ -70,6 +70,7 @@ export const TextIcon = styled(MotiText)`
   `}
   font-size:10px;
   font-family: 'Roboto-Regular';
+  opacity: 0;
 `;
 export const ContainerCategoryList = styled.View`
   margin-bottom: 8px;
@@ -77,12 +78,16 @@ export const ContainerCategoryList = styled.View`
 export const CategoriesList = styled(
   FlatList as new () => FlatList<ICategoryItem>,
 )``;
-export const ContainerAnimatedItemCategory = styled(MotiView)``;
+export const ContainerAnimatedItemCategory = styled(MotiView)`
+  margin-right: 8px;
+  border-radius: 6px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.secondary};
+  `}
+`;
 export const CategoryItemContainer = styled.TouchableOpacity`
   width: 120px;
   height: 60px;
-  border-radius: 4px;
-  margin-right: 8px;
 `;
 export const CategoryItemImage = styled.ImageBackground`
   width: 100%;

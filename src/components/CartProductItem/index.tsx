@@ -34,10 +34,11 @@ const CartProductItem: React.FC<Props> = ({ item, handlePressCartProduct }) => {
         <ProductImage source={{ uri: item.product.photos[0].photo_url }} />
       </ContainerProductImage>
       <ContainerProductData>
-        <NameProduct>{item.product.name}</NameProduct>
-        <ContainerQuantity>
-          <TextQuantity>{item.quantity}</TextQuantity>
-        </ContainerQuantity>
+        <NameProduct
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >{`${item.quantity}x - ${item.product.name}`}</NameProduct>
+
         <TotalProduct>
           <Currency value={productValue} />
         </TotalProduct>

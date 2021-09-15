@@ -5,6 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal, BackHandler } from 'react-native';
 import { MotiView } from 'moti';
+import { useMutation, useQueryClient } from 'react-query';
 import logoImage from '../../assets/logo_horizontal_catarina.png';
 import Button from '../../components/Button';
 import Currency from '../../components/Currency';
@@ -59,6 +60,24 @@ export interface INewCard {
   card_expiration_date: string;
   card_cvv: string;
 }
+export interface IOrderRequest {
+  amount: number;
+  card_hash: string;
+  card_id: string;
+  delivery_fee: number;
+  delivery: boolean;
+  billing_address_id: string;
+  shipping_address_id: string;
+  items: {
+    product: {
+      id: string;
+      name: string;
+      description: string;
+      sale_price: number;
+    };
+    quantity: number;
+  }[];
+}
 
 const PaymentScreen: React.FC = () => {
   const { clearCart } = useCart();
@@ -73,7 +92,17 @@ const PaymentScreen: React.FC = () => {
     'payment-cards',
     'payment-cards',
   );
-
+  const queryClient = useQueryClient();
+  const orderMutation = useMutation(
+    async (orderData: IOrderRequest) => api.post('orders', orderData),
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries('orders');
+        clearCart();
+        navigation.navigate('ConfirmedOrder', response.data);
+      },
+    },
+  );
   const handleHardwareBackPress = useCallback(() => {
     setModalCard(false);
     return !!modalCard;
@@ -141,7 +170,7 @@ const PaymentScreen: React.FC = () => {
         quantity: product.quantity,
       }));
 
-      const data = {
+      const data: IOrderRequest = {
         amount: order.subTotal || 0,
         card_hash,
         card_id: creditCardPayment.id || '',
@@ -152,21 +181,18 @@ const PaymentScreen: React.FC = () => {
         items,
       };
 
-      const orderData = await api.post('orders', data);
-      clearCart();
-      navigation.navigate('ConfirmedOrder', orderData.data);
+      orderMutation.mutate(data);
     } catch (error) {
       console.log(handleAxiosErrors(error));
     }
   }, [
-    clearCart,
     creditCardPayment.id,
-    navigation,
     newCreditCard,
     order.deliveryFee,
     order.delivery_address?.id,
     order.products,
     order.subTotal,
+    orderMutation,
   ]);
 
   return (
