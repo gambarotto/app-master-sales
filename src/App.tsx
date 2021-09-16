@@ -19,6 +19,7 @@ const App: React.FC = () => {
     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
     'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
     'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+    'Lobster-Regular': require('./assets/fonts/Lobster-Regular.ttf'),
   });
 
   const client = new QueryClient();

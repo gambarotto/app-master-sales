@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components/native';
 
 export const ContainerAnimated = styled(MotiView)``;
 export const Container = styled.TouchableOpacity`
-  flex: 1;
+  height: 125px;
   max-height: 125px;
   padding: 8px;
   border-radius: 8px;

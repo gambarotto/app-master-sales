@@ -45,6 +45,7 @@ import api from '../../services/api';
 import { handleAxiosErrors } from '../../utils/getAxiosError';
 import { useFetch } from '../../hooks/useFetch';
 import { useCart } from '../../contexts/cart';
+import PaymentModalError from './PaymentModalError';
 
 export interface ICreditCard {
   id: string;
@@ -272,8 +273,13 @@ const PaymentScreen: React.FC = () => {
           )}
         </ContainerTitleAndPaymentsMethods>
         <ContainerButton>
-          <Button color="secondary" textSize={16} onPress={handleConfirm}>
-            Finalizar
+          <Button
+            color="secondary"
+            textSize={16}
+            onPress={handleConfirm}
+            enabled={!orderMutation.isLoading}
+          >
+            {orderMutation.isLoading ? 'Enviando pedido...' : 'Finalizar'}
           </Button>
         </ContainerButton>
       </ContainerPayment>
@@ -289,6 +295,9 @@ const PaymentScreen: React.FC = () => {
           setCreditCardPayment={setCreditCardPayment}
           setNewCreditCard={setNewCreditCard}
         />
+      </Modal>
+      <Modal visible transparent statusBarTranslucent>
+        <PaymentModalError />
       </Modal>
     </Container>
   );

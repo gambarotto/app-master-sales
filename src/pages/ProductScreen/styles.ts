@@ -40,6 +40,8 @@ export const ContainerInfo = styled(MotiView)`
   flex: 1;
   margin-top: -24px;
   padding: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
   padding-bottom: 16px;
   margin-left: 8px;
   margin-right: 8px;
@@ -53,16 +55,23 @@ export const ContainerInfo = styled(MotiView)`
 export const ContainerNameAndPrice = styled.View``;
 export const ContainerNameAndPackage = styled.View`
   flex-direction: row;
+  /* padding: 0 16px; */
 `;
 export const TextNameProduct = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
+  font-size:18px;
+  font-family: 'Lobster-Regular';
+  letter-spacing: 1px;
+`;
+export const TextPrice = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.tertiary};
+  `}
   font-size:16px;
   font-family: 'Roboto-Bold';
-  margin-bottom: 8px;
 `;
-
 export const ContainerProductPackage = styled(MotiView)`
   flex: 1;
   margin-left: 8px;
@@ -72,7 +81,7 @@ export const TextPackage = styled.Text`
     color: ${props.theme.colors.gray3};
   `}
   font-size:16px;
-  font-family: 'Roboto-Regular';
+  font-family: 'Lobster-Regular';
 `;
 export const ContainerQuantity = styled.View`
   flex: 1;
@@ -110,13 +119,7 @@ export const TextNumberQuantity = styled.Text`
   margin-right: 8px;
 `;
 export const ContainerTextPrice = styled.View``;
-export const TextPrice = styled.Text`
-  ${(props) => css`
-    color: ${props.theme.colors.tertiary};
-  `}
-  font-size:18px;
-  font-family: 'Roboto-Bold';
-`;
+
 export const ContainerDescription = styled.View`
   margin-top: 64px;
 `;

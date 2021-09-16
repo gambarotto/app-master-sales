@@ -131,7 +131,10 @@ const ProductScreen: React.FC = () => {
         animate={{ translateY: 0, opacity: 1 }}
         transition={{ type: 'timing', duration: 600 }}
       >
-        <ProductImage source={{ uri: routeParams.photos[0].photo_url }} />
+        <ProductImage
+          source={{ uri: routeParams.photos[0].photo_url }}
+          resizeMode="cover"
+        />
         <ContainerIconBack
           style={{
             shadowColor: '#000',
