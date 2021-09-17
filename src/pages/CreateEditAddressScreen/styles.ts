@@ -48,6 +48,7 @@ export const ContainerDoubleInputs = styled.View`
   flex-direction: row;
   padding: 0;
   margin: 0;
+  margin-top: 8px;
 `;
 export const ContainerButtons = styled.View`
   flex-direction: row;

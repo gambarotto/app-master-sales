@@ -1,5 +1,6 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import { MotiView } from 'moti';
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 export const ContainerModal = styled.View`
   flex: 1;
@@ -11,10 +12,42 @@ export const Container = styled(MotiView)`
   align-items: center;
 `;
 export const ContainerModalContent = styled(MotiView)`
-  height: 50%;
-  width: 80%;
-  border-radius: 16px;
-  justify-content: flex-end;
+  height: 40%;
+  width: 70%;
+  border-radius: 8px;
+  justify-content: space-between;
+  align-items: center;
   background-color: white;
   padding: 16px;
+`;
+export const Icon = styled(MaterialIcons)``;
+export const TextError = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.primary};
+  `}
+  font-size: 14px;
+  font-family: 'Roboto-Bold';
+  margin-top: 8px;
+  text-align: center;
+`;
+export const ContainerButton = styled.View`
+  height: 50px;
+  width: 100%;
+`;
+export const ButtonConfirm = styled.TouchableOpacity`
+  height: 60px;
+  width: 100%;
+  ${(props) => css`
+    background-color: ${props.theme.colors.secondary};
+  `}
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+`;
+export const TextButton = styled.Text`
+  ${(props) =>
+    css`
+      color: ${props.theme.colors.white};
+    `};
+  font-family: 'Roboto-Bold';
 `;

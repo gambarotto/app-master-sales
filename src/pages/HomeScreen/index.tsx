@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // import { useAuth } from '../../contexts/auth';
 
@@ -34,6 +35,10 @@ export interface ICategoryItem {
   id: string;
   name: string;
   image_url: string;
+}
+interface IPropsItem {
+  item: IProduct;
+  index: number;
 }
 
 const HomeScreen: React.FC = () => {
@@ -100,6 +105,9 @@ const HomeScreen: React.FC = () => {
   const dataProducts = useMemo(
     () => (productsFiltred.length > 0 ? productsFiltred : products),
     [products, productsFiltred],
+  );
+  const renderItem = ({ item: product, index }: IPropsItem) => (
+    <ProductItem product={product} index={index} />
   );
 
   if (!products) {
@@ -190,9 +198,7 @@ const HomeScreen: React.FC = () => {
             data={dataProducts}
             keyExtractor={(product) => product.id}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item: product, index }) => (
-              <ProductItem product={product} index={index} />
-            )}
+            renderItem={renderItem}
             contentContainerStyle={{ paddingBottom: '10%' }}
           />
         </ContainerProductList>

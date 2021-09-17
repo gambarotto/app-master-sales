@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
 import Modal from 'react-native-modal';
 import { useAuth } from '../../contexts/auth';
+import { useCart } from '../../contexts/cart';
 import themeGlobal from '../../styles/global';
 import FacebookFunctions from '../../utils/facebook';
 import ModalEditProfile from './ModalEditProfile';
@@ -29,14 +30,16 @@ interface IMenu {
 
 const SettingsScreen: React.FC = () => {
   const { user, signOut } = useAuth();
+  const { clearCart } = useCart();
   const navigation = useNavigation();
   const [modalProfile, setModalProfile] = useState(false);
 
   const signOutWithFacebook = useCallback(async () => {
     await FacebookFunctions.initFacebook();
     await FacebookFunctions.logOut();
+    clearCart();
     signOut();
-  }, [signOut]);
+  }, [clearCart, signOut]);
   const handleOpenModal = useCallback(() => {
     setModalProfile((state) => !state);
   }, []);

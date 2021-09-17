@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -20,6 +21,11 @@ import AddressItem from '../../components/AddressItem';
 import Button from '../../components/Button';
 import api from '../../services/api';
 import LoadingContent from '../../components/LoadingContent';
+
+interface IPropsItem {
+  item: IAddress;
+  index: number;
+}
 
 const AdressesScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -72,6 +78,14 @@ const AdressesScreen: React.FC = () => {
     navigation.goBack();
   }, [adresses, navigation, selected]);
 
+  const renderItem = ({ item: address, index }: IPropsItem) => (
+    <AddressItem
+      isSelected={address.default || address.id === selected}
+      handleSelected={handleSelected}
+      index={index}
+      address={address}
+    />
+  );
   if (adresses === undefined) {
     <LoadingContent />;
   }
@@ -113,14 +127,7 @@ const AdressesScreen: React.FC = () => {
             data={adresses}
             keyExtractor={(address) => address.id}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item: address, index }) => (
-              <AddressItem
-                isSelected={address.default || address.id === selected}
-                handleSelected={handleSelected}
-                index={index}
-                address={address}
-              />
-            )}
+            renderItem={renderItem}
           />
         </ContainerAdressesList>
       )}

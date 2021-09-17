@@ -102,6 +102,7 @@ const AuthProvider: React.FC = ({ children }) => {
       'AppSales:user',
       'AppSales:facebook',
     ]);
+
     setData({} as IAuthData);
   }, []);
   const updateUser = useCallback(async (user: IUser) => {

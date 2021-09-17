@@ -12,6 +12,7 @@ import { Form } from '@unform/mobile';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import Modal from 'react-native-modal';
+import { useMutation } from 'react-query';
 import {
   Container,
   ContainerOr,
@@ -46,39 +47,51 @@ const SignUp: React.FC = () => {
 
   const navigate = useNavigation();
 
+  const userMutation = useMutation(
+    async (data: IFormData) => api.post('users', data),
+    {
+      onSuccess: () => {
+        setModalIsOpen(true);
+      },
+    },
+  );
+
   const handleCloseModal = useCallback(() => {
     setModalIsOpen(false);
     navigate.goBack();
   }, [navigate, setModalIsOpen]);
 
-  const handleSignUp = useCallback(async (data: IFormData) => {
-    try {
-      formRef.current?.setErrors({});
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome é obrigatório'),
-        email: Yup.string()
-          .required('E-mail é obrigatório')
-          .email('Informe um email válido'),
-        password: Yup.string().min(
-          6,
-          'A senha deve conter no minimo 6 caractéres',
-        ),
-      });
-      await schema.validate(data, { abortEarly: false });
-      await api.post('users', data);
-      setModalIsOpen(true);
-    } catch (error) {
-      if (error instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(error);
-        formRef.current?.setErrors(errors);
-        return;
+  const handleSignUp = useCallback(
+    async (data: IFormData) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome é obrigatório'),
+          email: Yup.string()
+            .required('E-mail é obrigatório')
+            .email('Informe um email válido'),
+          password: Yup.string().min(
+            6,
+            'A senha deve conter no minimo 6 caractéres',
+          ),
+        });
+        await schema.validate(data, { abortEarly: false });
+        userMutation.mutate(data);
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+        Alert.alert(
+          'Erro no cadastro',
+          'Ocorreu um erro ao efetuar o cadastro, tente novamente.',
+        );
       }
-      Alert.alert(
-        'Erro no cadastro',
-        'Ocorreu um erro ao efetuar o cadastro, tente novamente.',
-      );
-    }
-  }, []);
+    },
+    [userMutation],
+  );
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -133,7 +146,9 @@ const SignUp: React.FC = () => {
               onPress={() => {
                 formRef.current?.submitForm();
               }}
+              styleContainer={{ marginTop: 8 }}
               color="secondary"
+              textSize={18}
             >
               Criar Conta
             </Button>

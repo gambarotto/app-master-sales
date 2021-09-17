@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-syntax */
@@ -42,7 +43,6 @@ import PaymentModal from './PaymentModal';
 import { brands } from '../../utils/brands';
 import { createCardHash } from '../../utils/cardHashGenerator';
 import api from '../../services/api';
-import { handleAxiosErrors } from '../../utils/getAxiosError';
 import { useFetch } from '../../hooks/useFetch';
 import { useCart } from '../../contexts/cart';
 import PaymentModalError from './PaymentModalError';
@@ -83,6 +83,7 @@ export interface IOrderRequest {
 const PaymentScreen: React.FC = () => {
   const { clearCart } = useCart();
   const [modalCard, setModalCard] = useState(false);
+  const [modalError, setModalError] = useState(false);
   const [newCreditCard, setNewCreditCard] = useState({} as INewCard);
   const [creditCardPayment, setCreditCardPayment] = useState({} as ICreditCard);
   const navigation = useNavigation();
@@ -93,21 +94,31 @@ const PaymentScreen: React.FC = () => {
     'payment-cards',
     'payment-cards',
   );
+
   const queryClient = useQueryClient();
+  const postOrder = async (orderData: IOrderRequest) =>
+    api.post('orders', orderData);
   const orderMutation = useMutation(
-    async (orderData: IOrderRequest) => api.post('orders', orderData),
+    (orderData: IOrderRequest) => postOrder(orderData),
     {
+      onError: async () => {
+        setModalError(true);
+      },
       onSuccess: (response) => {
         queryClient.invalidateQueries('orders');
         clearCart();
-        navigation.navigate('ConfirmedOrder', response.data);
+        if (response?.data) {
+          navigation.navigate('ConfirmedOrder', response?.data);
+        }
       },
     },
   );
   const handleHardwareBackPress = useCallback(() => {
     setModalCard(false);
+    setModalError(false);
     return !!modalCard;
   }, [modalCard]);
+
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleHardwareBackPress);
     return () => {
@@ -155,36 +166,39 @@ const PaymentScreen: React.FC = () => {
   ]);
 
   const handleConfirm = useCallback(async () => {
+    let card_hash = '';
+    if (!creditCardPayment.id) {
+      card_hash = await createCardHash(newCreditCard);
+    }
+
+    const items = order.products.map((product) => ({
+      product: {
+        id: product.product.id,
+        name: product.product.name,
+        description: product.product.description,
+        sale_price: product.product.sale_price,
+      },
+      quantity: product.quantity,
+    }));
+
+    const data: IOrderRequest = {
+      amount: order.subTotal || 0,
+      card_hash,
+      card_id: creditCardPayment.id || '',
+      delivery_fee: order.deliveryFee,
+      delivery: order.deliveryFee > 0,
+      billing_address_id: order.delivery_address?.id || '',
+      shipping_address_id: order.delivery_address?.id || '',
+      items,
+    };
     try {
-      let card_hash = '';
-      if (!creditCardPayment.id) {
-        card_hash = await createCardHash(newCreditCard);
-      }
-
-      const items = order.products.map((product) => ({
-        product: {
-          id: product.product.id,
-          name: product.product.name,
-          description: product.product.description,
-          sale_price: product.product.sale_price,
+      orderMutation.mutate(data, {
+        onError: (err) => {
+          console.log('mutate error', err);
         },
-        quantity: product.quantity,
-      }));
-
-      const data: IOrderRequest = {
-        amount: order.subTotal || 0,
-        card_hash,
-        card_id: creditCardPayment.id || '',
-        delivery_fee: order.deliveryFee,
-        delivery: order.deliveryFee > 0,
-        billing_address_id: order.delivery_address?.id || '',
-        shipping_address_id: order.delivery_address?.id || '',
-        items,
-      };
-
-      orderMutation.mutate(data);
+      });
     } catch (error) {
-      console.log(handleAxiosErrors(error));
+      console.log(error);
     }
   }, [
     creditCardPayment.id,
@@ -296,8 +310,13 @@ const PaymentScreen: React.FC = () => {
           setNewCreditCard={setNewCreditCard}
         />
       </Modal>
-      <Modal visible transparent statusBarTranslucent>
-        <PaymentModalError />
+      <Modal
+        visible={modalError}
+        onRequestClose={handleHardwareBackPress}
+        transparent
+        statusBarTranslucent
+      >
+        <PaymentModalError setIsVisible={setModalError} />
       </Modal>
     </Container>
   );

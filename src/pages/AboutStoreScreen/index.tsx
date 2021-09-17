@@ -44,6 +44,9 @@ interface IStore {
   address: IAddressStore;
   photos: IPhotoStore[];
 }
+interface IPropsItem {
+  item: IPhotoStore;
+}
 
 const AboutStoreScreen: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -57,6 +60,13 @@ const AboutStoreScreen: React.FC = () => {
     setPhotoSelected(item);
     setOpenModal(true);
   }, []);
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  const renderItem = ({ item }: IPropsItem) => (
+    <ContainerItem onPress={() => handlePhoto(item)}>
+      <PhotoItem source={{ uri: item.image_url }} />
+    </ContainerItem>
+  );
   if (!stores) return null;
   return (
     <Container>
@@ -76,11 +86,7 @@ const AboutStoreScreen: React.FC = () => {
           data={stores[0].photos}
           keyExtractor={(photo) => photo.id}
           numColumns={3}
-          renderItem={({ item }) => (
-            <ContainerItem onPress={() => handlePhoto(item)}>
-              <PhotoItem source={{ uri: item.image_url }} />
-            </ContainerItem>
-          )}
+          renderItem={renderItem}
         />
       </ContainerGallery>
       <Modal

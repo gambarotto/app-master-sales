@@ -12,6 +12,7 @@ import { Form } from '@unform/mobile';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import Modal from 'react-native-modal';
+import { useMutation, useQueryClient } from 'react-query';
 import {
   Container,
   ContainerLogo,
@@ -52,6 +53,18 @@ const CreateAddressScreen: React.FC = () => {
   const navigation = useNavigation();
   const { updateAdresses } = useAuth();
 
+  const queryClient = useQueryClient();
+  const addressMutation = useMutation(
+    async (data: IFormData) => api.post('users/adresses/me', data),
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries('adresses');
+        updateAdresses(response.data);
+        setModalIsOpen(true);
+      },
+    },
+  );
+
   const handleCloseModal = useCallback(() => {
     setModalIsOpen(false);
     navigation.goBack();
@@ -72,9 +85,7 @@ const CreateAddressScreen: React.FC = () => {
           alias: Yup.string().required('O apelido é obrigatório'),
         });
         await schema.validate(data, { abortEarly: false });
-        const response = await api.post('users/adresses/me', data);
-        updateAdresses(response.data);
-        setModalIsOpen(true);
+        addressMutation.mutate(data);
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
@@ -87,7 +98,7 @@ const CreateAddressScreen: React.FC = () => {
         );
       }
     },
-    [updateAdresses],
+    [addressMutation],
   );
   return (
     <KeyboardAvoidingView

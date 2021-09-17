@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-native-modal';
 import Button from '../../components/Button';
 import CartProductItem from '../../components/CartProductItem';
@@ -57,6 +58,9 @@ export interface IOrder {
   delivery_address: IAddress | null | undefined;
   subTotal: number;
 }
+interface IPropsItem {
+  item: ICartProduct;
+}
 
 const CartScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -71,7 +75,9 @@ const CartScreen: React.FC = () => {
   const [currentItemModal, setCurrentItemModal] = useState<ICartProductItem>(
     {} as ICartProductItem,
   );
-
+  useEffect(() => {
+    setDeliveryFee(defaultAddress ? 10 : 0);
+  }, [defaultAddress]);
   const handlePressCartProduct = useCallback((item) => {
     setCurrentItemModal(item);
     setShowModal((state) => !state);
@@ -112,6 +118,13 @@ const CartScreen: React.FC = () => {
     navigation,
   ]);
 
+  const renderItem = ({ item }: IPropsItem) => (
+    <CartProductItem
+      key={item.product.id}
+      item={item}
+      handlePressCartProduct={() => handlePressCartProduct(item)}
+    />
+  );
   const footerComponent = (): JSX.Element => (
     <ButtonAddMoreItems onPress={() => navigation.navigate('Tabs')}>
       <TextAddMoreItems>Adicionar mais itens</TextAddMoreItems>
@@ -168,13 +181,7 @@ const CartScreen: React.FC = () => {
           data={cartProducts}
           keyExtractor={(product) => product.product.id}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <CartProductItem
-              key={item.product.id}
-              item={item}
-              handlePressCartProduct={() => handlePressCartProduct(item)}
-            />
-          )}
+          renderItem={renderItem}
           ListFooterComponent={footerComponent}
         />
       </ContainerCartProductList>
