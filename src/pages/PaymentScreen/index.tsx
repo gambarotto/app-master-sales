@@ -166,6 +166,9 @@ const PaymentScreen: React.FC = () => {
   ]);
 
   const handleConfirm = useCallback(async () => {
+    if (!creditCardPayment.id && !newCreditCard.card_number) {
+      return;
+    }
     let card_hash = '';
     if (!creditCardPayment.id) {
       card_hash = await createCardHash(newCreditCard);
@@ -208,6 +211,17 @@ const PaymentScreen: React.FC = () => {
     order.products,
     order.subTotal,
     orderMutation,
+  ]);
+
+  const textButtomConfirm = useMemo(() => {
+    if (!creditCardPayment.id && !newCreditCard.card_number) {
+      return 'Escolha uma forma de pagamento';
+    }
+    return orderMutation.isLoading ? 'Enviando pedido...' : 'Finalizar compra';
+  }, [
+    creditCardPayment.id,
+    newCreditCard.card_number,
+    orderMutation.isLoading,
   ]);
 
   return (
@@ -293,7 +307,7 @@ const PaymentScreen: React.FC = () => {
             onPress={handleConfirm}
             enabled={!orderMutation.isLoading}
           >
-            {orderMutation.isLoading ? 'Enviando pedido...' : 'Finalizar'}
+            {textButtomConfirm}
           </Button>
         </ContainerButton>
       </ContainerPayment>

@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useMutation, useQueryClient } from 'react-query';
 import {
   AdressesList,
   ButtonAdd,
@@ -36,6 +37,18 @@ const AdressesScreen: React.FC = () => {
 
   const { updateAdresses } = useAuth();
   const [selected, setSelected] = useState('');
+
+  const queryClient = useQueryClient();
+  const defaultMutation = useMutation(
+    async (selected_address: string) =>
+      api.patch(`/users/adresses/me/${selected_address}/default`),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('address_default');
+        navigation.goBack();
+      },
+    },
+  );
 
   useFocusEffect(
     useCallback(
@@ -73,10 +86,8 @@ const AdressesScreen: React.FC = () => {
       navigation.navigate('CreateEditAddress');
       return;
     }
-    await api.patch(`/users/adresses/me/${selected}/default`);
-
-    navigation.goBack();
-  }, [adresses, navigation, selected]);
+    defaultMutation.mutate(selected);
+  }, [adresses, defaultMutation, navigation, selected]);
 
   const renderItem = ({ item: address, index }: IPropsItem) => (
     <AddressItem

@@ -16,7 +16,7 @@ import {
   TextOrderNumber,
   LineText,
   ContainerTitle,
-  SubTitleDate,
+  // SubTitleDate,
   ContainerAnimated,
 } from './styles';
 
@@ -34,6 +34,7 @@ const OrderItem: React.FC<IProps> = ({
 }) => {
   const navigation = useNavigation();
 
+  // TODO - Ajustar dateDistance
   const orderDate = (): ResponseOrderDate => {
     const dateOrder = new Date(created_at);
     const dateDistance = `( ${formatDistance(dateOrder, new Date(), {
@@ -55,7 +56,7 @@ const OrderItem: React.FC<IProps> = ({
       <Container onPress={() => navigation.navigate('Order', { id })}>
         <ContainerTitle>
           <TitleDate>{orderDate().dateFormat}</TitleDate>
-          <SubTitleDate>{orderDate().dateDistance}</SubTitleDate>
+          {/* <SubTitleDate>{orderDate().dateDistance}</SubTitleDate> */}
         </ContainerTitle>
         <TextOrderNumber>{`#${order_number}`}</TextOrderNumber>
         <LineText>

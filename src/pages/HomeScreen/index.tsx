@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-// import { useAuth } from '../../contexts/auth';
 
 import { AnimatePresence, useAnimationState } from 'moti';
 import {

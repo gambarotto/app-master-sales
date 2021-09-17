@@ -101,6 +101,12 @@ export const TextAddMoreItems = styled.Text`
 export const ContainerDeliveryAddress = styled.View`
   flex: 1;
 `;
+export const ContainerTitleDelivery = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+`;
 export const TitleDelivery = styled.Text`
   font-family: 'Roboto-Bold';
   font-size: 14px;
@@ -108,8 +114,15 @@ export const TitleDelivery = styled.Text`
     css`
       color: ${props.theme.colors.primary};
     `};
-  margin-top: 16px;
-  margin-bottom: 8px;
+`;
+export const ContainerChangeAddress = styled.TouchableOpacity``;
+export const TextChangeAddress = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: 10px;
+  ${(props) =>
+    css`
+      color: ${props.theme.colors.primary};
+    `};
 `;
 export const ContainerAnimateCard = styled(MotiView)``;
 export const ContainerCard = styled.TouchableOpacity<PropsCard>`
@@ -119,6 +132,7 @@ export const ContainerCard = styled.TouchableOpacity<PropsCard>`
   padding: 12px;
   margin-top: 16px;
   ${(props) => css`
+    background-color: ${props.theme.colors.white};
     border-color: ${props.isChecked
       ? props.theme.colors.secondary
       : props.theme.colors.gray3};

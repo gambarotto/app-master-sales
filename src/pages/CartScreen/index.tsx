@@ -24,10 +24,12 @@ import {
   ContainerButtons,
   ContainerCard,
   ContainerCartProductList,
+  ContainerChangeAddress,
   ContainerDeliveryAddress,
   ContainerHeader,
   ContainerHeaderWithoutItems,
   ContainerLabelAndPrice,
+  ContainerTitleDelivery,
   ContainerTopCard,
   ContainerTotal,
   ContainerWithOutItems,
@@ -39,6 +41,7 @@ import {
   TextAddMoreItems,
   TextAddress,
   TextAliasAddress,
+  TextChangeAddress,
   TextTotal,
   TextTotalValue,
   TextWithOutItems,
@@ -61,6 +64,18 @@ export interface IOrder {
 interface IPropsItem {
   item: ICartProduct;
 }
+
+const shadowStyle = {
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 5,
+    height: 2,
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: 3,
+
+  elevation: 4,
+};
 
 const CartScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -186,7 +201,15 @@ const CartScreen: React.FC = () => {
         />
       </ContainerCartProductList>
       <ContainerDeliveryAddress>
-        <TitleDelivery>Entrega</TitleDelivery>
+        <ContainerTitleDelivery>
+          <TitleDelivery>Entrega</TitleDelivery>
+          <ContainerChangeAddress
+            onPress={() => navigation.navigate('Adresses')}
+          >
+            <TextChangeAddress>Trocar endereço</TextChangeAddress>
+          </ContainerChangeAddress>
+        </ContainerTitleDelivery>
+
         {defaultAddress ? (
           <ContainerAnimateCard
             from={{ translateY: 30, opacity: 0 }}
@@ -200,12 +223,13 @@ const CartScreen: React.FC = () => {
             <ContainerCard
               isChecked={isCheckedDelivery}
               onPress={() => handleDeliveryMethod(10)}
+              style={isCheckedDelivery && shadowStyle}
             >
               <ContainerTopCard>
                 <CheckCircle isChecked={isCheckedDelivery} size={20} />
                 <ContainerLabelAndPrice>
                   <TextAliasAddress isChecked={isCheckedDelivery}>
-                    Casa
+                    {defaultAddress.alias}
                   </TextAliasAddress>
                   <DeliveryPrice isChecked={isCheckedDelivery}>
                     <Currency value={10} />
@@ -228,6 +252,7 @@ const CartScreen: React.FC = () => {
           <ContainerCard
             isChecked={isCheckedDelivery}
             onPress={() => navigation.navigate('Adresses')}
+            style={isCheckedDelivery && shadowStyle}
           >
             <ContainerTopCard>
               <CheckCircle isChecked={isCheckedDelivery} size={20} />
@@ -251,6 +276,7 @@ const CartScreen: React.FC = () => {
           <ContainerCard
             isChecked={!isCheckedDelivery}
             onPress={() => handleDeliveryMethod(0)}
+            style={!isCheckedDelivery && shadowStyle}
           >
             <ContainerTopCard>
               <CheckCircle isChecked={!isCheckedDelivery} size={20} />
