@@ -26,22 +26,17 @@ export default class FacebookFunctions {
     const responseLogin = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile', 'email'],
     });
-    console.log('1');
 
     const params = 'id,name,email';
     if (responseLogin.type === 'success') {
-      console.log('2');
-
       const response = await facebookApi.get(
         `/me?fields=${params}&access_token=${responseLogin.token}`,
       );
-      console.log('3');
 
       const userId = response.data.id;
       const responseAvatar = await facebookApi.get(
         `/${userId}/picture?width=200&height=200&access_token=${responseLogin.token}`,
       );
-      console.log('4');
 
       responseDataFacebook = {
         name: response.data.name,

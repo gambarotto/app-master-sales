@@ -11,7 +11,6 @@ import CreateEditAddressScreen from '../pages/CreateEditAddressScreen';
 import EditProfileScreen from '../pages/EditProfileScreen';
 import AboutStoreScreen from '../pages/AboutStoreScreen';
 import AboutAppScreen from '../pages/AboutAppScreen';
-import CardPaymentScreen from '../pages/CardPaymentScreen';
 import OrderScreen from '../pages/OrderScreen';
 import ConfirmedOrderScreen from '../pages/ConfirmedOrderScreen';
 
@@ -35,7 +34,6 @@ const AppMain: React.FC = () => (
     />
     <AppMainRoutes.Screen name="Cart" component={CartScreen} />
     <AppMainRoutes.Screen name="Payment" component={PaymentScreen} />
-    <AppMainRoutes.Screen name="CardPayment" component={CardPaymentScreen} />
     <AppMainRoutes.Screen name="Adresses" component={AdressesScreen} />
     <AppMainRoutes.Screen name="AboutStore" component={AboutStoreScreen} />
     <AppMainRoutes.Screen name="AboutApp" component={AboutAppScreen} />

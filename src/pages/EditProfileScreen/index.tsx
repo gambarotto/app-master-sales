@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Alert, Keyboard, Platform, TextInput } from 'react-native';
+import { Alert, Keyboard, Platform, TextInput, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Yup from 'yup';
 import mime from 'mime';
@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/mobile';
-import Modal from 'react-native-modal';
+import ModalRN from 'react-native-modal';
 import Button from '../../components/Button';
 import IconBack from '../../components/IconBack';
 import Input from '../../components/Input';
@@ -39,6 +39,7 @@ import {
 import ModalProfileUpdate from './ModalProfileUpdate';
 import api from '../../services/api';
 import getValidationErrors from '../../utils/getValidationErrors';
+import ModalChangePassword from './ModalChangePassword';
 
 interface ImagePickerCrop {
   uri: string;
@@ -61,6 +62,7 @@ const EditProfileScreen: React.FC = () => {
   const [avatarImage, setAvatarImage] = useState<ImagePickerCrop>();
   const [fbLogin, setFbLogin] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalPassword, setOpenModalPassword] = useState(false);
   const [openModalSuccess, setOpenModalSuccess] = useState(false);
   const { data: user } = useFetch<IUser>('profile', 'users/profiles/me');
   const navigation = useNavigation();
@@ -197,6 +199,7 @@ const EditProfileScreen: React.FC = () => {
             />
             <Input
               ref={inputEmailRef}
+              style={{ marginTop: 16 }}
               editable={!fbLogin}
               autoCapitalize="words"
               autoCorrect={false}
@@ -225,7 +228,7 @@ const EditProfileScreen: React.FC = () => {
             animate={{ translateX: 0, opacity: 1 }}
             transition={{ type: 'timing', duration: 500 }}
           >
-            <ContainerChangePassword>
+            <ContainerChangePassword onPress={() => setOpenModalPassword(true)}>
               <TextChangePassword>
                 Gostaria de trocar sua senha? clique aqui
               </TextChangePassword>
@@ -240,12 +243,20 @@ const EditProfileScreen: React.FC = () => {
           </Button>
         </ContainerActionsButtons>
       )}
-      <Modal isVisible={openModal}>
+      <Modal
+        visible={openModalPassword}
+        onRequestClose={() => setOpenModalPassword(false)}
+        transparent
+        statusBarTranslucent
+      >
+        <ModalChangePassword setIsVisible={setOpenModalPassword} />
+      </Modal>
+      <ModalRN isVisible={openModal}>
         <ModalProfileUpdate
           setModalIsOpen={setOpenModal}
           success={openModalSuccess}
         />
-      </Modal>
+      </ModalRN>
     </KeyboardAvoiding>
   );
 };
