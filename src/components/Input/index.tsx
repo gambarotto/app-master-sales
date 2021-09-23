@@ -35,9 +35,9 @@ interface InputProps extends TextInputProps {
   style?: object;
   flex?: 'true' | 'false';
   initialValue?: string;
-  mask?: 'number' | 'cep' | 'phone';
   rawText?: string;
   onInitialData?: Dispatch<React.SetStateAction<string>>;
+  selectedColor?: 'primary' | 'secondary' | 'tertiary';
 }
 
 const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
@@ -47,9 +47,9 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     label = null,
     style = {},
     initialValue = '',
-    mask,
     rawText,
     onInitialData,
+    selectedColor = 'secondary',
     ...rest
   },
   ref,
@@ -102,9 +102,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
         inputElementRef.current.clear();
       },
     });
-  }, [fieldName, initialValue, mask, rawText, registerField]);
-
-  // const isFlex = flex === 'true';
+  }, [fieldName, initialValue, rawText, registerField]);
   return (
     <>
       <Container
@@ -112,6 +110,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
         isFocus={isFocus}
         isFilled={isFilled}
         isErrored={!!error}
+        selectedColor={selectedColor}
       >
         {label && <LabelInput>{label}</LabelInput>}
         <ContainerInput>

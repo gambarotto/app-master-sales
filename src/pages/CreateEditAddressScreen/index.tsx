@@ -210,7 +210,6 @@ const CreateEditAddressScreen: React.FC = () => {
             </ContainerDoubleInputs>
             <Input
               ref={inputComplementRef}
-              style={{ marginTop: 8 }}
               name="complement"
               label="Complemento"
               defaultValue={routeAddress ? routeAddress.complement : undefined}
@@ -222,7 +221,6 @@ const CreateEditAddressScreen: React.FC = () => {
             />
             <Input
               ref={inputReferencePointRef}
-              style={{ marginTop: 8 }}
               name="reference_point"
               label="Ponto de Referencia"
               defaultValue={
@@ -238,7 +236,6 @@ const CreateEditAddressScreen: React.FC = () => {
             />
             <Input
               ref={inputAliasRef}
-              style={{ marginTop: 8 }}
               name="alias"
               label="Apelido - ex: casa"
               defaultValue={routeAddress ? routeAddress.alias : undefined}

@@ -6,11 +6,12 @@ interface ContainerProps {
   isFocus: boolean;
   isFilled: boolean;
   isErrored: boolean;
+  selectedColor: 'primary' | 'secondary' | 'tertiary';
 }
 
 export const Container = styled.View<ContainerProps>`
   flex: 1;
-  height: 50px;
+  min-height: 50px;
   justify-content: center;
   align-items: center;
   padding: 0 16px;
@@ -25,12 +26,12 @@ export const Container = styled.View<ContainerProps>`
   ${(props) =>
     props.isFocus &&
     css`
-      border-bottom-color: ${props.theme.colors.secondary};
+      border-bottom-color: ${props.theme.colors[props.selectedColor]};
     `}
   ${(props) =>
     props.isFilled &&
     css`
-      border-bottom-color: ${props.theme.colors.secondary};
+      border-bottom-color: ${props.theme.colors[props.selectedColor]};
     `}
   ${(props) =>
     props.isErrored &&

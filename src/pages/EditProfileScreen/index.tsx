@@ -84,6 +84,7 @@ const EditProfileScreen: React.FC = () => {
       Keyboard.removeListener('keyboardDidHide', keyboardDidHide);
     };
   }, []);
+
   const keyboardDidShow = (): void => setKeyboardShow(true);
   const keyboardDidHide = (): void => setKeyboardShow(false);
 
@@ -199,7 +200,6 @@ const EditProfileScreen: React.FC = () => {
             />
             <Input
               ref={inputEmailRef}
-              style={{ marginTop: 16 }}
               editable={!fbLogin}
               autoCapitalize="words"
               autoCorrect={false}

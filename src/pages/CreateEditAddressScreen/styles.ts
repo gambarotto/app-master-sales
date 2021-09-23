@@ -27,7 +27,7 @@ export const ContainerHeader = styled.View`
 `;
 export const ButtonBack = styled.TouchableOpacity`
   position: absolute;
-  left: 16px;
+  left: 8px;
 `;
 export const Icon = styled(MaterialIcons)``;
 export const TitleAdresses = styled.Text`
