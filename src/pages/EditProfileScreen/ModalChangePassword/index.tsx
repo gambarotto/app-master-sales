@@ -107,7 +107,7 @@ const ModalChangePassword: React.FC<Props> = ({ setIsVisible }) => {
 
   const handleForgotPassword = useCallback(() => {
     setIsVisible(false);
-    navigation.navigate('ForgotPassword');
+    navigation.navigate('Passwords');
   }, [navigation, setIsVisible]);
   const handleSubmit = useCallback(
     async (data: IDataForm) => {

@@ -1,20 +1,13 @@
-import Constants from 'expo-constants';
 import { RectButton } from 'react-native-gesture-handler';
 import styled, { css } from 'styled-components/native';
 
-const { statusBarHeight } = Constants;
-
 export const Container = styled.View`
-  position: relative;
   flex: 1;
-  margin-top: ${`${statusBarHeight + 16}px`};
   justify-content: center;
   align-items: center;
-  padding: 0 16px;
-  padding-bottom: 16px;
+  position: relative;
 `;
-
-export const TextFirstStep = styled.Text`
+export const TextInsertPassword = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
@@ -22,9 +15,9 @@ export const TextFirstStep = styled.Text`
   font-family: 'Roboto-Regular';
   text-align: center;
 `;
-export const ContainerInputEmail = styled.View`
+export const ContainerInputPassword = styled.View`
   height: 50px;
-  width: 100%;
+  width: 200px;
   margin-top: 16px;
   border-radius: 8px;
   border-width: 0.5px;
@@ -34,17 +27,16 @@ export const ContainerInputEmail = styled.View`
   justify-content: center;
   align-items: center;
 `;
-export const TextInputEmail = styled.TextInput`
+export const TextInputPassword = styled.TextInput`
   flex: 1;
-  ${(props) => css`
-    color: ${props.theme.colors.primary};
-  `}
   justify-content: center;
   align-items: center;
-  font-size: 14px;
+  font-size: 18px;
+  letter-spacing: 1.2px;
   text-align: center;
 `;
-export const FlowButtonContainer = styled(RectButton)`
+export const ConfirmButtonContainer = styled(RectButton)`
+  position: absolute;
   height: 50px;
   width: 160px;
   border-width: 1px;
@@ -56,26 +48,13 @@ export const FlowButtonContainer = styled(RectButton)`
   `}
   justify-content: center;
   align-items: center;
-  margin-top: 32px;
+  bottom: 0;
+  margin-bottom: 16px;
 `;
-export const FlowTextButton = styled.Text`
+export const ConfirmTextButton = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.white};
   `}
   font-size:14px;
-  font-family: 'Roboto-Regular';
-`;
-export const ContainerAlreadyHaveCode = styled.TouchableOpacity`
-  position: absolute;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 32px;
-  bottom: 0;
-`;
-export const TextAlreadyHaveCode = styled.Text`
-  ${(props) => css`
-    color: ${props.theme.colors.primary};
-  `}
-  font-size:12px;
   font-family: 'Roboto-Regular';
 `;
