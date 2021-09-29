@@ -10,12 +10,13 @@ import Input from '../Input';
 interface InputMask extends TextInputMaskProps {
   type: TextInputMaskTypeProp;
   name: string;
-  label: string;
+  label?: string;
+  styleInput?: object;
   initialValue: string | undefined;
 }
 
 const InputMask = (
-  { type, name, label, initialValue, ...rest }: InputMask,
+  { type, name, label, styleInput, initialValue, ...rest }: InputMask,
   inputRef: any,
 ) => {
   const [text, setText] = useState('');
@@ -34,6 +35,7 @@ const InputMask = (
       customTextInputProps={{
         ref: inputRef,
         rawText,
+        styleInput,
         onInitialData: setText,
         name,
         label,

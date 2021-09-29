@@ -12,7 +12,7 @@ interface ContainerProps {
 export const Container = styled.View<ContainerProps>`
   flex: 1;
   min-height: 50px;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   padding: 0 16px;
   border-bottom-width: 1px;
@@ -51,7 +51,7 @@ export const LabelInput = styled.Text`
 export const ContainerInput = styled.View`
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 `;
 export const Icon = styled(MaterialIcons)`
   margin-right: 16px;
@@ -63,7 +63,6 @@ export const Warning = styled(MaterialIcons)`
 `;
 export const styleTextInput = StyleSheet.create({
   textInput: {
-    minHeight: 50,
     flex: 1,
     fontSize: 16,
   },

@@ -67,10 +67,11 @@ const AddNewCreditCard: React.FC<Props> = ({ addNewCardData }) => {
       <Form ref={formRef} onSubmit={handleSubmit}>
         <InputMask
           style={{ minHeight: 50 }}
+          styleInput={{ fontSize: 14 }}
           ref={cardNumberRef}
           type="credit-card"
           name="card_number"
-          label="Numero do cartão"
+          placeholder="Numero do cartão"
           maxLength={19}
           initialValue={undefined}
           returnKeyType="next"
@@ -79,10 +80,11 @@ const AddNewCreditCard: React.FC<Props> = ({ addNewCardData }) => {
           }}
         />
         <Input
-          style={{ minHeight: 50 }}
+          style={{ minHeight: 50, marginTop: 8 }}
+          styleInput={{ fontSize: 14 }}
           ref={cardNameRef}
           name="card_holder_name"
-          label="Nome do cartão"
+          placeholder="Nome do cartão"
           defaultValue={undefined}
           initialValue={undefined}
           returnKeyType="next"
@@ -92,10 +94,12 @@ const AddNewCreditCard: React.FC<Props> = ({ addNewCardData }) => {
         />
         <LineInputs>
           <Input
-            style={{ minHeight: 50, maxHeight: 50, maxWidth: 90 }}
+            style={{ maxHeight: 50, maxWidth: 90, marginTop: 8 }}
+            styleInput={{ fontSize: 14 }}
             ref={cardExpirationRef}
             name="card_expiration_date"
-            label="Validade"
+            placeholder="Validade"
+            maxLength={4}
             defaultValue={undefined}
             initialValue={undefined}
             returnKeyType="next"
@@ -106,14 +110,15 @@ const AddNewCreditCard: React.FC<Props> = ({ addNewCardData }) => {
           />
           <Input
             style={{
-              minHeight: 50,
-              maxHeight: 50,
-              maxWidth: 60,
               marginLeft: 16,
+              maxWidth: 80,
+              maxHeight: 50,
+              marginTop: 8,
             }}
+            styleInput={{ fontSize: 14 }}
             ref={cardCvvRef}
             name="card_cvv"
-            label="CVV"
+            placeholder="CVV"
             maxLength={3}
             defaultValue={undefined}
             initialValue={undefined}

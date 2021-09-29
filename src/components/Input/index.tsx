@@ -33,6 +33,7 @@ interface InputProps extends TextInputProps {
   icon?: string;
   label?: string;
   style?: object;
+  styleInput?: object;
   flex?: 'true' | 'false';
   initialValue?: string;
   rawText?: string;
@@ -46,6 +47,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     icon,
     label = null,
     style = {},
+    styleInput = {},
     initialValue = '',
     rawText,
     onInitialData,
@@ -127,7 +129,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
           )}
           <TextInput
             ref={inputElementRef}
-            style={styleTextInput.textInput}
+            style={[styleTextInput.textInput, styleInput]}
             keyboardAppearance="dark"
             placeholderTextColor={themeGlobal.colors.gray3}
             onFocus={handleInputFocus}

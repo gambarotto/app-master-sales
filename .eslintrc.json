@@ -19,6 +19,8 @@
   },
   "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
   "rules": {
+    "react/require-default-props": 0,
+    "react/default-props-match-prop-types": 0,
     "prettier/prettier": "error",
     "react/jsx-one-expression-per-line": "off",
     "no-use-before-define": "off",

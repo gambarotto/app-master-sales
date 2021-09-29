@@ -16,11 +16,11 @@ import {
   TextOr,
 } from './styles';
 import logoImage from '../../assets/logo_catarina.png';
-import Input from '../../components/Input';
 import Button from '../../components/Button';
 import FacebookButton from '../../components/FacebookButton';
 import { useAuth } from '../../contexts/auth';
 import getValidationErrors from '../../utils/getValidationErrors';
+import InputRounded from '../../components/InputRounded';
 
 interface IFormData {
   email: string;
@@ -74,23 +74,23 @@ const SignIn: React.FC = () => {
         </ContainerLogo>
         <ContainerLoginOrRegistry>
           <Form ref={formRef} onSubmit={handleSignIn}>
-            <Input
+            <InputRounded
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
+              labelPlaceholder="E-mail"
               name="email"
               icon="email"
-              placeholder="E-mail"
               returnKeyType="next"
               onSubmitEditing={() => {
                 inputPasswordRef.current?.focus();
               }}
             />
-            <Input
+            <InputRounded
               ref={inputPasswordRef}
               name="password"
+              labelPlaceholder="Senha"
               icon="lock"
-              placeholder="Senha"
               secureTextEntry
               returnKeyType="send"
               onSubmitEditing={() => {

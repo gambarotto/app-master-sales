@@ -18,7 +18,7 @@ export const ContainerUserData = styled.View`
   padding-right: 8px;
   padding-top: 8px;
 `;
-export const ContainerAvatar = styled.TouchableOpacity`
+export const ContainerAvatar = styled.View`
   height: 80px;
   width: 80px;
   border-radius: 40px;

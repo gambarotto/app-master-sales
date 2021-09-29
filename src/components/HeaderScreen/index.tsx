@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Container, ImageLogo } from './styles';
 import logoImage from '../../assets/logo_horizontal_catarina.png';
 import CartButton from '../CartButton';

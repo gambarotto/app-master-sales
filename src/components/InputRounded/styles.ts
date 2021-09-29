@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components/native';
 import { StyleSheet } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons';
 
 interface ContainerProps {
@@ -9,13 +10,20 @@ interface ContainerProps {
 }
 
 export const Container = styled.View<ContainerProps>`
+  position: relative;
   max-width: 100%;
-  height: 50px;
+  padding: 2px 8px;
+  height: 60px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 4px;
+  border-width: 1px;
   ${(props) => css`
-    background-color: ${props.theme.colors.white2};
+    background-color: ${props.theme.colors.white};
+    border-color: ${props.theme.colors.gray3};
   `}
-  margin:0px 16px;
+
   border-radius: 8px;
   margin-bottom: 16px;
   z-index: 5;
@@ -24,18 +32,39 @@ export const Container = styled.View<ContainerProps>`
   ${(props) =>
     props.isFocus &&
     css`
-      border-color: ${props.theme.colors.gray3};
+      border-width: 1px;
+      border-color: ${props.theme.colors.tertiary};
     `}
   ${(props) =>
     props.isFilled &&
     css`
-      border-color: ${props.theme.colors.gray3};
+      border-width: 0.5px;
+      border-color: ${props.theme.colors.tertiary};
     `}
   ${(props) =>
     props.isErrored &&
     css`
+      border-width: 0.5px;
       border-color: ${props.theme.colors.red};
     `}
+`;
+export const ContainerTextLabel = styled.View``;
+export const TextLabel = styled(Animated.Text)`
+  position: absolute;
+  ${(props) => css`
+    color: ${props.theme.colors.gray3};
+    background-color: ${props.theme.colors.white};
+  `}
+  padding:0 4px;
+  font-size: 16px;
+  font-family: 'Roboto-Regular';
+  margin-left: 16px;
+  left: 24px;
+  top: 18px;
+`;
+export const ContainerTextInput = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
 export const Icon = styled(MaterialIcons)`
   margin-right: 16px;
@@ -52,7 +81,7 @@ export const TextError = styled.Text`
 export const styleTextInput = StyleSheet.create({
   textInput: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 16,
     paddingLeft: 8,
   },
 });
