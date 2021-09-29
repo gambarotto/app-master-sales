@@ -33,6 +33,7 @@ const NewPasswordScreen: React.FC = () => {
       onSuccess: () => {
         if (user) {
           signOut();
+          return;
         }
         navigation.navigate('SignIn');
       },

@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 import { Alert, TextInput, Modal } from 'react-native';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
+import { motify } from 'moti';
 import Input from '../../../components/Input';
 import {
   ActionButton,
@@ -66,6 +67,7 @@ const ModalChangePassword: React.FC<Props> = ({ setIsVisible }) => {
   const [actionModal, setActionModal] = useState<ModalState>({
     actionFunc: () => {},
   });
+
   const handleCloseModal = useCallback(() => {
     setShowModal((state) => !state);
   }, []);
@@ -145,8 +147,24 @@ const ModalChangePassword: React.FC<Props> = ({ setIsVisible }) => {
   );
 
   return (
-    <ContainerKeyboarding>
-      <Container>
+    <Container
+      from={{ translateY: 10, opacity: 0 }}
+      animate={{ translateY: 0, opacity: 1 }}
+      transition={{
+        type: 'timing',
+        duration: 500,
+        opacity: {
+          type: 'timing',
+          duration: 300,
+        },
+      }}
+      exit={{
+        translateY: 10,
+        opacity: 0,
+      }}
+      exitTransition={{ type: 'timing' }}
+    >
+      <ContainerKeyboarding>
         <TitleModal>Trocar senha</TitleModal>
         <ContainerInputs>
           <Form ref={formRef} onSubmit={handleSubmit}>
@@ -206,19 +224,20 @@ const ModalChangePassword: React.FC<Props> = ({ setIsVisible }) => {
         <ActionButton onPress={handleClose} confirmedButton={false}>
           <TextActionButton confirmedButton={false}>Cancelar</TextActionButton>
         </ActionButton>
-      </Container>
-      <Modal
-        visible={showModal}
-        transparent
-        onRequestClose={actionModal.actionFunc}
-      >
-        <ModalAlert
-          actionFunc={actionModal.actionFunc}
-          icon={actionModal.icon}
-          message={actionModal.message}
-        />
-      </Modal>
-    </ContainerKeyboarding>
+
+        <Modal
+          visible={showModal}
+          transparent
+          onRequestClose={actionModal.actionFunc}
+        >
+          <ModalAlert
+            actionFunc={actionModal.actionFunc}
+            icon={actionModal.icon}
+            message={actionModal.message}
+          />
+        </Modal>
+      </ContainerKeyboarding>
+    </Container>
   );
 };
 

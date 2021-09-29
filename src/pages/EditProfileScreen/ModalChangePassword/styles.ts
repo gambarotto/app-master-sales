@@ -31,7 +31,6 @@ export const ContainerInputs = styled.View`
   margin-top: 24px;
 `;
 export const ContainerForgotPassword = styled.TouchableOpacity`
-  flex: 1;
   align-items: center;
   margin-bottom: 16px;
 `;

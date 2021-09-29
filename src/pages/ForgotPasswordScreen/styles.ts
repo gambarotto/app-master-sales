@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import { RectButton } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 import styled, { css } from 'styled-components/native';
 
 const { statusBarHeight } = Constants;
@@ -43,6 +44,20 @@ export const TextInputEmail = styled.TextInput`
   align-items: center;
   font-size: 14px;
   text-align: center;
+`;
+export const IndicatorSendEmail = styled.ActivityIndicator`
+  margin-top: 16px;
+`;
+export const TextSendingEmail = styled(Animated.Text)`
+  ${(props) => css`
+    color: ${props.theme.colors.tertiary};
+  `}
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  text-align: center;
+  font-family: 'Roboto-Bold';
+  margin-top: 8px;
 `;
 export const FlowButtonContainer = styled(RectButton)`
   height: 50px;
