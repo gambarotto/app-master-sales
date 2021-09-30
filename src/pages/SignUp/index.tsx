@@ -25,12 +25,12 @@ import {
   ContainerForm,
 } from './styles';
 import logoImage from '../../assets/logo_catarina.png';
-import Input from '../../components/Input';
 import Button from '../../components/Button';
 import FacebookButton from '../../components/FacebookButton';
 import api from '../../services/api';
 import ModalCreateAccount from './ModalCreateAccount';
 import getValidationErrors from '../../utils/getValidationErrors';
+import InputRounded from '../../components/InputRounded';
 
 interface IFormData {
   name: string;
@@ -105,36 +105,39 @@ const SignUp: React.FC = () => {
           </ContainerLogo>
           <ContainerForm>
             <Form ref={formRef} onSubmit={handleSignUp}>
-              <Input
+              <InputRounded
                 autoCapitalize="words"
                 autoCorrect={false}
                 keyboardType="name-phone-pad"
                 name="name"
                 icon="account-circle"
-                placeholder="Nome"
+                labelPlaceholder="Nome"
+                heightContainer={55}
                 returnKeyType="next"
                 onSubmitEditing={() => {
                   inputEmailRef.current?.focus();
                 }}
               />
-              <Input
+              <InputRounded
                 ref={inputEmailRef}
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="email-address"
                 name="email"
                 icon="email"
-                placeholder="E-mail"
+                labelPlaceholder="E-mail"
+                heightContainer={55}
                 returnKeyType="next"
                 onSubmitEditing={() => {
                   inputPasswordRef.current?.focus();
                 }}
               />
-              <Input
+              <InputRounded
                 ref={inputPasswordRef}
                 name="password"
                 icon="lock"
-                placeholder="Senha"
+                labelPlaceholder="Senha"
+                heightContainer={55}
                 secureTextEntry
                 returnKeyType="send"
                 onSubmitEditing={() => {

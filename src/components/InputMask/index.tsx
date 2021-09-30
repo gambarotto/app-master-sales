@@ -6,17 +6,29 @@ import {
   TextInputMaskTypeProp,
 } from 'react-native-masked-text';
 import Input from '../Input';
+import InputRounded from '../InputRounded';
 
 interface InputMask extends TextInputMaskProps {
   type: TextInputMaskTypeProp;
   name: string;
   label?: string;
+  labelPlaceholder?: string;
+  typeInput?: 'line' | 'rounded';
   styleInput?: object;
   initialValue: string | undefined;
 }
 
 const InputMask = (
-  { type, name, label, styleInput, initialValue, ...rest }: InputMask,
+  {
+    type,
+    name,
+    label,
+    labelPlaceholder,
+    typeInput = 'line',
+    styleInput,
+    initialValue,
+    ...rest
+  }: InputMask,
   inputRef: any,
 ) => {
   const [text, setText] = useState('');
@@ -25,13 +37,17 @@ const InputMask = (
     setText(maskedText);
     setRawText(unmaskedText);
   }, []);
+  const inputs = {
+    line: Input,
+    rounded: InputRounded,
+  };
   return (
     <TextInputMask
       type={type}
       includeRawValueInChangeText
       value={text}
       onChangeText={handleChangeText}
-      customTextInput={Input}
+      customTextInput={inputs[typeInput]}
       customTextInputProps={{
         ref: inputRef,
         rawText,

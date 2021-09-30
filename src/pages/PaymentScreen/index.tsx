@@ -167,6 +167,7 @@ const PaymentScreen: React.FC = () => {
 
   const handleConfirm = useCallback(async () => {
     if (!creditCardPayment.id && !newCreditCard.card_number) {
+      setModalCard(true);
       return;
     }
     let card_hash = '';

@@ -95,7 +95,7 @@ const PaymentModal: React.FC<Props> = ({
 
   const formatCardNumber = useMemo(() => {
     if (newCard.card_number) {
-      return newCard.card_number.replace(/[0-9]/g, '*');
+      return newCard.card_number.replace(/[0-9](?=.*.{4})/g, '*');
     }
     return '';
   }, [newCard.card_number]);

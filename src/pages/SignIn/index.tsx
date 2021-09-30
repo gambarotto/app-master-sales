@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import {
   Container,
   ContainerCreateAccount,
-  ContainerLoginOrRegistry,
+  ContainerLogin,
   ContainerLoginWithSocialMedia,
   ContainerLogo,
   Logo,
@@ -72,12 +72,13 @@ const SignIn: React.FC = () => {
         <ContainerLogo>
           <Logo source={logoImage} />
         </ContainerLogo>
-        <ContainerLoginOrRegistry>
+        <ContainerLogin>
           <Form ref={formRef} onSubmit={handleSignIn}>
             <InputRounded
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
+              inputActiveColor="tertiary"
               labelPlaceholder="E-mail"
               name="email"
               icon="email"
@@ -89,6 +90,7 @@ const SignIn: React.FC = () => {
             <InputRounded
               ref={inputPasswordRef}
               name="password"
+              inputActiveColor="tertiary"
               labelPlaceholder="Senha"
               icon="lock"
               secureTextEntry
@@ -99,6 +101,7 @@ const SignIn: React.FC = () => {
             />
           </Form>
           <Button
+            styleContainer={{ marginTop: 16 }}
             onPress={() => {
               formRef.current?.submitForm();
             }}
@@ -106,14 +109,13 @@ const SignIn: React.FC = () => {
           >
             Login
           </Button>
-          <ContainerCreateAccount onPress={() => navigation.navigate('SignUp')}>
-            <TextCreateAccount>
-              Ainda não tem uma conta? Crie uma aqui
-            </TextCreateAccount>
-            <TextOr>Ou</TextOr>
-          </ContainerCreateAccount>
-        </ContainerLoginOrRegistry>
-
+        </ContainerLogin>
+        <ContainerCreateAccount onPress={() => navigation.navigate('SignUp')}>
+          <TextCreateAccount>
+            Ainda não tem uma conta? Crie uma aqui
+          </TextCreateAccount>
+        </ContainerCreateAccount>
+        <TextOr>Ou</TextOr>
         <ContainerLoginWithSocialMedia>
           <FacebookButton />
         </ContainerLoginWithSocialMedia>

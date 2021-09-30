@@ -23,6 +23,7 @@ export default class FacebookFunctions {
 
   static async logIn(): Promise<IResponseFacebook | undefined> {
     let responseDataFacebook;
+    await this.initFacebook();
     const responseLogin = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile', 'email'],
     });

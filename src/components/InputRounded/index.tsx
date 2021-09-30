@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -5,6 +6,7 @@ import React, {
   useCallback,
   useState,
   useEffect,
+  Dispatch,
 } from 'react';
 
 import { TextInputProps, TextInput } from 'react-native';
@@ -34,11 +36,27 @@ interface InputProps extends TextInputProps {
   name: string;
   icon?: string;
   styleInLine?: object;
+  inputActiveColor?: 'primary' | 'secondary' | 'tertiary';
   labelPlaceholder: string;
+  heightContainer?: number;
+  initialValue?: string;
+  rawText?: string;
+  onInitialData?: Dispatch<React.SetStateAction<string>>;
 }
 
 const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
-  { name, icon, labelPlaceholder, ...rest },
+  {
+    name,
+    icon,
+    styleInLine = {},
+    inputActiveColor = 'primary',
+    labelPlaceholder,
+    heightContainer = 60,
+    initialValue = '',
+    rawText,
+    onInitialData,
+    ...rest
+  },
   ref,
 ) => {
   const { registerField, defaultValue = '', fieldName, error } = useField(name);
@@ -52,6 +70,10 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   const translateY = useSharedValue(0);
   const translateX = useSharedValue(0);
   const color = useSharedValue(themeGlobal.colors.gray3);
+
+  useEffect(() => {
+    if (onInitialData) onInitialData(initialValue || defaultValue);
+  }, [defaultValue, initialValue, onInitialData]);
 
   const animateStyle = useAnimatedStyle(() => ({
     transform: [
@@ -70,17 +92,33 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
 
   useEffect(() => {
     if (isFocus) {
-      translateY.value = -30;
-      translateX.value = -18;
+      translateY.value = -heightContainer / 2;
+      translateX.value = -24;
       scale.value = 0.9;
-      color.value = themeGlobal.colors.primary;
+      color.value = error
+        ? themeGlobal.colors.red
+        : themeGlobal.colors[inputActiveColor];
     } else if (!isFocus && !isFilled) {
       translateY.value = 0;
       translateX.value = 0;
       scale.value = 1;
       color.value = themeGlobal.colors.gray3;
+    } else if (!isFocus && isFilled) {
+      color.value = error
+        ? themeGlobal.colors.red
+        : themeGlobal.colors[inputActiveColor];
     }
-  }, [color, isFilled, isFocus, scale, translateX, translateY]);
+  }, [
+    color,
+    error,
+    heightContainer,
+    inputActiveColor,
+    isFilled,
+    isFocus,
+    scale,
+    translateX,
+    translateY,
+  ]);
 
   const handleInputFocus = useCallback(() => {
     setIsFocus(true);
@@ -101,22 +139,37 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     registerField<string>({
       name: fieldName,
       ref: inputValueRef.current,
-      path: 'value',
       setValue(_ref: any, value) {
         inputValueRef.current.value = value;
         inputElementRef.current.setNativeProps({ text: value });
+      },
+      getValue(_ref: any) {
+        if (rawText) return rawText;
+        if (inputValueRef.current)
+          return inputValueRef.current.value || initialValue;
+
+        return '';
       },
       clearValue() {
         inputValueRef.current.value = '';
         inputElementRef.current.clear();
       },
     });
-  }, [fieldName, registerField]);
+  }, [fieldName, initialValue, rawText, registerField]);
 
   return (
     <>
-      <Container isFocus={isFocus} isFilled={isFilled} isErrored={!!error}>
-        <TextLabel style={animateStyle}>{labelPlaceholder}</TextLabel>
+      <Container
+        style={styleInLine}
+        isFocus={isFocus}
+        isFilled={isFilled}
+        isErrored={!!error}
+        heightContainer={heightContainer}
+        inputActiveColor={inputActiveColor}
+      >
+        <TextLabel style={animateStyle} isErrored={!!error}>
+          {labelPlaceholder}
+        </TextLabel>
 
         {icon && (
           <Icon
@@ -124,7 +177,7 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
             size={20}
             color={
               isFilled || isFocus
-                ? themeGlobal.colors.tertiary
+                ? themeGlobal.colors[inputActiveColor]
                 : themeGlobal.colors.primary
             }
           />
@@ -141,8 +194,8 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
           }}
           {...rest}
         />
+        {!!error && <TextError>{error}</TextError>}
       </Container>
-      {!!error && <TextError>{error}</TextError>}
     </>
   );
 };

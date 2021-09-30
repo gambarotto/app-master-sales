@@ -7,25 +7,30 @@ interface ContainerProps {
   isFocus: boolean;
   isFilled: boolean;
   isErrored: boolean;
+  heightContainer: number;
+  inputActiveColor: 'primary' | 'secondary' | 'tertiary';
+}
+interface TextLabelProps {
+  isErrored: boolean;
 }
 
 export const Container = styled.View<ContainerProps>`
   position: relative;
   max-width: 100%;
   padding: 2px 8px;
-  height: 60px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   border-radius: 4px;
   border-width: 1px;
   ${(props) => css`
+    height: ${`${props.heightContainer}px`};
     background-color: ${props.theme.colors.white};
     border-color: ${props.theme.colors.gray3};
   `}
 
   border-radius: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   z-index: 5;
 
   /* CONDITIONALS */
@@ -33,13 +38,13 @@ export const Container = styled.View<ContainerProps>`
     props.isFocus &&
     css`
       border-width: 1px;
-      border-color: ${props.theme.colors.tertiary};
+      border-color: ${props.theme.colors[props.inputActiveColor]};
     `}
   ${(props) =>
     props.isFilled &&
     css`
       border-width: 0.5px;
-      border-color: ${props.theme.colors.tertiary};
+      border-color: ${props.theme.colors[props.inputActiveColor]};
     `}
   ${(props) =>
     props.isErrored &&
@@ -49,10 +54,12 @@ export const Container = styled.View<ContainerProps>`
     `}
 `;
 export const ContainerTextLabel = styled.View``;
-export const TextLabel = styled(Animated.Text)`
+export const TextLabel = styled(Animated.Text)<TextLabelProps>`
   position: absolute;
   ${(props) => css`
-    color: ${props.theme.colors.gray3};
+    color: ${props.isErrored
+      ? props.theme.colors.red
+      : props.theme.colors.gray3};
     background-color: ${props.theme.colors.white};
   `}
   padding:0 4px;
@@ -60,7 +67,7 @@ export const TextLabel = styled(Animated.Text)`
   font-family: 'Roboto-Regular';
   margin-left: 16px;
   left: 24px;
-  top: 18px;
+  margin-top: auto;
 `;
 export const ContainerTextInput = styled.View`
   flex-direction: row;
@@ -71,12 +78,16 @@ export const Icon = styled(MaterialIcons)`
 `;
 
 export const TextError = styled.Text`
+  position: absolute;
   ${(props) => css`
     color: ${props.theme.colors.secondary};
+    background-color: ${props.theme.colors.white};
   `}
+  padding:0 4px;
   font-size: 8px;
   font-family: 'Roboto-Regular';
-  align-self: flex-end;
+  right: 8px;
+  bottom: -4px;
 `;
 export const styleTextInput = StyleSheet.create({
   textInput: {
