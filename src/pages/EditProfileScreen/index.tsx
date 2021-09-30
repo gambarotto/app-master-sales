@@ -85,6 +85,12 @@ const EditProfileScreen: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const closeModal = navigation.addListener('blur', () =>
+      setOpenModalPassword(false),
+    );
+    return closeModal;
+  }, [navigation]);
   const keyboardDidShow = (): void => setKeyboardShow(true);
   const keyboardDidHide = (): void => setKeyboardShow(false);
 

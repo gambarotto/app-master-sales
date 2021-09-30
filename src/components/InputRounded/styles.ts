@@ -84,8 +84,8 @@ export const TextError = styled.Text`
     background-color: ${props.theme.colors.white};
   `}
   padding:0 4px;
-  font-size: 8px;
-  font-family: 'Roboto-Regular';
+  font-size: 9px;
+  font-family: 'Roboto-Bold';
   right: 8px;
   bottom: -4px;
 `;

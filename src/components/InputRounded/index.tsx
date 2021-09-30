@@ -7,6 +7,7 @@ import React, {
   useState,
   useEffect,
   Dispatch,
+  useMemo,
 } from 'react';
 
 import { TextInputProps, TextInput } from 'react-native';
@@ -16,6 +17,7 @@ import {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
+  Easing,
 } from 'react-native-reanimated';
 import {
   Container,
@@ -75,19 +77,23 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     if (onInitialData) onInitialData(initialValue || defaultValue);
   }, [defaultValue, initialValue, onInitialData]);
 
+  const optionsAnimate = {
+    duration: 350,
+    easing: Easing.out(Easing.exp),
+  };
   const animateStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        translateY: withTiming(translateY.value),
+        translateY: withTiming(translateY.value, optionsAnimate),
       },
       {
-        translateX: withTiming(translateX.value),
+        translateX: withTiming(translateX.value, optionsAnimate),
       },
       {
-        scale: withTiming(scale.value),
+        scale: withTiming(scale.value, optionsAnimate),
       },
     ],
-    color: withTiming(color.value),
+    color: withTiming(color.value, optionsAnimate),
   }));
 
   useEffect(() => {
@@ -157,6 +163,15 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
     });
   }, [fieldName, initialValue, rawText, registerField]);
 
+  const iconColor = useMemo(() => {
+    if ((isFilled && !error) || isFocus) {
+      return themeGlobal.colors[inputActiveColor];
+    }
+    if (error || (isFilled && error)) {
+      return themeGlobal.colors.red;
+    }
+    return themeGlobal.colors.primary;
+  }, [error, inputActiveColor, isFilled, isFocus]);
   return (
     <>
       <Container
@@ -171,17 +186,7 @@ const InputRounded: React.ForwardRefRenderFunction<InputRef, InputProps> = (
           {labelPlaceholder}
         </TextLabel>
 
-        {icon && (
-          <Icon
-            name={icon}
-            size={20}
-            color={
-              isFilled || isFocus
-                ? themeGlobal.colors[inputActiveColor]
-                : themeGlobal.colors.primary
-            }
-          />
-        )}
+        {icon && <Icon name={icon} size={20} color={iconColor} />}
         <TextInput
           ref={inputElementRef}
           style={styleTextInput.textInput}
