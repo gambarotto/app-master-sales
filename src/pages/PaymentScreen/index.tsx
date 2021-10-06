@@ -46,6 +46,7 @@ import api from '../../services/api';
 import { useFetch } from '../../hooks/useFetch';
 import { useCart } from '../../contexts/cart';
 import PaymentModalError from './PaymentModalError';
+import PaymentModalDelivery from './PaymentModalDelivery';
 
 export interface ICreditCard {
   id: string;
@@ -84,6 +85,7 @@ const PaymentScreen: React.FC = () => {
   const { clearCart } = useCart();
   const [modalCard, setModalCard] = useState(false);
   const [modalError, setModalError] = useState(false);
+  const [modalDateDelivery, setModalDateDelivery] = useState(true);
   const [newCreditCard, setNewCreditCard] = useState({} as INewCard);
   const [creditCardPayment, setCreditCardPayment] = useState({} as ICreditCard);
   const navigation = useNavigation();
@@ -116,6 +118,7 @@ const PaymentScreen: React.FC = () => {
   const handleHardwareBackPress = useCallback(() => {
     setModalCard(false);
     setModalError(false);
+    setModalDateDelivery(false);
     return !!modalCard;
   }, [modalCard]);
 
@@ -312,6 +315,14 @@ const PaymentScreen: React.FC = () => {
           </Button>
         </ContainerButton>
       </ContainerPayment>
+      <Modal
+        visible={modalDateDelivery}
+        onRequestClose={handleHardwareBackPress}
+        transparent
+        statusBarTranslucent
+      >
+        <PaymentModalDelivery />
+      </Modal>
       <Modal
         visible={modalCard}
         onRequestClose={handleHardwareBackPress}
