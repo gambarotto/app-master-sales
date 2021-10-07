@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import styled, { css } from 'styled-components/native';
 
@@ -57,15 +58,18 @@ export const TextTotalOrder = styled.Text`
   font-family: 'Roboto-Bold';
   margin-bottom: 8px;
 `;
-export const ContainerSubTitle = styled.View``;
-export const SubTitle = styled.Text`
+export const ContainerSubTitle = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 16px;
+`;
+export const SubTitle = styled.Text`
   ${(props) => css`
     color: ${props.theme.colors.primary};
   `}
   font-size:14px;
   font-family: 'Roboto-Bold';
-  margin-bottom: 8px;
 `;
 export const ContainerAddress = styled.View`
   flex-direction: row;
@@ -93,6 +97,33 @@ export const TextAddress = styled.Text`
   font-size:12px;
   font-family: 'Roboto-Regular';
 `;
+export const ContainerDateDelivery = styled.View`
+  flex-direction: row;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+`;
+export const TextDateDelivery = styled.Text`
+  ${(props) => css`
+    color: ${props.theme.colors.gray2};
+  `}
+  font-size:10px;
+  font-family: 'Roboto-Regular';
+  margin-right: 8px;
+`;
+export const ContainerButtonCalendar = styled.TouchableOpacity`
+  height: 24px;
+  width: 24px;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  border-width: 0.5px;
+  ${(props) => css`
+    border-color: ${props.theme.colors.gray4};
+    background-color: ${props.theme.colors.white};
+  `}
+`;
+export const IconCalendar = styled(MaterialCommunityIcons)``;
 export const ContainerPayment = styled.View`
   flex: 1;
   justify-content: space-between;

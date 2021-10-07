@@ -19,7 +19,9 @@ import {
   ContainerAddress,
   ContainerAddressData,
   ContainerButton,
+  ContainerButtonCalendar,
   ContainerCardPayment,
+  ContainerDateDelivery,
   ContainerDescriptionOrderCosts,
   ContainerHeader,
   ContainerOrderDetails,
@@ -29,11 +31,13 @@ import {
   ContainerSubTitle,
   ContainerTitleAndPaymentsMethods,
   HolderName,
+  IconCalendar,
   ImageLogo,
   NumberCard,
   SubTitle,
   TextAddress,
   TextCardPayment,
+  TextDateDelivery,
   TextDescriptionItemOrder,
   TextTotalOrder,
   Title,
@@ -46,7 +50,8 @@ import api from '../../services/api';
 import { useFetch } from '../../hooks/useFetch';
 import { useCart } from '../../contexts/cart';
 import PaymentModalError from './PaymentModalError';
-import PaymentModalDelivery from './PaymentModalDelivery';
+import PaymentModalDelivery, { ISelectedDay } from './PaymentModalDelivery';
+import themeGlobal from '../../styles/global';
 
 export interface ICreditCard {
   id: string;
@@ -80,12 +85,18 @@ export interface IOrderRequest {
     quantity: number;
   }[];
 }
+export interface IAvailableDay {
+  date: Date;
+  dateString: string;
+  available: boolean;
+  reason: string;
+}
 
 const PaymentScreen: React.FC = () => {
   const { clearCart } = useCart();
   const [modalCard, setModalCard] = useState(false);
   const [modalError, setModalError] = useState(false);
-  const [modalDateDelivery, setModalDateDelivery] = useState(true);
+  const [modalDateDelivery, setModalDateDelivery] = useState(false);
   const [newCreditCard, setNewCreditCard] = useState({} as INewCard);
   const [creditCardPayment, setCreditCardPayment] = useState({} as ICreditCard);
   const navigation = useNavigation();
@@ -96,10 +107,35 @@ const PaymentScreen: React.FC = () => {
     'payment-cards',
     'payment-cards',
   );
+  const { data: availableDays } = useFetch<IAvailableDay[]>(
+    `available-days-${new Date()}`,
+    `users/delivery/available-days/${order.delivery_address?.id}`,
+  );
+  const [dateDelivery, setDateDelivery] = useState<ISelectedDay>();
+  const [initialDateDelivery, setInitialDateDelivery] = useState<
+    string | undefined
+  >();
+
+  useEffect(() => {
+    const dayAvailable = availableDays?.find((day) => day.available === true);
+    if (dayAvailable) {
+      const formatted = dayAvailable.dateString.split('-').reverse().join('/');
+
+      setInitialDateDelivery(formatted);
+    }
+  }, [availableDays]);
+
+  const textDateDelivery = useMemo(() => {
+    if (dateDelivery && dateDelivery.dateString) {
+      return dateDelivery.dateString.split('-').reverse().join('/');
+    }
+    return initialDateDelivery;
+  }, [dateDelivery, initialDateDelivery]);
 
   const queryClient = useQueryClient();
   const postOrder = async (orderData: IOrderRequest) =>
     api.post('orders', orderData);
+
   const orderMutation = useMutation(
     (orderData: IOrderRequest) => postOrder(orderData),
     {
@@ -228,6 +264,10 @@ const PaymentScreen: React.FC = () => {
     orderMutation.isLoading,
   ]);
 
+  const handleConfirmModalDeliveryDate = useCallback((data: ISelectedDay) => {
+    setDateDelivery(data);
+    setModalDateDelivery(false);
+  }, []);
   return (
     <Container>
       <ContainerHeader>
@@ -271,6 +311,31 @@ const PaymentScreen: React.FC = () => {
 
       <ContainerSubTitle>
         <SubTitle>Entrega</SubTitle>
+        <ContainerDateDelivery>
+          {dateDelivery || initialDateDelivery ? (
+            <TextDateDelivery>{`programada para ${textDateDelivery}`}</TextDateDelivery>
+          ) : null}
+          <ContainerButtonCalendar
+            onPress={() => setModalDateDelivery(true)}
+            style={{
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 20,
+                height: 20,
+              },
+              shadowOpacity: 0,
+              shadowRadius: 3.84,
+
+              elevation: 2,
+            }}
+          >
+            <IconCalendar
+              name="calendar-multiselect"
+              color={themeGlobal.colors.gray2}
+              size={20}
+            />
+          </ContainerButtonCalendar>
+        </ContainerDateDelivery>
       </ContainerSubTitle>
       <ContainerAddress>
         <ContainerAddressData>
@@ -321,7 +386,10 @@ const PaymentScreen: React.FC = () => {
         transparent
         statusBarTranslucent
       >
-        <PaymentModalDelivery />
+        <PaymentModalDelivery
+          availableDays={availableDays}
+          handleConfirm={handleConfirmModalDeliveryDate}
+        />
       </Modal>
       <Modal
         visible={modalCard}

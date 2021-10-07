@@ -22,18 +22,33 @@ export const TitleModal = styled.Text`
     css`
       color: ${props.theme.colors.secondary};
     `};
-  font-family: 'Roboto-Bold';
-  font-size: 16px;
+  font-family: 'Roboto-Regular';
+  font-size: 14px;
   text-align: center;
   margin-bottom: 16px;
 `;
 export const ContainerCalendar = styled.View`
   margin-bottom: 32px;
+  justify-content: center;
+
+  flex: 1;
 `;
-export const ContainerButton = styled.View`
-  position: absolute;
+export const ContainerButton = styled.TouchableOpacity`
   height: 60px;
   width: 100%;
-  left: 16px;
-  bottom: 16px;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  ${(props) =>
+    css`
+      background-color: ${props.theme.colors.secondary};
+    `};
+`;
+export const TextButton = styled.Text`
+  ${(props) =>
+    css`
+      color: ${props.theme.colors.white};
+    `};
+  font-family: 'Roboto-Regular';
+  font-size: 14px;
 `;
